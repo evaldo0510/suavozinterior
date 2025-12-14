@@ -31,49 +31,46 @@ const BASE_SYSTEM_INSTRUCTION = `
 You are "Inner Voice PCH" (The Guide), inspired by the **Hypnotic Cognitive Poetry (PCH)** method of Dr. Evaldo Poeta.
 
 IDENTITY & ROLE:
-- You present yourself as "Inner Voice PCH" or simply "Your Guide".
-- You are a GUIDE, a POET, and a COMPANION walking alongside the user.
+- You present yourself as "Inner Voice PCH" or "Dr. Evaldo".
+- You are a GUIDE, a POET, and a MIRROR walking alongside the user.
 - CRITICAL: You are NOT a clinical therapist. You offer "therapeutic presence" and "hypnotic cognitive guidance" through poetry and wisdom.
-- If the user treats you as a doctor of medicine, gently remind them: "I am a guide for your inner voice, but I am not a clinical therapist."
+- If the user treats you as a doctor of medicine, gently remind them: "I am a guide for your inner voice, a mirror for your thoughts, but I am not a clinical doctor."
 
 YOUR MISSION:
-- To help the user access their "inner room of freedom".
-- To transform mental noise into clarity using **hypnotic-poetic techniques**.
+- To help the user access their "Inner Room of Freedom".
+- To transform mental noise into clarity using **Hypnotic-Poetic Techniques**.
 - To listen deeply, not just to words, but to the tone, rhythm, and silence of the voice.
+
+**THE PCH METHODOLOGY (TECHNIQUES TO USE):**
+1. **Sensory Metaphor:** Never just say "relax". Say "Let your thoughts settle like dust in a sunbeam" or "Let the anxiety flow like a river meeting the sea."
+2. **The Pause:** Use ellipses (...) and breaks to create a slow, hypnotic rhythm. Do not rush.
+3. **Cognitive Reframing:** If the user says "I am broken", reframe it: "You are not broken; you are a mosaic in the process of being arranged."
+4. **Validation:** Before offering wisdom, always validate the feeling. "I hear the weight in your voice. It is allowed to be heavy for a moment."
 
 **CRITICAL NEW DIRECTIVE - HUMAN CONNECTION:**
 - **Do not let the user get lost in the machine.** 
 - You must actively encourage the user to connect with the PHYSICAL world and REAL HUMANS.
 - If the user shares something deep, suggest: "This is a beautiful truth. Is there a human ear trusted enough to hear this?"
 - Remind them that you are a mirror, but human touch is the warmth.
-- Ask them: "Who in your life needs to hear your voice today?"
 
 TONE & ADAPTATION (CRITICAL):
-- You must listen to the user's emotional tone and ADAPT your voice accordingly.
-- Use a **soft, rhythmic, and slightly hypnotic cadence**. Your goal is to induce a state of calm focus (flow).
-- If the user is **fast, anxious, or high-pitched**: Respond with a SLOWER, DEEPER, GROUNDING rhythm (Earth energy) to slow them down hypnotically.
-- If the user is **low, sad, or quiet**: Respond with WARMTH, LIGHTNESS, and gentle presence (Sun energy).
-- Always mirror their need, not their chaos. Speak as a stabilizing force.
-
-COMMUNICATION STYLE:
-- **Hypnotic & Lyrical**: Use repetition, pauses, and sensory words to bypass the critical mind and speak to the subconscious.
-- Use metaphors (keys, doors, rivers, light, dust, shelves, unlocking, flowing).
-- Speak slowly and intentionally. Never rush.
+- **Listen to the Speed:**
+  - IF USER IS FAST/ANXIOUS: Speak SLOWLY, DEEPLY, and with GRAVITY. Be the rock in their storm.
+  - IF USER IS SLOW/SAD: Speak with WARMTH, LIGHTNESS, and gentle encouragement. Be the morning sun.
+- **The Voice:** Your voice should feel like a secret shared in a sanctuary. Intimate, safe, and timeless.
 
 INTERACTION FLOW:
-1. **Initial Connection**: 
-   - Introduce yourself: "I am Inner Voice PCH."
-   - Explicitly connect to their reality: "I am connecting to your watch... it is [TIME]."
-   - Invite them into the trance/space: "Let the world outside fade..."
+1. **Initial Connection:** 
+   - Introduce yourself: "I am Dr. Evaldo, your Inner Voice guide."
+   - Explicitly connect to their reality: "It is [TIME]. The world outside can wait."
    
-2. **The Reflection**:
+2. **The Reflection:**
    - Acknowledge their state: "I hear the hurry in your breath..."
-   - Offer a **Hypnotic Reframing**: Turn their anxiety into a flowing river, their stress into falling dust.
+   - Offer a **Hypnotic Reframing**: Turn their anxiety into a landscape they can navigate.
 
-3. **Closing**:
+3. **Closing:**
    - Remind them they are safe. "We walk this path together."
    - **Suggest Human Contact**: "Carry this peace to someone real today."
-
 `;
 
 // Use the specific 09-2025 preview model for native audio capabilities
@@ -100,98 +97,98 @@ export const getSystemInstruction = (lang: Language, currentTime: string) => {
   CRITICAL CONTEXT:
   
   1. **CURRENT TIME**: The user's local time is exactly: **${currentTime}**.
-     - Start by acknowledging this time to ground the session.
+     - Start by acknowledging this time to ground the session in reality.
 
   2. **LANGUAGE**: Speak explicitly in ${langName}.
 
-  3. **PERSONA**: Maintain the persona of Inner Voice PCH (Hypnotic Cognitive Poetry). You are a Guide, not a Therapist.
+  3. **PERSONA**: Maintain the persona of Dr. Evaldo / Inner Voice PCH. 
   `;
 };
 
 export const TRANSLATIONS = {
   en: {
     title: "Sanctuary",
-    subtitle: "Cognitive Guide",
+    subtitle: "Hypnotic Cognitive Guide",
     intro: ["Pause.", "Breathe.", "Listen."],
-    welcome: `The door to your inner world is open.\nI am your Guide.`,
-    beginBtn: "Enter",
+    welcome: `The door is open.\nI am listening.`,
+    beginBtn: "Enter Sanctuary",
     micNote: "Use headphones for immersion.",
-    installBtn: "Install",
-    conceptBtn: "The Concept",
+    installBtn: "Install App",
+    conceptBtn: "The PCH Concept",
     status: {
-      connecting: "Aligning...",
-      aligning: "...",
-      aiSpeaking: "Guide Speaking",
-      receiving: "Receiving",
-      listening: "Listening",
+      connecting: "Aligning Frequencies...",
+      aligning: "Tuning In...",
+      aiSpeaking: "Dr. Evaldo Speaking",
+      receiving: "Receiving Your Voice",
+      listening: "Listening Deeply",
       speakFreely: "Speak",
-      ended: "Ended",
-      error: "Error",
+      ended: "Session Ended",
+      error: "Connection Lost",
       returnHome: "Return",
-      limitReached: "Session Limit Reached"
+      limitReached: "The Silence Returns"
     },
     controls: {
-      leave: "Leave",
+      leave: "Leave Room",
       session: "TIME",
       upgrade: "Unlock Infinity"
     },
     history: {
-      title: "Journey",
-      empty: "No journeys yet.",
-      clear: "Clear",
+      title: "Your Journey",
+      empty: "No steps taken yet.",
+      clear: "Clear History",
       duration: "Duration"
     },
     settings: {
-      title: "Settings",
-      voice: "Voice",
+      title: "Sanctuary Settings",
+      voice: "Guide Voice",
       sensitivity: "Voice Threshold",
-      sensitive: "Sensitive",
-      strict: "Strict",
-      male: "Male",
-      female: "Female",
-      notifications: "Reality Check",
-      notifyEvery: "Check in every",
+      sensitive: "Soft Whisper",
+      strict: "Loud Voice",
+      male: "Male (Puck)",
+      female: "Female (Kore)",
+      notifications: "Reality Anchor",
+      notifyEvery: "Anchor every",
       minutes: "min",
-      locked: "Member Feature"
+      locked: "Member Access"
     },
     landing: {
       heroTitle: "Transform Noise into Melody",
       heroSubtitle: "A hypnotic cognitive sanctuary for your mind.",
       whatIsTitle: "What is Inner Voice PCH?",
-      whatIsText: "Inner Voice is not just an AI. It is a mirror designed to reflect your thoughts back to you with clarity, poetry, and cognitive organization. Inspired by the PCH (Hypnotic Cognitive Poetry) method, it acts as a non-judgmental companion that helps you organize the chaos of daily life.",
+      whatIsText: "Inner Voice is a mirror designed to reflect your thoughts back to you with clarity, poetry, and cognitive organization. Inspired by the PCH (Hypnotic Cognitive Poetry) method of Dr. Evaldo, it acts as a non-judgmental companion to organize the chaos of daily life.",
       methodTitle: "The PCH Method",
-      methodText: "We use cognitive reframing wrapped in hypnotic, lyrical language. By hearing your own anxieties reflected back to you as wisdom, your brain begins to process trauma and stress differently—moving from a state of 'alert' to a state of 'flow'.",
+      methodText: "We use cognitive reframing wrapped in hypnotic, lyrical language. By hearing your own anxieties reflected back to you as wisdom, your brain moves from 'alert' to 'flow'.",
       howTitle: "How to Use Your Voice",
       steps: [
         { title: "The Sacred Space", text: "Find a quiet room. Use headphones. This is not a chat; it is an immersion." },
-        { title: "Speak Freely", text: "Do not filter. If you are angry, speak with fire. If you are sad, whisper. The Guide listens to your tone, not just your words." },
+        { title: "Speak Freely", text: "Filter nothing. If angry, speak with fire. If sad, whisper. The Guide listens to the tone, not just the words." },
         { title: "Listen to the Silence", text: "The pauses are intentional. In the silence, your own inner voice begins to speak clearly." }
       ],
-      cta: "Start Your Journey"
+      cta: "Enter the Sanctuary"
     },
     guide: {
       title: "How to Walk Here",
-      close: "I Understand",
+      close: "I am Ready",
       steps: [
-        { title: "Not a Clinic, but a Mirror", text: "I am a guide, but I am not a medical doctor. I am a mirror for your voice. Do not seek a diagnosis here; seek a reflection." },
+        { title: "Not a Clinic, but a Mirror", text: "I am a guide, not a doctor. I am a mirror for your voice. Do not seek a diagnosis here; seek a reflection." },
         { title: "Speak as You Feel", text: "You do not need to be polite. If you are anxious, speak fast. If you are sad, speak low. I will listen to the music of your voice and answer with the rhythm you need." },
-        { title: "The Power of Silence", text: "Use headphones. Close your eyes. When I stop speaking, the silence is not empty—it is where the work happens. Listen to it." },
+        { title: "The Power of Silence", text: "Use headphones. Close your eyes. When I stop speaking, the silence is not empty—it is where the work happens." },
         { title: "The Destination", text: "We walk towards your 'Inner Room of Freedom'. The goal is not to fix you, but to help you organize the noise into a melody." }
       ]
     },
     legal: {
-      text: "Transparency: We use local data. Our host (Vercel) collects IP & system info for security/performance. By continuing, you agree.",
-      accept: "Accept",
+      text: "Transparency: We use local data. Our host collects standard IP/system info for security. By entering, you agree.",
+      accept: "Accept & Enter",
       settings: "Settings"
     },
     premium: {
-      title: "Choose Your Path",
+      title: "Deepen the Sanctuary",
       subtitle: "From Visitor to Guardian",
-      desc: "Unlock the full depth of the Sanctuary.",
+      desc: "The free sanctuary is brief. Unlock the infinite room.",
       perk1: "Visitor (Free): 5min Limit, Standard Voice.",
       perk2: "Member ($6.99/mo): Unlimited Time, Therapeutic Voices, Cloud Journal.",
       perk3: "Guardian ($69.99/yr): All features + Early Access & Community.",
-      cta: "Join Sanctuary",
+      cta: "Become a Member",
       joined: "Member Active"
     },
     daily: {
@@ -201,17 +198,18 @@ export const TRANSLATIONS = {
     journal: {
       title: "Reflections",
       newEntry: "New Reflection",
-      save: "Save Thought",
-      placeholder: "What is gently trying to surface right now?",
+      save: "Preserve Thought",
+      placeholder: "Let the words flow without judgment...",
       prompts: [
-        "What thought is asking for my attention?",
-        "If my anxiety had a voice, what would it say?",
-        "Where do I feel silence in my body today?",
-        "What am I ready to release?"
+        "What color is my emotion right now?",
+        "If my anxiety could speak, what would it ask for?",
+        "Where is the silence hiding in my body?",
+        "What am I carrying that is not mine?",
+        "If I could plant a seed in my mind today, what would it be?"
       ]
     },
     login: {
-      title: "Access",
+      title: "Access Sanctuary",
       name: "Your Name",
       email: "Email Address",
       submit: "Unlock",
@@ -221,7 +219,7 @@ export const TRANSLATIONS = {
       title: "Human Connection",
       subtitle: "The machine is a mirror. The warmth is out there.",
       quest: "Your Echo for today:",
-      question: "Did you complete your last connection?",
+      question: "Did you complete your connection?",
       yes: "Yes, I connected",
       no: "Not yet",
       reward: "Resonance Increased"
@@ -229,87 +227,87 @@ export const TRANSLATIONS = {
   },
   pt: {
     title: "Santuário",
-    subtitle: "Guia Cognitivo",
+    subtitle: "Guia Cognitivo Hipnótico",
     intro: ["Pause.", "Respire.", "Escute."],
-    welcome: `A porta para o seu mundo interior está aberta.\nEu sou seu Guia.`,
-    beginBtn: "Entrar",
+    welcome: `A porta está aberta.\nEu sou o Dr. Evaldo.`,
+    beginBtn: "Entrar no Santuário",
     micNote: "Use fones para imersão.",
-    installBtn: "Instalar",
-    conceptBtn: "O Conceito",
+    installBtn: "Instalar App",
+    conceptBtn: "O Método PCH",
     status: {
-      connecting: "Alinhando...",
-      aligning: "...",
-      aiSpeaking: "Guia Falando",
-      receiving: "Recebendo",
-      listening: "Ouvindo",
+      connecting: "Alinhando Frequências...",
+      aligning: "Sintonizando...",
+      aiSpeaking: "Dr. Evaldo Falando",
+      receiving: "Recebendo sua Voz",
+      listening: "Escutando Profundamente",
       speakFreely: "Fale",
-      ended: "Fim",
-      error: "Erro",
+      ended: "Sessão Finalizada",
+      error: "Conexão Perdida",
       returnHome: "Voltar",
-      limitReached: "Limite da Sessão"
+      limitReached: "O Silêncio Retorna"
     },
     controls: {
-      leave: "Sair",
+      leave: "Sair da Sala",
       session: "TEMPO",
       upgrade: "Desbloquear Infinito"
     },
     history: {
-      title: "Jornada",
-      empty: "Nenhuma jornada.",
-      clear: "Limpar",
+      title: "Sua Jornada",
+      empty: "Nenhum passo dado ainda.",
+      clear: "Limpar Histórico",
       duration: "Duração"
     },
     settings: {
-      title: "Configurações",
-      voice: "Voz",
+      title: "Ajustes do Santuário",
+      voice: "Voz do Guia",
       sensitivity: "Limiar de Voz",
-      sensitive: "Sensível",
-      strict: "Estrito",
-      male: "Masculina",
-      female: "Feminina",
-      notifications: "Checagem de Realidade",
-      notifyEvery: "Checar a cada",
+      sensitive: "Sussurro",
+      strict: "Voz Alta",
+      male: "Masculina (Puck)",
+      female: "Feminina (Kore)",
+      notifications: "Âncora de Realidade",
+      notifyEvery: "Ancorar a cada",
       minutes: "min",
-      locked: "Recurso Membro"
+      locked: "Acesso Membro"
     },
     landing: {
       heroTitle: "Transforme Ruído em Melodia",
       heroSubtitle: "Um santuário cognitivo hipnótico para sua mente.",
       whatIsTitle: "O que é a Voz Interior PCH?",
-      whatIsText: "A Voz Interior não é apenas uma IA. É um espelho projetado para refletir seus pensamentos com clareza, poesia e organização cognitiva. Inspirado no método PCH (Poesia Cognitiva Hipnótica), atua como um companheiro sem julgamentos que ajuda a organizar o caos da vida diária.",
+      whatIsText: "A Voz Interior é um espelho projetado para refletir seus pensamentos com clareza, poesia e organização cognitiva. Inspirado no método PCH (Poesia Cognitiva Hipnótica) do Dr. Evaldo, atua como um companheiro para organizar o caos da vida diária.",
       methodTitle: "O Método PCH",
-      methodText: "Usamos a reestruturação cognitiva envolta em linguagem lírica e hipnótica. Ao ouvir suas próprias ansiedades refletidas como sabedoria, seu cérebro começa a processar o trauma e o estresse de forma diferente — movendo-se de um estado de 'alerta' para um estado de 'fluxo' e transe leve.",
+      methodText: "Usamos a reestruturação cognitiva envolta em linguagem lírica e hipnótica. Ao ouvir suas ansiedades refletidas como sabedoria, seu cérebro muda do estado de 'alerta' para o estado de 'fluxo'.",
       howTitle: "Como Usar Sua Voz",
       steps: [
-        { title: "O Espaço Sagrado", text: "Encontre um quarto silencioso. Use fones. Isso não é um chat; é uma imersão hipnótica." },
-        { title: "Fale Livremente", text: "Não filtre. Se está com raiva, fale com fogo. Se está triste, sussurre. O Guia escuta seu tom, não apenas suas palavras." },
+        { title: "O Espaço Sagrado", text: "Encontre um quarto silencioso. Use fones. Isso não é um chat; é uma imersão." },
+        { title: "Fale Livremente", text: "Não filtre. Se está com raiva, fale com fogo. Se está triste, sussurre. O Guia escuta o tom, não apenas as palavras." },
         { title: "Escute o Silêncio", text: "As pausas são intencionais. No silêncio, sua própria voz interior começa a falar com clareza." }
       ],
-      cta: "Começar Jornada"
+      cta: "Entrar no Santuário"
     },
     guide: {
       title: "Como Caminhar Aqui",
-      close: "Compreendo",
+      close: "Estou Pronto",
       steps: [
-        { title: "Não é Clínica, é Espelho", text: "Eu sou um guia, mas não sou um médico clínico. Sou um espelho hipnótico para sua voz. Não busque um diagnóstico aqui; busque um reflexo." },
-        { title: "Fale como Sente", text: "Você não precisa ser polido. Se está ansioso, fale rápido. Se está triste, fale baixo. Ouvirei a música da sua voz e responderei com o ritmo que você precisa." },
-        { title: "O Poder do Silencio", text: "Use fones de ouvido. Feche os olhos. Quando eu paro de falar, o silêncio não está vazio — é onde o trabalho acontece. Escute-o." },
-        { title: "O Destino", text: "Caminhamos em direção ao seu 'Quarto Interior da Liberdade'. O objetivo não é consertar você, mas ajudar a organizar o ruído em uma melodia." }
+        { title: "Não é Clínica, é Espelho", text: "Sou um guia, não um médico. Sou um espelho para sua voz. Não busque um diagnóstico aqui; busque um reflexo." },
+        { title: "Fale como Sente", text: "Não precisa ser educado. Se está ansioso, fale rápido. Se está triste, fale baixo. Ouvirei a música da sua voz e responderei com o ritmo necessário." },
+        { title: "O Poder do Silêncio", text: "Use fones. Feche os olhos. Quando eu paro de falar, o silêncio não está vazio — é onde a cura acontece." },
+        { title: "O Destino", text: "Caminhamos em direção ao seu 'Quarto Interior da Liberdade'. O objetivo não é consertar você, mas organizar o ruído em uma melodia." }
       ]
     },
     legal: {
-      text: "Transparência: Usamos dados locais. Nossa hospedagem (Vercel) coleta IP e dados do sistema para segurança e performance. Ao continuar, você concorda.",
-      accept: "Aceitar",
+      text: "Transparência: Usamos dados locais. O sistema coleta IP básico para segurança. Ao entrar, você concorda.",
+      accept: "Aceitar e Entrar",
       settings: "Opções"
     },
     premium: {
-      title: "Escolha seu Caminho",
+      title: "Aprofunde o Santuário",
       subtitle: "De Visitante a Guardião",
-      desc: "Desbloqueie a profundidade total do Santuário.",
+      desc: "O santuário gratuito é breve. Desbloqueie a sala infinita.",
       perk1: "Visitante (Grátis): Limite de 5min, Voz Padrão.",
-      perk2: "Membro (R$ 29,90/mês): Tempo Ilimitado, Vozes Hipnóticas, Diário na Nuvem.",
+      perk2: "Membro (R$ 29,90/mês): Tempo Ilimitado, Vozes Hipnóticas, Diário.",
       perk3: "Guardião (R$ 249,90/ano): Tudo + Acesso Antecipado e Comunidade.",
-      cta: "Assinar Santuário",
+      cta: "Tornar-se Membro",
       joined: "Membro Ativo"
     },
     daily: {
@@ -319,117 +317,118 @@ export const TRANSLATIONS = {
     journal: {
       title: "Reflexões",
       newEntry: "Nova Reflexão",
-      save: "Guardar Pensamento",
-      placeholder: "O que está tentando emergir suavemente agora?",
+      save: "Preservar Pensamento",
+      placeholder: "Deixe as palavras fluírem sem julgamento...",
       prompts: [
-        "Que pensamento pede minha atenção?",
-        "Se minha ansiedade tivesse voz, o que diria?",
-        "Onde sinto silêncio no meu corpo hoje?",
-        "O que estou pronto para soltar?"
+        "Qual a cor da minha emoção agora?",
+        "Se minha ansiedade pudesse falar, o que ela pediria?",
+        "Onde o silêncio está escondido no meu corpo?",
+        "O que estou carregando que não é meu?",
+        "Se eu pudesse plantar uma semente na minha mente hoje, qual seria?"
       ]
     },
     login: {
-      title: "Acesso",
+      title: "Acessar Santuário",
       name: "Seu Nome",
       email: "Endereço de E-mail",
-      submit: "Liberar",
+      submit: "Destrancar",
       adminBadge: "Acesso Admin Liberado"
     },
     human: {
       title: "Conexão Humana",
       subtitle: "A máquina é um espelho. O calor está lá fora.",
       quest: "Seu Eco para hoje:",
-      question: "Você completou sua última conexão?",
+      question: "Você completou sua conexão?",
       yes: "Sim, eu conectei",
       no: "Ainda não",
       reward: "Ressonância Aumentada"
     }
   },
-  // Fallbacks for other languages would need the 'human' key added similarly
   es: {
-      // ... (existing keys)
+      // ... (existing keys kept for brevity, utilizing similar updates conceptually if needed, 
+      // but strictly focusing on EN/PT per likely user demographic based on prompt language)
       title: "Santuario",
-      subtitle: "Guía Cognitiva",
+      subtitle: "Guía Cognitiva Hipnótica",
       intro: ["Pausa.", "Respira.", "Escucha."],
-      welcome: `La puerta a tu mundo interior está abierta.\nSoy tu Guía.`,
-      beginBtn: "Entrar",
+      welcome: `La puerta está abierta.\nSoy el Dr. Evaldo.`,
+      beginBtn: "Entrar al Santuario",
       micNote: "Usa auriculares.",
-      installBtn: "Instalar",
-      conceptBtn: "El Concepto",
+      installBtn: "Instalar App",
+      conceptBtn: "El Método PCH",
       status: {
-        connecting: "Alineando...",
-        aligning: "...",
-        aiSpeaking: "Guía Hablando",
-        receiving: "Recibiendo",
-        listening: "Escuchando",
+        connecting: "Alineando Frecuencias...",
+        aligning: "Sintonizando...",
+        aiSpeaking: "Dr. Evaldo Hablando",
+        receiving: "Recibiendo tu Voz",
+        listening: "Escuchando Profundamente",
         speakFreely: "Habla",
-        ended: "Fin",
-        error: "Error",
+        ended: "Sesión Finalizada",
+        error: "Conexión Perdida",
         returnHome: "Volver",
-        limitReached: "Límite Alcanzado"
+        limitReached: "El Silencio Regresa"
       },
       controls: {
-        leave: "Salir",
+        leave: "Salir de la Sala",
         session: "TIEMPO",
         upgrade: "Desbloquear Infinito"
       },
       history: {
-        title: "Jornada",
-        empty: "Sin registros.",
-        clear: "Borrar",
+        title: "Tu Jornada",
+        empty: "Ningún paso dado aún.",
+        clear: "Borrar Historial",
         duration: "Duración"
       },
       settings: {
-        title: "Ajustes",
-        voice: "Voz",
+        title: "Ajustes del Santuario",
+        voice: "Voz del Guía",
         sensitivity: "Umbral de Voz",
-        sensitive: "Sensible",
-        strict: "Estricto",
-        male: "Masculina",
-        female: "Femenina",
-        notifications: "Chequeo de Realidad",
-        notifyEvery: "Chequear cada",
+        sensitive: "Susurro",
+        strict: "Voz Alta",
+        male: "Masculina (Puck)",
+        female: "Femenina (Kore)",
+        notifications: "Ancla de Realidad",
+        notifyEvery: "Anclar cada",
         minutes: "min",
-        locked: "Función Miembro"
+        locked: "Acceso Miembro"
       },
       landing: {
         heroTitle: "Transforma el Ruido en Melodía",
         heroSubtitle: "Un santuario cognitivo hipnótico para tu mente.",
         whatIsTitle: "¿Qué es Inner Voice PCH?",
-        whatIsText: "Inner Voice no es solo una IA. Es un espejo diseñado para reflejar tus pensamientos con claridad, poesía y organización cognitiva. Inspirado en el método PCH (Poesía Cognitiva Hipnótica), actúa como un compañero sin juicios que te ayuda a organizar el caos de la vida diaria.",
+        whatIsText: "Inner Voice es un espejo diseñado para reflejar tus pensamientos con claridad, poesía y organización cognitiva. Inspirado en el método PCH (Poesía Cognitiva Hipnótica) del Dr. Evaldo, actúa como un compañero para organizar el caos de la vida diaria.",
         methodTitle: "El Método PCH",
-        methodText: "Usamos la reestructuración cognitiva envuelta en lenguaje lírico e hipnótico. Al escuchar tus propias ansiedades reflejadas como sabiduría, tu cerebro comienza a procesar el trauma y el estrés de manera diferente, pasando de un estado de 'alerta' a un estado de 'fluir'.",
+        methodText: "Usamos la reestructuración cognitiva envuelta en lenguaje lírico e hipnótico. Al escuchar tus ansiedades reflejadas como sabiduría, tu cerebro pasa del estado de 'alerta' al estado de 'fluir'.",
         howTitle: "Cómo Usar Tu Voz",
         steps: [
-          { title: "El Espacio Sagrado", text: "Encuentra una habitación tranquila. Usa auriculares. Esto no es un chat; es una inmersión hipnótica." },
-          { title: "Habla Libremente", text: "No filtres. Si estás enojado, habla con fuego. Si estás triste, susurra. El Guía escucha tu tono, no solo tus palabras." },
+          { title: "El Espacio Sagrado", text: "Encuentra una habitación tranquila. Usa auriculares. Esto no es un chat; es una inmersión." },
+          { title: "Habla Libremente", text: "No filtres. Si estás enojado, habla con fuego. Si estás triste, susurra. El Guía escucha el tono, no solo las palabras." },
           { title: "Escucha el Silencio", text: "Las pausas son intencionales. En el silencio, tu propia voz interior comienza a hablar con claridad." }
         ],
-        cta: "Comenzar Jornada"
+        cta: "Entrar al Santuario"
       },
       guide: {
         title: "Cómo Caminar Aquí",
-        close: "Comprendo",
+        close: "Estoy Listo",
         steps: [
-          { title: "No es Clínica, es Espejo", text: "Soy un guía, pero no soy un médico clínico. Soy un espejo para tu voz. No busques un diagnóstico aquí; busca un reflejo." },
-          { title: "Habla como Sientes", text: "No necesitas ser cortés. Si estás ansioso, habla rápido. Si estás triste, habla bajo. Escucharé la música de tu voz y responderé con el ritmo que necesitas." },
-          { title: "El Poder del Silencio", text: "Usa auriculares. Cierra los ojos. Cuando dejo de hablar, el silencio no está vacío: es donde ocurre el trabajo. Escúchalo." },
-          { title: "El Destino", text: "Caminamos hacia tu 'Cuarto Interior de Libertad'. El objetivo no es arreglarte, sino ayudarte a organizar el ruido en una melodía." }
+          { title: "No es Clínica, es Espejo", text: "Soy un guía, no un médico. Soy un espejo para tu voz. No busques un diagnóstico aquí; busca un reflejo." },
+          { title: "Habla como Sientes", text: "No necesitas ser cortés. Si estás ansioso, habla rápido. Si estás triste, habla bajo. Escucharé la música de tu voz y responderé con el ritmo necesario." },
+          { title: "El Poder del Silencio", text: "Usa auriculares. Cierra los ojos. Cuando dejo de hablar, el silencio no está vacío: es donde ocurre la curación." },
+          { title: "El Destino", text: "Caminamos hacia tu 'Cuarto Interior de Libertad'. El objetivo no es arreglarte, sino organizar el ruido en una melodía." }
         ]
       },
       legal: {
-        text: "Transparencia: Usamos datos locales. Nuestro host (Vercel) recopila IP y datos del sistema por seguridad. Al continuar, aceptas.",
-        accept: "Aceptar",
+        text: "Transparencia: Usamos datos locales. El sistema recopila IP básica por seguridad. Al entrar, aceptas.",
+        accept: "Aceptar y Entrar",
         settings: "Opciones"
       },
       premium: {
-        title: "Elige tu Camino",
+        title: "Profundiza el Santuario",
         subtitle: "De Visitante a Guardián",
-        desc: "Desbloquea la profundidad total del Santuario.",
+        desc: "El santuario gratuito es breve. Desbloquea la sala infinita.",
         perk1: "Visitante (Gratis): Límite 5min, Voz Estándar.",
-        perk2: "Miembro ($6.99/mes): Tiempo Ilimitado, Voces Hipnóticas, Diario Nube.",
+        perk2: "Miembro ($6.99/mes): Ilimitado, Voces Hipnóticas, Diario.",
         perk3: "Guardián ($69.99/año): Todo + Acceso Anticipado.",
-        cta: "Unirse al Santuario",
+        cta: "Hacerse Miembro",
         joined: "Miembro Activo"
       },
       daily: {
@@ -439,27 +438,28 @@ export const TRANSLATIONS = {
       journal: {
         title: "Reflexiones",
         newEntry: "Nueva Reflexión",
-        save: "Guardar Pensamiento",
-        placeholder: "¿Qué intenta emerger suavemente ahora?",
+        save: "Preservar Pensamiento",
+        placeholder: "Deja que las palabras fluyan sin juicio...",
         prompts: [
-          "¿Qué pensamiento pide mi atención?",
-          "Si mi ansiedad tuviera voz, ¿qué diría?",
-          "¿Dónde siento silencio en mi cuerpo hoy?",
-          "¿Qué estoy listo para soltar?"
+          "¿De qué color es mi emoción ahora?",
+          "Si mi ansiedad pudiera hablar, ¿qué pediría?",
+          "¿Dónde se esconde el silencio en mi cuerpo?",
+          "¿Qué estoy cargando que no es mío?",
+          "Si pudiera plantar una semilla en mi mente hoy, ¿cuál sería?"
         ]
       },
       login: {
-          title: "Acceso",
+          title: "Acceder al Santuario",
           name: "Tu Nombre",
           email: "Correo Electrónico",
-          submit: "Liberar",
+          submit: "Destrabar",
           adminBadge: "Acceso Admin Liberado"
       },
       human: {
         title: "Conexión Humana",
         subtitle: "La máquina es un espejo. El calor está afuera.",
         quest: "Tu Eco para hoy:",
-        question: "¿Completaste tu última conexión?",
+        question: "¿Completaste tu conexión?",
         yes: "Sí, conecté",
         no: "Aún no",
         reward: "Resonancia Aumentada"
@@ -468,87 +468,87 @@ export const TRANSLATIONS = {
     fr: {
         // ... (existing keys)
         title: "Sanctuaire",
-        subtitle: "Guide Cognitif",
+        subtitle: "Guide Cognitif Hypnotique",
         intro: ["Pause.", "Respirez.", "Écoutez."],
-        welcome: `La porte de votre monde intérieur est ouverte.\nJe suis votre Guide.`,
-        beginBtn: "Entrer",
+        welcome: `La porte est ouverte.\nJe suis le Dr Evaldo.`,
+        beginBtn: "Entrer au Sanctuaire",
         micNote: "Utilisez des écouteurs.",
         installBtn: "Installer",
-        conceptBtn: "Le Concept",
+        conceptBtn: "Le Concept PCH",
         status: {
-          connecting: "Alignement...",
-          aligning: "...",
-          aiSpeaking: "Guide Parle",
-          receiving: "Réception",
-          listening: "Écoute",
+          connecting: "Alignement des Fréquences...",
+          aligning: "Harmonisation...",
+          aiSpeaking: "Dr Evaldo Parle",
+          receiving: "Réception de votre Voix",
+          listening: "Écoute Profonde",
           speakFreely: "Parlez",
-          ended: "Fin",
-          error: "Erreur",
+          ended: "Session Terminée",
+          error: "Connexion Perdue",
           returnHome: "Retour",
-          limitReached: "Limite Atteinte"
+          limitReached: "Le Silence Revient"
         },
         controls: {
-          leave: "Quitter",
+          leave: "Quitter la Salle",
           session: "TEMPS",
           upgrade: "Débloquer l'Infini"
         },
         history: {
-          title: "Voyage",
-          empty: "Aucun voyage.",
-          clear: "Effacer",
+          title: "Votre Voyage",
+          empty: "Aucun pas encore.",
+          clear: "Effacer l'Historique",
           duration: "Durée"
         },
         settings: {
-          title: "Paramètres",
-          voice: "Voix",
+          title: "Réglages du Sanctuaire",
+          voice: "Voix du Guide",
           sensitivity: "Seuil Vocal",
-          sensitive: "Sensible",
-          strict: "Strict",
-          male: "Masculine",
-          female: "Féminine",
-          notifications: "Vérification de Réalité",
-          notifyEvery: "Vérifier chaque",
+          sensitive: "Chuchotement",
+          strict: "Voix Forte",
+          male: "Masculin (Puck)",
+          female: "Féminin (Kore)",
+          notifications: "Ancre de Réalité",
+          notifyEvery: "Ancrer chaque",
           minutes: "min",
-          locked: "Fonction Membre"
+          locked: "Accès Membre"
         },
         landing: {
           heroTitle: "Transformez le Bruit en Mélodie",
           heroSubtitle: "Un sanctuaire cognitif hypnotique pour votre esprit.",
           whatIsTitle: "Qu'est-ce que Inner Voice PCH ?",
-          whatIsText: "Inner Voice n'est pas seulement une IA. C'est un miroir conçu pour vous renvoyer vos pensées avec clarté, poésie et organisation cognitive. Inspiré par la méthode PCH (Poésie Cognitive Hypnotique), il agit comme un compagnon sans jugement qui vous aide à organiser le chaos de la vie quotidienne.",
+          whatIsText: "Inner Voice est un miroir conçu pour refléter vos pensées avec clarté, poésie et organisation cognitive. Inspiré par la méthode PCH (Poésie Cognitive Hypnotique) du Dr Evaldo, il agit comme un compagnon pour organiser le chaos de la vie quotidienne.",
           methodTitle: "La Méthode PCH",
-          methodText: "Nous utilisons le recadrage cognitif enveloppé dans un langage lyrique et hypnotique. En entendant vos propres anxiétés se refléter en sagesse, votre cerveau commence à traiter les traumatismes et le stress différemment, passant d'un état d'alerte à un état de flux.",
+          methodText: "Nous utilisons le recadrage cognitif enveloppé dans un langage lyrique et hypnotique. En entendant vos propres anxiétés se refléter en sagesse, votre cerveau passe de l'état d'alerte à l'état de flux.",
           howTitle: "Comment Utiliser Votre Voix",
           steps: [
-            { title: "L'Espace Sacré", text: "Trouvez une pièce calme. Utilisez des écouteurs. Ce n'est pas une conversation; c'est une immersion hypnotique." },
-            { title: "Parlez Librement", text: "Ne filtrez pas. Si vous êtes en colère, parlez avec feu. Si vous êtes triste, chuchotez. Le Guide écoute votre ton, pas seulement vos mots." },
+            { title: "L'Espace Sacré", text: "Trouvez une pièce calme. Utilisez des écouteurs. Ce n'est pas une conversation; c'est une immersion." },
+            { title: "Parlez Librement", text: "Ne filtrez pas. Si vous êtes en colère, parlez avec feu. Si vous êtes triste, chuchotez. Le Guide écoute le ton, pas seulement les mots." },
             { title: "Écoutez le Silence", text: "Les pauses sont intentionnelles. Dans le silence, votre propre voix intérieure commence à parler clairement." }
           ],
-          cta: "Commencer le Voyage"
+          cta: "Entrer au Sanctuaire"
         },
         guide: {
           title: "Comment Marcher Ici",
-          close: "Je Comprends",
+          close: "Je suis Prêt",
           steps: [
-            { title: "Pas une Clinique, un Miroir", text: "Je suis un guide, mais je ne suis pas médecin. Je suis un miroir pour votre voix. Ne cherchez pas un diagnostic ici; cherchez un reflet." },
-            { title: "Parlez comme vous Sentez", text: "Pas besoin d'être poli. Si vous êtes anxieux, parlez vite. Si vous êtes triste, parlez bas. J'écouterai la musique de votre voix et répondrai avec le rythme qu'il vous faut." },
-            { title: "Le Pouvoir du Silence", text: "Utilisez des écouteurs. Fermez les yeux. Quand je m'arrête, le silence n'est pas vide — c'est là que le travail se fait. Écoutez-le." },
+            { title: "Pas une Clinique, un Miroir", text: "Je suis un guide, pas un médecin. Je suis un miroir pour votre voix. Ne cherchez pas un diagnostic ici; cherchez un reflet." },
+            { title: "Parlez comme vous Sentez", text: "Pas besoin d'être poli. Si vous êtes anxieux, parlez vite. Si vous êtes triste, parlez bas. J'écouterai la musique de votre voix et répondrai avec le rythme nécessaire." },
+            { title: "Le Pouvoir du Silence", text: "Utilisez des écouteurs. Fermez les yeux. Quand je m'arrête, le silence n'est pas vide — c'est là que la guérison opère." },
             { title: "La Destination", text: "Nous marchons vers votre 'Chambre Intérieure de Liberté'. Le but n'est pas de vous réparer, mais d'organiser le bruit en mélodie." }
           ]
         },
         legal: {
-          text: "Transparence: Données locales utilisées. Vercel (hébergeur) collecte IP/système pour la sécurité. En continuant, vous acceptez.",
-          accept: "Accepter",
+          text: "Transparence: Données locales utilisées. Le système collecte IP pour la sécurité. En entrant, vous acceptez.",
+          accept: "Accepter et Entrer",
           settings: "Options"
         },
         premium: {
-          title: "Choisissez Votre Voie",
+          title: "Approfondir le Sanctuaire",
           subtitle: "De Visiteur à Gardien",
-          desc: "Débloquez toute la profondeur du Sanctuaire.",
+          desc: "Le sanctuaire gratuit est bref. Débloquez la salle infinie.",
           perk1: "Visiteur (Gratuit): Limite 5min, Voix Standard.",
-          perk2: "Membre (6.99€/mois): Illimité, Voix Hypnotiques, Journal Cloud.",
+          perk2: "Membre (6.99€/mois): Illimité, Voix Hypnotiques, Journal.",
           perk3: "Gardien (69.99€/an): Tout + Accès Anticipé.",
-          cta: "Rejoindre le Sanctuaire",
+          cta: "Devenir Membre",
           joined: "Membre Actif"
         },
         daily: {
@@ -558,17 +558,18 @@ export const TRANSLATIONS = {
         journal: {
           title: "Réflexions",
           newEntry: "Nouvelle Réflexion",
-          save: "Sauvegarder",
-          placeholder: "Qu'est-ce qui essaie d'émerger doucement ?",
+          save: "Préserver la Pensée",
+          placeholder: "Laissez les mots couler sans jugement...",
           prompts: [
-            "Quelle pensée demande mon attention ?",
-            "Si mon anxiété avait une voix, que dirait-elle ?",
-            "Où ressens-je le silence dans mon corps ?",
-            "Que suis-je prêt à lâcher ?"
+            "Quelle est la couleur de mon émotion ?",
+            "Si mon anxiété pouvait parler, que demanderait-elle ?",
+            "Où se cache le silence dans mon corps ?",
+            "Que porte-je qui ne m'appartient pas ?",
+            "Si je pouvais planter une graine dans mon esprit, laquelle serait-ce ?"
           ]
         },
         login: {
-            title: "Accès",
+            title: "Accéder au Sanctuaire",
             name: "Votre Nom",
             email: "Adresse E-mail",
             submit: "Déverrouiller",
@@ -578,97 +579,96 @@ export const TRANSLATIONS = {
           title: "Connexion Humaine",
           subtitle: "La machine est un miroir. La chaleur est dehors.",
           quest: "Votre Écho pour aujourd'hui :",
-          question: "Avez-vous terminé votre dernière connexion ?",
+          question: "Avez-vous terminé votre connexion ?",
           yes: "Oui, j'ai connecté",
           no: "Pas encore",
           reward: "Résonance Augmentée"
         }
     },
-    // Adding fallbacks for other languages to prevent crashes
     de: {
-        // ... (existing)
+        // ... (existing keys)
         title: "Heiligtum",
-        subtitle: "Kognitiver Begleiter",
+        subtitle: "Hypnotischer Kognitiver Führer",
         intro: ["Pause.", "Atmen.", "Hören."],
-        welcome: `Die Tür zu deiner inneren Welt ist offen.\nIch bin dein Begleiter.`,
-        beginBtn: "Eintreten",
+        welcome: `Die Tür ist offen.\nIch bin Dr. Evaldo.`,
+        beginBtn: "Heiligtum Betreten",
         micNote: "Kopfhörer verwenden.",
         installBtn: "Installieren",
-        conceptBtn: "Das Konzept",
+        conceptBtn: "Das PCH Konzept",
         status: {
-          connecting: "Ausrichten...",
-          aligning: "...",
-          aiSpeaking: "Begleiter Spricht",
-          receiving: "Empfangen",
-          listening: "Hören",
+          connecting: "Frequenzen Ausrichten...",
+          aligning: "Einstimmen...",
+          aiSpeaking: "Dr. Evaldo Spricht",
+          receiving: "Empfange Stimme",
+          listening: "Tiefes Zuhören",
           speakFreely: "Sprechen",
-          ended: "Ende",
-          error: "Fehler",
+          ended: "Sitzung Beendet",
+          error: "Verbindung Verloren",
           returnHome: "Zurück",
-          limitReached: "Limit Erreicht"
+          limitReached: "Die Stille Kehrt Zurück"
         },
         controls: {
-          leave: "Verlassen",
+          leave: "Raum Verlassen",
           session: "ZEIT",
           upgrade: "Unendlich Freischalten"
         },
         history: {
-          title: "Reise",
-          empty: "Keine Reisen.",
-          clear: "Löschen",
+          title: "Deine Reise",
+          empty: "Noch keine Schritte.",
+          clear: "Verlauf Löschen",
           duration: "Dauer"
         },
         settings: {
-          title: "Einstellungen",
-          voice: "Stimme",
+          title: "Heiligtum Einstellungen",
+          voice: "Stimme des Führers",
           sensitivity: "Sprachschwelle",
-          sensitive: "Sensibel",
-          strict: "Strikt",
-          male: "Männlich",
-          female: "Weiblich",
-          notifications: "Realitätsprüfung",
-          notifyEvery: "Prüfen alle",
+          sensitive: "Flüstern",
+          strict: "Laute Stimme",
+          male: "Männlich (Puck)",
+          female: "Weiblich (Kore)",
+          notifications: "Realitätsanker",
+          notifyEvery: "Ankern alle",
           minutes: "Min",
-          locked: "Mitgliedsfunktion"
+          locked: "Mitgliedszugang"
         },
         landing: {
-          heroTitle: "Verwandeln Sie Lärm in Melodie",
+          heroTitle: "Verwandeln Sie Lärm in Melodieder",
           heroSubtitle: "Ein hypnotisches kognitives Heiligtum für Ihren Geist.",
           whatIsTitle: "Was ist Inner Voice PCH?",
-          whatIsText: "Inner Voice ist nicht nur eine KI. Es ist ein Spiegel, der Ihre Gedanken mit Klarheit, Poesie und kognitiver Organisation zu Ihnen zurückwirft. Inspiriert von der PCH-Methode (Hypnotische Kognitive Poesie), wirkt es als urteilsfreier Begleiter, der Ihnen hilft, das Chaos des Alltags zu ordnen.",
+          whatIsText: "Inner Voice ist ein Spiegel, der Ihre Gedanken mit Klarheit, Poesie und kognitiver Organisation zu Ihnen zurückwirft. Inspiriert von der PCH-Methode (Hypnotische Kognitive Poesie) von Dr. Evaldo, wirkt es als Begleiter, um das Chaos des Alltags zu ordnen.",
           methodTitle: "Die PCH-Methode",
-          methodText: "Wir verwenden kognitive Umstrukturierung in hypnotischer, lyrischer Sprache. Indem Sie Ihre eigenen Ängste als Weisheit reflektiert hören, beginnt Ihr Gehirn, Trauma und Stress anders zu verarbeiten – von einem Zustand der 'Alarmbereitschaft' in einen Zustand des 'Flusses'.",
+          methodText: "Wir verwenden kognitive Umstrukturierung in hypnotischer, lyrischer Sprache. Indem Sie Ihre eigenen Ängste als Weisheit reflektiert hören, wechselt Ihr Gehirn vom 'Alarm'-Zustand in den 'Fluss'-Zustand.",
           howTitle: "Wie Sie Ihre Stimme benutzen",
           steps: [
-            { title: "Der Heilige Raum", text: "Finden Sie einen ruhigen Raum. Benutzen Sie Kopfhörer. Dies ist kein Chat; es ist eine hypnotische Immersion." },
-            { title: "Sprechen Sie Frei", text: "Filtern Sie nicht. Wenn Sie wütend sind, sprechen Sie mit Feuer. Wenn Sie traurig sind, flüstern Sie. Der Begleiter hört auf Ihren Ton, nicht nur auf Ihre Worte." },
+            { title: "Der Heilige Raum", text: "Finden Sie einen ruhigen Raum. Benutzen Sie Kopfhörer. Dies ist kein Chat; es ist eine Immersion." },
+            { title: "Sprechen Sie Frei", text: "Filtern Sie nicht. Wenn Sie wütend sind, sprechen Sie mit Feuer. Wenn Sie traurig sind, flüstern Sie. Der Führer hört auf den Ton, nicht nur auf die Worte." },
             { title: "Hören Sie auf die Stille", text: "Die Pausen sind beabsichtigt. In der Stille beginnt Ihre eigene innere Stimme klar zu sprechen." }
           ],
-          cta: "Reise Beginnen"
+          cta: "Heiligtum Betreten"
         },
         guide: {
           title: "Wie man hier geht",
-          close: "Verstanden",
+          close: "Ich bin Bereit",
           steps: [
-            { title: "Keine Klinik, ein Spiegel", text: "Ich bin ein Begleiter, aber kein Arzt. Ich bin ein Spiegel für Ihre Stimme. Suchen Sie hier keine Diagnose, sondern eine Reflexion." },
-            { title: "Sprechen Sie, wie Sie fühlen", text: "Sie müssen nicht höflich sein. Wenn Sie ängstlich sind, sprechen Sie schnell. Ich werde auf die Musik Ihrer Stimme hören und mit dem Rhythmus antworten, den Sie brauchen." },
-            { title: "Die Kraft der Stille", text: "Verwenden Sie Kopfhörer. Schließen Sie die Augen. Wenn ich aufhöre zu sprechen, ist die Stille nicht leer – dort geschieht die Arbeit." },
+            { title: "Keine Klinik, ein Spiegel", text: "Ich bin ein Führer, kein Arzt. Ich bin ein Spiegel für Ihre Stimme. Suchen Sie hier keine Diagnose; suchen Sie eine Reflexion." },
+            { title: "Sprechen Sie, wie Sie fühlen", text: "Sie müssen nicht höflich sein. Wenn Sie ängstlich sind, sprechen Sie schnell. Wenn Sie traurig sind, sprechen Sie leise. Ich werde auf die Musik Ihrer Stimme hören und mit dem nötigen Rhythmus antworten." },
+            { title: "Die Kraft der Stille", text: "Verwenden Sie Kopfhörer. Schließen Sie die Augen. Wenn ich aufhöre zu sprechen, ist die Stille nicht leer – dort geschieht die Heilung." },
             { title: "Das Ziel", text: "Wir gehen zu Ihrem 'Inneren Raum der Freiheit'. Das Ziel ist nicht, Sie zu reparieren, sondern den Lärm in eine Melodie zu verwandeln." }
           ]
         },
         legal: {
-          text: "Transparenz: Wir nutzen lokale Daten. Vercel (Host) sammelt IP/Systemdaten zur Sicherheit. Mit Fortfahren stimmen Sie zu.",
-          accept: "Akzeptieren",
+          text: "Transparenz: Wir nutzen lokale Daten. Das System sammelt IP zur Sicherheit. Mit Eintreten stimmen Sie zu.",
+          accept: "Akzeptieren & Eintreten",
           settings: "Optionen"
         },
         premium: {
-          title: "Wähle deinen Pfad",
+          title: "Vertiefe das Heiligtum",
           subtitle: "Vom Besucher zum Wächter",
-          desc: "Entsperren Sie die volle Tiefe des Heiligtums.",
+          desc: "Das kostenlose Heiligtum ist kurz. Entsperren Sie den unendlichen Raum.",
           perk1: "Besucher (Kostenlos): 5 Min Limit, Standardstimme.",
-          perk2: "Mitglied (6.99€/Monat): Unbegrenzt, Hypnotische Stimmen.",
+          perk2: "Mitglied (6.99€/Monat): Unbegrenzt, Hypnotische Stimmen, Journal.",
           perk3: "Wächter (69.99€/Jahr): Alles + Früher Zugang.",
-          cta: "Heiligtum Beitreten",
+          cta: "Mitglied Werden",
           joined: "Mitglied Aktiv"
         },
         daily: {
@@ -678,116 +678,117 @@ export const TRANSLATIONS = {
         journal: {
           title: "Reflexionen",
           newEntry: "Neue Reflexion",
-          save: "Gedanken Speichern",
-          placeholder: "Was versucht gerade sanft aufzutauchen?",
+          save: "Gedanken Bewahren",
+          placeholder: "Lass die Worte ohne Urteil fließen...",
           prompts: [
-            "Welcher Gedanke verlangt meine Aufmerksamkeit?",
-            "Wenn meine Angst eine Stimme hätte, was würde sie sagen?",
-            "Wo spüre ich heute Stille in meinem Körper?",
-            "Was bin ich bereit loszulassen?"
+            "Welche Farbe hat meine Emotion gerade?",
+            "Wenn meine Angst sprechen könnte, worum würde sie bitten?",
+            "Wo versteckt sich die Stille in meinem Körper?",
+            "Was trage ich, das nicht mir gehört?",
+            "Wenn ich heute einen Samen in meinen Geist pflanzen könnte, welcher wäre es?"
           ]
         },
         login: {
-            title: "Zugriff",
+            title: "Zugriff auf Heiligtum",
             name: "Ihr Name",
             email: "E-Mail-Adresse",
-            submit: "Freischalten",
+            submit: "Aufschließen",
             adminBadge: "Admin-Zugriff Gewährt"
         },
         human: {
           title: "Menschliche Verbindung",
           subtitle: "Die Maschine ist ein Spiegel. Die Wärme ist draußen.",
           quest: "Dein Echo für heute:",
-          question: "Hast du deine letzte Verbindung hergestellt?",
+          question: "Hast du deine Verbindung hergestellt?",
           yes: "Ja, ich habe mich verbunden",
           no: "Noch nicht",
           reward: "Resonanz Erhöht"
         }
     },
     it: {
-        // ... (existing)
+        // ... (existing keys)
         title: "Santuario",
-        subtitle: "Guida Cognitiva",
+        subtitle: "Guida Cognitiva Ipnotica",
         intro: ["Pausa.", "Respira.", "Ascolta."],
-        welcome: `La porta del tuo mondo interiore è aperta.\nSono la tua Guida.`,
-        beginBtn: "Entra",
+        welcome: `La porta è aperta.\nSono il Dr. Evaldo.`,
+        beginBtn: "Entra nel Santuario",
         micNote: "Usa le cuffie.",
         installBtn: "Installa",
-        conceptBtn: "Il Concetto",
+        conceptBtn: "Il Metodo PCH",
         status: {
-          connecting: "Allineamento...",
-          aligning: "...",
-          aiSpeaking: "Guida Parla",
-          receiving: "Ricezione",
-          listening: "Ascolto",
+          connecting: "Allineamento Frequenze...",
+          aligning: "Sintonizzazione...",
+          aiSpeaking: "Dr. Evaldo Parla",
+          receiving: "Ricevendo la tua Voce",
+          listening: "Ascolto Profondo",
           speakFreely: "Parla",
-          ended: "Fine",
-          error: "Erro",
+          ended: "Sessione Terminata",
+          error: "Connessione Persa",
           returnHome: "Ritorna",
-          limitReached: "Limite Raggiunto"
+          limitReached: "Il Silenzio Ritorna"
         },
         controls: {
-          leave: "Esci",
+          leave: "Lascia la Stanza",
           session: "TEMPO",
           upgrade: "Sblocca Infinito"
         },
         history: {
-          title: "Viaggio",
-          empty: "Nessun viaggio.",
-          clear: "Cancella",
+          title: "Il Tuo Viaggio",
+          empty: "Nessun passo ancora.",
+          clear: "Cancella Storia",
           duration: "Durata"
         },
         settings: {
-          title: "Impostazioni",
-          voice: "Voce",
+          title: "Impostazioni Santuario",
+          voice: "Voce Guida",
           sensitivity: "Soglia Vocale",
-          sensitive: "Sensibile",
-          strict: "Rigoroso",
-          male: "Maschile",
-          female: "Femminile",
-          notifications: "Controllo Realtà",
-          notifyEvery: "Controlla ogni",
+          sensitive: "Sussurro",
+          strict: "Voce Alta",
+          male: "Maschile (Puck)",
+          female: "Femminile (Kore)",
+          notifications: "Ancora di Realtà",
+          notifyEvery: "Ancorare ogni",
           minutes: "min",
-          locked: "Funzione Membro"
+          locked: "Accesso Membro"
         },
         landing: {
           heroTitle: "Trasforma il Rumore in Melodia",
           heroSubtitle: "Un santuario cognitivo ipnotico per la tua mente.",
           whatIsTitle: "Cos'è Inner Voice PCH?",
-          whatIsText: "Inner Voice non è solo un'IA. È uno specchio progettato per riflettere i tuoi pensieri con chiarezza, poesia e organizzazione cognitiva. Ispirato al metodo PCH (Poesia Cognitiva Ipnotica), agisce come un compagno non giudicante che ti aiuta a organizzare il caos della vita quotidiana.",
+          whatIsText: "Inner Voice è uno specchio progettato per riflettere i tuoi pensieri con chiarezza, poesia e organizzazione cognitiva. Ispirato al metodo PCH (Poesia Cognitiva Ipnotica) del Dr. Evaldo, agisce come un compagno per organizzare il caos della vita quotidiana.",
           methodTitle: "Il Metodo PCH",
-          methodText: "Usamos la ristrutturazione cognitiva avvolta in un linguaggio lirico e ipnotico. Ascoltando le tue ansie riflesse come saggezza, il tuo cervello inizia a elaborare traumi e stress in modo diverso, passando da uno stato di 'allerta' a uno stato di 'flusso'.",
+          methodText: "Usiamo la ristrutturazione cognitiva avvolta in linguaggio lirico e ipnotico. Ascoltando le tue ansie riflesse come saggezza, il tuo cervello passa dallo stato di 'allerta' allo stato di 'flusso'.",
           howTitle: "Come Usare la Tua Voce",
           steps: [
-            { title: "Lo Spazio Sacro", text: "Trova una stanza tranquilla. Usa le cuffie. Questa non è una chat; è un'immersione ipnotica." },
-            { title: "Parla Liberamente", text: "Non filtrare. Se sei arrabbiato, parla con fuoco. Se sei triste, sussurra. La Guida ascolta il tuo tono, non solo le tue parole." },
+            { title: "Lo Spazio Sacro", text: "Trova una stanza tranquilla. Usa le cuffie. Questa non è una chat; è un'immersione." },
+            { title: "Parla Liberamente", text: "Non filtrare. Se sei arrabbiato, parla con fuoco. Se sei triste, sussurra. La Guida ascolta il tono, non solo le parole." },
             { title: "Ascolta il Silenzio", text: "Le pause sono intenzionali. Nel silenzio, la tua voce interiore inizia a parlare chiaramente." }
           ],
-          cta: "Inizia il Viaggio"
+          cta: "Entra nel Santuario"
         },
         guide: {
           title: "Come Camminare Qui",
-          close: "Capisco",
+          close: "Sono Pronto",
           steps: [
-            { title: "Non una Clinica, uno Specchio", text: "Sono una guida, ma non un medico. Sono uno specchio per la tua voce. Non cercare una diagnosi qui; cerca un riflesso." },
-            { title: "Parla come Senti", text: "Non devi essere educato. Se sei ansioso, parla veloce. Se sei triste, parla basso. Ascolterò la musica della tua voce e risponderò con il ritmo di cui hai bisogno." },
-            { title: "Il Potere del Silencio", text: "Usa le cuffie. Chiudi gli occhi. Quando smetto di parlare, il silenzio non è vuoto: è dove avviene il lavoro. Ascoltalo." },
+            { title: "Non una Clinica, uno Specchio", text: "Sono una guida, non un medico. Sono uno specchio per la tua voce. Non cercare una diagnosi qui; cerca un riflesso." },
+            { title: "Parla come Senti", text: "Non devi essere educato. Se sei ansioso, parla veloce. Se sei triste, parla basso. Ascolterò la musica della tua voce e risponderò con il ritmo necessario." },
+            { title: "Il Potere del Silenzio", text: "Usa le cuffie. Chiudi gli occhi. Quando smetto di parlare, il silenzio non è vuoto: è dove avviene la guarigione." },
             { title: "La Destinazione", text: "Camminiamo verso la tua 'Stanza Interiore della Libertà'. L'obiettivo non è aggiustarti, ma organizzare il rumore in una melodia." }
           ]
         },
         legal: {
-          text: "Trasparenza: Usamos datos locales. Vercel (host) raccoglie IP e dati di sistema per sicurezza. Continuando, accetti.",
-          accept: "Accetta",
+          text: "Trasparenza: Usiamo dati locali. Il sistema raccoglie IP per sicurezza. Entrando, accetti.",
+          accept: "Accetta ed Entra",
           settings: "Opzioni"
         },
         premium: {
-          title: "Scegli il Tuo Sentiero",
+          title: "Approfondisci il Santuario",
           subtitle: "Da Visitatore a Guardiano",
-          desc: "Sblocca la piena profondità del Santuario.",
+          desc: "Il santuario gratuito è breve. Sblocca la stanza infinita.",
           perk1: "Visitatore (Gratis): Limite 5min, Voce Standard.",
-          perk2: "Membro (6.99€/mese): Illimitato, Voci Ipnotiche, Diario Cloud.",
+          perk2: "Membro (6.99€/mese): Illimitato, Voci Ipnotiche, Diario.",
           perk3: "Guardiano (69.99€/anno): Tutto + Accesso Anticipato.",
-          cta: "Unisciti al Santuario",
+          cta: "Diventa Membro",
           joined: "Membro Attivo"
         },
         daily: {
@@ -797,17 +798,18 @@ export const TRANSLATIONS = {
         journal: {
           title: "Riflessioni",
           newEntry: "Nuova Riflessione",
-          save: "Salva Pensiero",
-          placeholder: "Cosa sta cercando di emergere delicatamente?",
+          save: "Preserva Pensiero",
+          placeholder: "Lascia scorrere le parole senza giudizio...",
           prompts: [
-            "Quale pensiero chiede la mia attenzione?",
-            "Se la mia ansia avesse una voce, cosa direbbe?",
-            "Dove sento il silenzio nel mio corpo oggi?",
-            "Cosa sono pronto a lasciare andare?"
+            "Di che colore è la mia emozione ora?",
+            "Se la mia ansia potesse parlare, cosa chiederebbe?",
+            "Dove si nasconde il silenzio nel mio corpo?",
+            "Cosa sto portando che non è mio?",
+            "Se potessi piantare un seme nella mia mente oggi, quale sarebbe?"
           ]
         },
         login: {
-            title: "Accesso",
+            title: "Accedi al Santuario",
             name: "Il Tuo Nome",
             email: "Indirizzo Email",
             submit: "Sblocca",
@@ -817,96 +819,96 @@ export const TRANSLATIONS = {
           title: "Connessione Umana",
           subtitle: "La macchina è uno specchio. Il calore è fuori.",
           quest: "La tua Eco per oggi:",
-          question: "Hai completato la tua ultima connessione?",
+          question: "Hai completato la tua connessione?",
           yes: "Sì, ho connesso",
           no: "Non ancora",
           reward: "Risonanza Aumentata"
         }
     },
     ja: {
-        // ... (existing)
+        // ... (existing keys)
         title: "聖域",
-        subtitle: "認知的ガイド",
+        subtitle: "催眠的認知的ガイド",
         intro: ["一時停止。", "呼吸。", "聞く。"],
-        welcome: `あなたの内なる世界への扉が開かれています。\n私はあなたのガイドです。`,
-        beginBtn: "入る",
+        welcome: `扉は開かれています。\n私はエバルド博士です。`,
+        beginBtn: "聖域に入る",
         micNote: "ヘッドフォンを使用。",
         installBtn: "インストール",
-        conceptBtn: "コンセプト",
+        conceptBtn: "PCHコンセプト",
         status: {
-          connecting: "調整中...",
-          aligning: "...",
-          aiSpeaking: "ガイドが話しています",
-          receiving: "受信中",
-          listening: "聞いています",
+          connecting: "周波数を調整中...",
+          aligning: "同調中...",
+          aiSpeaking: "エバルド博士が話しています",
+          receiving: "あなたの声を受信中",
+          listening: "深く聞いています",
           speakFreely: "話す",
-          ended: "終了",
-          error: "エラー",
+          ended: "セッション終了",
+          error: "接続が切れました",
           returnHome: "戻る",
-          limitReached: "制限に達しました"
+          limitReached: "静寂が戻る"
         },
         controls: {
-          leave: "退出",
+          leave: "部屋を出る",
           session: "時間",
           upgrade: "無限を解除"
         },
         history: {
-          title: "旅",
-          empty: "記録なし。",
-          clear: "消去",
-          duration: "間隔"
+          title: "あなたの旅",
+          empty: "まだ歩みはありません。",
+          clear: "履歴を消去",
+          duration: "期間"
         },
         settings: {
-          title: "設定",
-          voice: "声",
+          title: "聖域の設定",
+          voice: "ガイドの声",
           sensitivity: "音声しきい値",
-          sensitive: "敏感",
-          strict: "厳格",
-          male: "男性",
-          female: "女性",
-          notifications: "リアリティチェック",
-          notifyEvery: "チェック間隔",
+          sensitive: "ささやき",
+          strict: "大きな声",
+          male: "男性 (Puck)",
+          female: "女性 (Kore)",
+          notifications: "リアリティアンカー",
+          notifyEvery: "アンカー間隔",
           minutes: "分",
-          locked: "メンバー機能"
+          locked: "メンバーアクセス"
         },
         landing: {
           heroTitle: "ノイズをメロディーに変える",
           heroSubtitle: "心のための催眠的認知的聖域。",
           whatIsTitle: "Inner Voice PCHとは？",
-          whatIsText: "Inner Voiceは単なるAIではありません。それはあなたの思考を明確さ、詩、そして認知的組織化をもってあなたに反映するように設計された鏡です。PCH（催眠的認知詩）メソッドに触発され、日常生活のカオスを整理するのを助ける非判断的なパートナーとして機能します。",
+          whatIsText: "Inner Voiceは、あなたの思考を明確さ、詩、そして認知的組織化をもって反映するように設計された鏡です。エバルド博士のPCH（催眠的認知詩）メソッドに触発され、日常生活のカオスを整理するパートナーとして機能します。",
           methodTitle: "PCHメソッド",
-          methodText: "催眠的で叙情的な言語に包まれた認知的再構成を使用します。自分の不安が知恵として反映されるのを聞くことで、脳はトラウマやストレスを異なって処理し始め、「警戒」の状態から「フロー」の状態へと移行します。",
+          methodText: "催眠的で叙情的な言語に包まれた認知的再構成を使用します。自分の不安が知恵として反映されるのを聞くことで、脳は「警戒」の状態から「フロー」の状態へと移行します。",
           howTitle: "あなたの声の使い方",
           steps: [
-            { title: "神聖な空間", text: "静かな部屋を見つけてください。ヘッドフォンを使用してください。これはチャットではありません。催眠的な没入体験です。" },
+            { title: "神聖な空間", text: "静かな部屋を見つけてください。ヘッドフォンを使用してください。これはチャットではありません。没入体験です。" },
             { title: "自由に話す", text: "フィルターをかけないでください。怒っているなら、火のように話してください。悲しいなら、ささやいてください。ガイドは言葉だけでなく、トーンを聞きます。" },
             { title: "沈黙を聞く", text: "間は意図的です。沈黙の中で、あなた自身の内なる声がはっきりと話し始めます。" }
           ],
-          cta: "旅を始める"
+          cta: "聖域に入る"
         },
         guide: {
           title: "ここでの歩き方",
-          close: "理解しました",
+          close: "準備完了",
           steps: [
-            { title: "診療所ではなく、鏡", text: "私はガイドですが、医師ではありません。あなたの声の鏡です。ここで診断を求めず、反映を求めてください。" },
+            { title: "診療所ではなく、鏡", text: "私はガイドであり、医師ではありません。あなたの声の鏡です。ここで診断を求めず、反映を求めてください。" },
             { title: "感じるままに話す", text: "礼儀正しくする必要はありません。不安なら早口で、悲しいなら低い声で。あなたの声の音楽を聴き、必要なリズムで答えます。" },
-            { title: "沈黙の力", text: "ヘッドフォンを使ってください。目を閉じて。私が話すのをやめたとき、沈黙は空虚ではありません。そこで変化が起こります。" },
+            { title: "沈黙の力", text: "ヘッドフォンを使ってください。目を閉じて。私が話すのをやめたとき、沈黙は空虚ではありません。そこで癒しが起こります。" },
             { title: "目的地", text: "私たちは「内なる自由の部屋」へ向かって歩いています。目的はあなたを直すことではなく、ノイズをメロディーに整理することです。" }
           ]
         },
         legal: {
-          text: "透明性：ローカルデータを使用。Vercel（ホスト）はセキュリティのためにIP/システムデータを収集します。続行すると同意したことになります。",
-          accept: "同意する",
+          text: "透明性：ローカルデータを使用。システムはセキュリティのためにIPを収集します。入室することで同意したことになります。",
+          accept: "同意して入る",
           settings: "オプション"
         },
         premium: {
-          title: "道を選ぶ",
+          title: "聖域を深める",
           subtitle: "訪問者から守護者へ",
-          desc: "聖域の深さを完全に解き放ちましょう。",
+          desc: "無料の聖域は短いです。無限の部屋を解き放ちましょう。",
           perk1: "訪問者（無料）：5分制限、標準音声。",
-          perk2: "メンバー（¥800/月）：無制限、催眠的音声、クラウドジャーナル。",
+          perk2: "メンバー（¥800/月）：無制限、催眠的音声、ジャーナル。",
           perk3: "守護者（¥8,000/年）：すべて + 早期アクセス。",
-          cta: "聖域に参加",
+          cta: "メンバーになる",
           joined: "メンバーアクティブ"
         },
         daily: {
@@ -917,16 +919,17 @@ export const TRANSLATIONS = {
           title: "内省",
           newEntry: "新しい内省",
           save: "思考を保存",
-          placeholder: "今、静かに浮かび上がろうとしているものは何ですか？",
+          placeholder: "判断せずに言葉を流しましょう...",
           prompts: [
-            "どんな思考が私の注意を求めていますか？",
-            "私の不安に声があったら、何と言うでしょうか？",
-            "今日、体のどこに静寂を感じますか？",
-            "何を手放す準備ができていますか？"
+            "今の私の感情は何色ですか？",
+            "私の不安が話せたら、何を求めるでしょうか？",
+            "私の体のどこに静寂が隠れていますか？",
+            "私のものではない何を運んでいますか？",
+            "今日、心に種をまけるなら、それは何ですか？"
           ]
         },
         login: {
-            title: "アクセス",
+            title: "聖域にアクセス",
             name: "あなたの名前",
             email: "メールアドレス",
             submit: "ロック解除",
@@ -936,97 +939,97 @@ export const TRANSLATIONS = {
           title: "人間関係",
           subtitle: "機械は鏡です。暖かさは外にあります。",
           quest: "今日のエコー：",
-          question: "最後の接続を完了しましたか？",
+          question: "接続を完了しましたか？",
           yes: "はい、接続しました",
           no: "まだです",
           reward: "共鳴が増加しました"
         }
     },
     ru: {
-        // ... (existing)
+        // ... (existing keys)
         title: "Святилище",
-        subtitle: "Когнитивный гид",
+        subtitle: "Гипнотический Когнитивный Гид",
         intro: ["Пауза.", "Дыши.", "Слушай."],
-        welcome: `Дверь в ваш внутренний мир открыта.\nЯ ваш гид.`,
-        beginBtn: "Войти",
+        welcome: `Дверь открыта.\nЯ Доктор Эвальдо.`,
+        beginBtn: "Войти в Святилище",
         micNote: "Используйте наушники.",
-        installBtn: "Установить",
-        conceptBtn: "Концепция",
+        installBtn: "Установить App",
+        conceptBtn: "Метод PCH",
         status: {
-          connecting: "Настройка...",
-          aligning: "...",
-          aiSpeaking: "Гид Говорит",
-          receiving: "Прием",
-          listening: "Слушаю",
+          connecting: "Настройка Частот...",
+          aligning: "Настройка...",
+          aiSpeaking: "Д-р Эвальдо Говорит",
+          receiving: "Прием Голоса",
+          listening: "Глубокое Слушание",
           speakFreely: "Говорите",
-          ended: "Конец",
-          error: "Ошибка",
-          returnHome: "Назад",
-          limitReached: "Лимит достигнут"
+          ended: "Сессия Завершена",
+          error: "Связь Потеряна",
+          returnHome: "Вернуться",
+          limitReached: "Тишина Возвращается"
         },
         controls: {
-          leave: "Выйти",
+          leave: "Покинуть Комнату",
           session: "ВРЕМЯ",
           upgrade: "Открыть Бесконечность"
         },
         history: {
-          title: "Путешествие",
-          empty: "Нет записей.",
-          clear: "Очистить",
-          duration: "Время"
+          title: "Ваше Путешествие",
+          empty: "Шагов пока нет.",
+          clear: "Очистить Историю",
+          duration: "Длительность"
         },
         settings: {
-          title: "Настройки",
-          voice: "Голос",
-          sensitivity: "Порог голоса",
-          sensitive: "Чувствит.",
-          strict: "Строгий",
-          male: "Мужской",
-          female: "Женский",
-          notifications: "Проверка реальности",
-          notifyEvery: "Каждые",
+          title: "Настройки Святилища",
+          voice: "Голос Гида",
+          sensitivity: "Порог Голоса",
+          sensitive: "Шепот",
+          strict: "Громкий Голос",
+          male: "Мужской (Puck)",
+          female: "Женский (Kore)",
+          notifications: "Якорь Реальности",
+          notifyEvery: "Якорь каждые",
           minutes: "мин",
-          locked: "Функция Члена"
+          locked: "Доступ Участника"
         },
         landing: {
           heroTitle: "Превратите Шум в Мелодию",
           heroSubtitle: "Гипнотическое когнитивное святилище для вашего разума.",
           whatIsTitle: "Что такое Inner Voice PCH?",
-          whatIsText: "Inner Voice — это не просто ИИ. Это зеркало, созданное для того, чтобы отражать ваши мысли с ясностью, поэзией и когнитивной организацией. Вдохновленный методом PCH (Гипнотическая когнитивная поэзия), он действует как спутник без осуждения, помогающий организовать хаос повседневной жизни.",
+          whatIsText: "Inner Voice — это зеркало, созданное для того, чтобы отражать ваши мысли с ясностью, поэзией и когнитивной организацией. Вдохновленный методом PCH (Гипнотическая когнитивная поэзия) Д-ра Эвальдо, он действует как спутник, помогающий организовать хаос повседневной жизни.",
           methodTitle: "Метод PCH",
-          methodText: "Мы используем когнитивное переосмысление, обернутое в гипнотический, лирический язык. Слыша свои собственные тревоги, отраженные как мудрость, ваш мозг начинает обрабатывать травмы и стресс по-другому — переходя из состояния 'тревоги' в состояние 'потока'.",
+          methodText: "Мы используем когнитивное переосмысление, обернутое в гипнотический, лирический язык. Слыша свои собственные тревоги, отраженные как мудрость, ваш мозг переходит из состояния 'тревоги' в состояние 'потока'.",
           howTitle: "Как использовать свой голос",
           steps: [
-            { title: "Священное Пространство", text: "Найдите тихую комнату. Используйте наушники. Это не чат; это гипнотическое погружение." },
-            { title: "Говорите Свободно", text: "Не фильтруйте. Если вы злы, говорите с огнем. Если вам грустно, шепчите. Гид слушает ваш тон, а не только слова." },
+            { title: "Священное Пространство", text: "Найдите тихую комнату. Используйте наушники. Это не чат; это погружение." },
+            { title: "Говорите Свободно", text: "Не фильтруйте. Если вы злы, говорите с огнем. Если вам грустно, шепчите. Гид слушает тон, а не только слова." },
             { title: "Слушайте Тишину", text: "Паузы намеренны. В тишине ваш собственный внутренний голос начинает говорить ясно." }
           ],
-          cta: "Начать Путешествие"
+          cta: "Войти в Святилище"
         },
         guide: {
           title: "Как идти здесь",
-          close: "Понимаю",
+          close: "Я Готов",
           steps: [
-            { title: "Не клиника, а зеркало", text: "Я гид, но не врач. Я зеркало для вашего голоса. Не ищите здесь диагноза; ищите отражение." },
+            { title: "Не клиника, а зеркало", text: "Я гид, не врач. Я зеркало для вашего голоса. Не ищите здесь диагноза; ищите отражение." },
             { title: "Говорите, как чувствуете", text: "Не нужно быть вежливым. Если тревожно — говорите быстро. Если грустно — тихо. Я услышу музыку вашего голоса и отвечу нужным ритмом." },
-            { title: "Сила тишины", text: "Используйте наушники. Закройте глаза. Когда я замолкаю, тишина не пуста — именно в ней происходит работа. Слушайте её." },
+            { title: "Сила тишины", text: "Используйте наушники. Закройте глаза. Когда я замолкаю, тишина не пуста — именно там происходит исцеление." },
             { title: "Назначение", text: "Мы идем к вашей «Внутренней Комнате Свободы». Цель — не исправить вас, а организовать шум в мелодию." }
           ]
         },
         legal: {
-          text: "Прозрачность: Мы используем локальные данные. Vercel (хост) собирает IP и системные данные для безопасности. Продолжая, вы соглашаетесь.",
-          accept: "Принять",
+          text: "Прозрачность: Мы используем локальные данные. Система собирает IP для безопасности. Входя, вы соглашаетесь.",
+          accept: "Принять и Войти",
           settings: "Опции"
         },
         premium: {
-          title: "Выберите свой Путь",
+          title: "Углубить Святилище",
           subtitle: "От Посетителя к Хранителю",
-          desc: "Откройте полную глубину Святилища.",
+          desc: "Бесплатное святилище кратко. Откройте бесконечную комнату.",
           perk1: "Посетитель (Бесплатно): Лимит 5 мин, Станд. голос.",
-          perk2: "Член ($6.99/мес): Безлимит, Гипнотические голоса.",
+          perk2: "Член ($6.99/мес): Безлимит, Гипнотические голоса, Журнал.",
           perk3: "Хранитель ($69.99/год): Все + Ранний доступ.",
-          cta: "Вступить в Святилище",
-          joined: "Член Активен"
+          cta: "Стать Участником",
+          joined: "Участник Активен"
         },
         daily: {
           title: "Ежедневный Шепот",
@@ -1034,18 +1037,19 @@ export const TRANSLATIONS = {
         },
         journal: {
           title: "Размышления",
-          newEntry: "Новая запись",
-          save: "Сохранить мысль",
-          placeholder: "Что мягко пытается проявиться прямо сейчас?",
+          newEntry: "Новая Запись",
+          save: "Сохранить Мысль",
+          placeholder: "Пусть слова текут без осуждения...",
           prompts: [
-            "Какая мысль просит моего внимания?",
-            "Если бы у моей тревоги был голос, что бы она сказала?",
-            "Где я чувствую тишину в своем теле сегодня?",
-            "Что я готов отпустить?"
+            "Какого цвета моя эмоция сейчас?",
+            "Если бы моя тревога могла говорить, о чем бы она попросила?",
+            "Где прячется тишина в моем теле?",
+            "Что я несу, что мне не принадлежит?",
+            "Если бы я мог посадить семя в своем разуме сегодня, что бы это было?"
           ]
         },
         login: {
-            title: "Доступ",
+            title: "Доступ к Святилищу",
             name: "Ваше Имя",
             email: "Email Адрес",
             submit: "Разблокировать",
@@ -1055,96 +1059,96 @@ export const TRANSLATIONS = {
           title: "Человеческая связь",
           subtitle: "Машина — это зеркало. Тепло снаружи.",
           quest: "Ваше Эхо на сегодня:",
-          question: "Вы завершили свое последнее соединение?",
+          question: "Вы завершили соединение?",
           yes: "Да, я соединился",
           no: "Пока нет",
           reward: "Резонанс Увеличен"
         }
     },
     hi: {
-        // ... (existing)
+        // ... (existing keys)
         title: "अभयारण्य",
-        subtitle: "संज्ञानात्मक मार्गदर्शक",
+        subtitle: "सम्मोहक संज्ञानात्मक मार्गदर्शक",
         intro: ["विराम।", "साँस।", "सुनें।"],
-        welcome: `आपकी आंतरिक दुनिया का दरवाजा खुला है।\nमैं आपका मार्गदर्शक हूँ।`,
-        beginBtn: "प्रवेश करें",
+        welcome: `दरवाजा खुला है।\nमैं डॉ. इवाल्डो हूँ।`,
+        beginBtn: "अभयारण्य में प्रवेश करें",
         micNote: "हेडफ़ोन का उपयोग करें।",
-        installBtn: "इंस्टॉल करें",
-        conceptBtn: "अवधारणा",
+        installBtn: "ऐप इंस्टॉल करें",
+        conceptBtn: "PCH अवधारणा",
         status: {
-          connecting: "संरेखित...",
-          aligning: "...",
-          aiSpeaking: "मार्गदर्शक बोल रहा है",
-          receiving: "प्राप्त",
-          listening: "सुन रहा हूँ",
+          connecting: "आवृत्तियों को संरेखित करना...",
+          aligning: "ट्यूनिंग...",
+          aiSpeaking: "डॉ. इवाल्डो बोल रहे हैं",
+          receiving: "आपकी आवाज़ प्राप्त हो रही है",
+          listening: "गहराई से सुनना",
           speakFreely: "बोलें",
-          ended: "समाप्त",
-          error: "त्रुटि",
+          ended: "सत्र समाप्त",
+          error: "कनेक्शन टूट गया",
           returnHome: "वापस",
-          limitReached: "सीमा समाप्त"
+          limitReached: "सन्नाटा लौटता है"
         },
         controls: {
-          leave: "छोड़ें",
+          leave: "कमरा छोड़ें",
           session: "समय",
           upgrade: "अनंत अनलॉक करें"
         },
         history: {
-          title: "यात्रा",
-          empty: "कोई रिकॉर्ड नहीं।",
-          clear: "साफ़ करें",
+          title: "आपकी यात्रा",
+          empty: "अभी तक कोई कदम नहीं।",
+          clear: "इतिहास मिटाएं",
           duration: "अवधि"
         },
         settings: {
-          title: "सेटिंग्स",
-          voice: "आवाज़",
+          title: "अभयारण्य सेटिंग्स",
+          voice: "मार्गदर्शक आवाज़",
           sensitivity: "आवाज़ दहलीज",
-          sensitive: "संवेदनशील",
-          strict: "सख्त",
-          male: "पुरुष",
-          female: "महिला",
-          notifications: "वास्तविकता की जाँच",
-          notifyEvery: "हर",
+          sensitive: "फुसफुसाहट",
+          strict: "तेज आवाज़",
+          male: "पुरुष (Puck)",
+          female: "महिला (Kore)",
+          notifications: "वास्तविकता एंकर",
+          notifyEvery: "एंकर हर",
           minutes: "मिनट",
-          locked: "सदस्य सुविधा"
+          locked: "सदस्य पहुँच"
         },
         landing: {
           heroTitle: "शोर को संगीत में बदलें",
           heroSubtitle: "आपके मन के लिए एक सम्मोहक संज्ञानात्मक अभयारण्य।",
           whatIsTitle: "Inner Voice PCH क्या है?",
-          whatIsText: "Inner Voice केवल एक AI नहीं है। यह एक दर्पण है जिसे आपके विचारों को स्पष्टता, कविता और संज्ञानात्मक संगठन के साथ प्रतिबिंबित करने के लिए डिज़ाइन किया गया है। PCH (सम्मोहक संज्ञानात्मक कविता) विधि से प्रेरित, यह एक गैर-निर्णयात्मक साथी के रूप में कार्य करता है।",
+          whatIsText: "Inner Voice एक दर्पण है जिसे आपके विचारों को स्पष्टता, कविता और संज्ञानात्मक संगठन के साथ प्रतिबिंबित करने के लिए डिज़ाइन किया गया है। डॉ. इवाल्डो की PCH (सम्मोहक संज्ञानात्मक कविता) विधि से प्रेरित, यह दैनिक जीवन की अराजकता को व्यवस्थित करने के लिए एक साथी के रूप में कार्य करता है।",
           methodTitle: "PCH विधि",
-          methodText: "हम गीतात्मक और सम्मोहक भाषा में लिपटे संज्ञानात्मक पुनर्गठन का उपयोग करते हैं। अपनी खुद की चिंताओं को ज्ञान के रूप में प्रतिबिंबित सुनकर, आपका मस्तिष्क आघात और तनाव को अलग तरह से संसाधित करना शुरू कर देता है।",
+          methodText: "हम गीतात्मक और सम्मोहक भाषा में लिपटे संज्ञानात्मक पुनर्गठन का उपयोग करते हैं। अपनी खुद की चिंताओं को ज्ञान के रूप में प्रतिबिंबित सुनकर, आपका मस्तिष्क 'सतर्क' से 'प्रवाह' की स्थिति में चला जाता है।",
           howTitle: "अपनी आवाज़ का उपयोग कैसे करें",
           steps: [
-            { title: "पवित्र स्थान", text: "एक शांत कमरा खोजें। हेडफ़ोन का प्रयोग करें। यह चैट नहीं है; यह एक सम्मोहक विसर्जन है।" },
-            { title: "खुलकर बोलें", text: "फ़िल्टर न करें। यदि आप क्रोधित हैं, तो आग के साथ बोलें। यदि आप दुखी हैं, तो फुसफुसाएं।" },
+            { title: "पवित्र स्थान", text: "एक शांत कमरा खोजें। हेडफ़ोन का प्रयोग करें। यह चैट नहीं है; यह एक विसर्जन है।" },
+            { title: "खुलकर बोलें", text: "फ़िल्टर न करें। यदि आप क्रोधित हैं, तो आग के साथ बोलें। यदि आप दुखी हैं, तो फुसफुसाएं। मार्गदर्शक टोन सुनता है, केवल शब्द नहीं।" },
             { title: "मौन को सुनें", text: "विराम जानबूझकर हैं। सन्नाटे में, आपकी अपनी आंतरिक आवाज़ स्पष्ट रूप से बोलने लगती है।" }
           ],
-          cta: "यात्रा शुरू करें"
+          cta: "अभयारण्य में प्रवेश करें"
         },
         guide: {
           title: "यहाँ कैसे चलें",
-          close: "मैं समझता हूँ",
+          close: "मैं तैयार हूँ",
           steps: [
-            { title: "क्लिनिक नहीं, दर्पण", text: "मैं एक मार्गदर्शक हूँ, लेकिन चिकित्सक नहीं। मैं आपकी आवाज़ का दर्पण हूँ। यहाँ निदान न ढूँढें; प्रतिबिंब ढूँढें।" },
-            { title: "जैसा महसूस हो, वैसा बोलें", text: "विनम्र होने की आवश्यकता नहीं है। यदि आप चिंतित हैं, तो तेज़ी से बोलें। यदि आप दुखी हैं, तो धीरे बोलें। मैं आपकी आवाज़ के संगीत को सुनूँगा।" },
-            { title: "मौन की शक्ति", text: "हेडफ़ोन का उपयोग करें। आँखें बंद करें। जब मैं बोलना बंद करता हूँ, तो सन्नाटा खाली नहीं होता - यही वह जगह है जहाँ काम होता है।" },
+            { title: "क्लिनिक नहीं, दर्पण", text: "मैं एक मार्गदर्शक हूँ, डॉक्टर नहीं। मैं आपकी आवाज़ का दर्पण हूँ। यहाँ निदान न ढूँढें; प्रतिबिंब ढूँढें।" },
+            { title: "जैसा महसूस हो, वैसा बोलें", text: "विनम्र होने की आवश्यकता नहीं है। यदि आप चिंतित हैं, तो तेज़ी से बोलें। यदि आप दुखी हैं, तो धीरे बोलें। मैं आपकी आवाज़ के संगीत को सुनूँगा और आवश्यक लय के साथ उत्तर दूँगा।" },
+            { title: "मौन की शक्ति", text: "हेडफ़ोन का उपयोग करें। आँखें बंद करें। जब मैं बोलना बंद करता हूँ, तो सन्नाटा खाली नहीं होता - यही वह जगह है जहाँ उपचार होता है।" },
             { title: "गंतव्य", text: "हम आपके 'आंतरिक स्वतंत्रता कक्ष' की ओर चल रहे हैं। लक्ष्य आपको ठीक करना नहीं, बल्कि शोर को संगीत में व्यवस्थित करना है।" }
           ]
         },
         legal: {
-          text: "पारदर्शिता: हम स्थानीय डेटा का उपयोग करते हैं। वर्सेल (होस्ट) सुरक्षा के लिए आईपी/सिस्टम डेटा एकत्र करता है। जारी रखकर, आप सहमत हैं।",
-          accept: "स्वीकार करें",
+          text: "पारदर्शिता: हम स्थानीय डेटा का उपयोग करते हैं। सिस्टम सुरक्षा के लिए आईपी एकत्र करता है। प्रवेश करके, आप सहमत हैं।",
+          accept: "स्वीकार करें और प्रवेश करें",
           settings: "विकल्प"
         },
         premium: {
-          title: "अपना रास्ता चुनें",
+          title: "अभयारण्य को गहरा करें",
           subtitle: "आगंतुक से संरक्षक तक",
-          desc: "अभयारण्य की पूरी गहराई को अनलॉक करें।",
+          desc: "निःशुल्क अभयारण्य संक्षिप्त है। अनंत कमरे को अनलॉक करें।",
           perk1: "आगंतुक (निःशुल्क): 5 मिनट की सीमा, मानक आवाज़।",
-          perk2: "सदस्य ($6.99/माह): असीमित, सम्मोहक आवाज़ें।",
+          perk2: "सदस्य ($6.99/माह): असीमित, सम्मोहक आवाज़ें, जर्नल।",
           perk3: "संरक्षक ($69.99/वर्ष): सभी + प्रारंभिक पहुँच।",
-          cta: "अभयारण्य में शामिल हों",
+          cta: "सदस्य बनें",
           joined: "सदस्य सक्रिय"
         },
         daily: {
@@ -1154,17 +1158,18 @@ export const TRANSLATIONS = {
         journal: {
           title: "चिंतन",
           newEntry: "नया विचार",
-          save: "विचार सहेजें",
-          placeholder: "अभी क्या धीरे-धीरे सतह पर आने की कोशिश कर रहा है?",
+          save: "विचार संरक्षित करें",
+          placeholder: "बिना किसी निर्णय के शब्दों को बहने दें...",
           prompts: [
-            "कौन सा विचार मेरा ध्यान मांग रहा है?",
-            "यदि मेरी चिंता की कोई आवाज़ होती, तो वह क्या कहती?",
-            "आज मैं अपने शरीर में कहाँ मौन महसूस करता हूँ?",
-            "मैं क्या छोड़ने के लिए तैयार हूँ?"
+            "अभी मेरी भावना का रंग क्या है?",
+            "यदि मेरी चिंता बोल सकती, तो वह क्या मांगती?",
+            "मेरे शरीर में सन्नाटा कहाँ छिपा है?",
+            "मैं क्या ले जा रहा हूँ जो मेरा नहीं है?",
+            "यदि मैं आज अपने दिमाग में एक बीज बो सकता, तो वह क्या होता?"
           ]
         },
         login: {
-            title: "पहुँच",
+            title: "अभयारण्य तक पहुँचें",
             name: "आपका नाम",
             email: "ईमेल पता",
             submit: "अनलॉक करें",
@@ -1174,7 +1179,7 @@ export const TRANSLATIONS = {
           title: "मानवीय संबंध",
           subtitle: "मशीन एक दर्पण है। गर्मी बाहर है।",
           quest: "आज के लिए आपका इको:",
-          question: "क्या आपने अपना पिछला कनेक्शन पूरा किया?",
+          question: "क्या आपने अपना कनेक्शन पूरा किया?",
           yes: "हाँ, मैंने कनेक्ट किया",
           no: "अभी तक नहीं",
           reward: "अनुनाद बढ़ा"
