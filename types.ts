@@ -3,7 +3,8 @@ export enum SessionStatus {
   CONNECTING = 'CONNECTING',
   CONNECTED = 'CONNECTED',
   ERROR = 'ERROR',
-  ENDED = 'ENDED'
+  ENDED = 'ENDED',
+  LIMIT_REACHED = 'LIMIT_REACHED'
 }
 
 export interface AudioVolumeState {
@@ -17,3 +18,5 @@ export interface SessionHistoryItem {
 }
 
 export type Language = 'en' | 'pt' | 'es' | 'fr' | 'de' | 'it' | 'ja' | 'ru' | 'hi';
+
+export type UserPlan = 'visitor' | 'member' | 'guardian';

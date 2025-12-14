@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { GoogleGenAI, LiveServerMessage, Modality } from '@google/genai';
-import { SessionStatus, Language } from '../types';
-import { getSystemInstruction, MODEL_NAME, TRANSLATIONS, VOICE_IDS } from '../constants';
+import { SessionStatus, Language, UserPlan } from '../types';
+import { getSystemInstruction, MODEL_NAME, TRANSLATIONS, VOICE_IDS, PLAN_LIMITS } from '../constants';
 import AudioVisualizer from './AudioVisualizer';
 import { Logo } from './Logo';
 
 interface SessionManagerProps {
   onDisconnect: () => void;
   lang: Language;
+  userPlan: UserPlan;
+  onUpgrade: () => void;
 }
 
 // --- Icons ---
@@ -48,6 +50,12 @@ const SettingsIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const LockIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+  </svg>
+);
+
 
 // --- Audio Helpers ---
 
@@ -71,8 +79,9 @@ function base64ToUint8Array(base64: string): Uint8Array {
 }
 
 const IDLE_THRESHOLD_MS = 30000; // 30 seconds
+const MAX_SENSITIVITY_RANGE = 0.2; // Maximum value for the sensitivity slider (20% RMS)
 
-const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) => {
+const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, userPlan, onUpgrade }) => {
   const [status, setStatus] = useState<SessionStatus>(SessionStatus.CONNECTING);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [volume, setVolume] = useState(0);
@@ -82,7 +91,16 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
   // New features state
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [outputVolume, setOutputVolume] = useState(0.8);
-  const [inputSensitivity, setInputSensitivity] = useState(0.01);
+  
+  // Initialize sensitivity from localStorage or default to 0.01
+  const [inputSensitivity, setInputSensitivity] = useState(() => {
+    if (typeof window !== 'undefined') {
+        const saved = localStorage.getItem('pch_mic_sensitivity');
+        return saved ? parseFloat(saved) : 0.01;
+    }
+    return 0.01;
+  });
+
   const [isMicMuted, setIsMicMuted] = useState(false);
   const [feedback, setFeedback] = useState<'up' | 'down' | null>(null);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
@@ -113,11 +131,12 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
   // Audio state refs to access in loops
   const isMicMutedRef = useRef(false); 
   const outputVolumeRef = useRef(0.8);
-  const inputSensitivityRef = useRef(0.01);
+  const inputSensitivityRef = useRef(inputSensitivity);
   const isAiSpeakingRef = useRef(false);
   const hasErrorRef = useRef(false);
   const currentRmsRef = useRef(0);
   const silenceFramesRef = useRef(0);
+  const statusRef = useRef<SessionStatus>(SessionStatus.CONNECTING);
   
   // Session Refs
   const sessionPromiseRef = useRef<Promise<any> | null>(null);
@@ -129,6 +148,16 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
   const animationFrameRef = useRef<number>();
 
   const text = TRANSLATIONS[lang];
+  const limitConfig = PLAN_LIMITS[userPlan];
+
+  // Sync ref when state changes
+  useEffect(() => {
+      inputSensitivityRef.current = inputSensitivity;
+  }, [inputSensitivity]);
+
+  useEffect(() => {
+      statusRef.current = status;
+  }, [status]);
 
   const cleanupAudio = useCallback(() => {
     if (processorRef.current) {
@@ -200,38 +229,30 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
       };
   }, []);
 
-  // Timer Effect
+  // Timer Effect & Plan Limits
   useEffect(() => {
     if (status === SessionStatus.CONNECTED) {
       const startTime = Date.now();
       timerRef.current = window.setInterval(() => {
-        setElapsedSeconds(Math.floor((Date.now() - startTime) / 1000));
-      }, 1000);
-      
-      // Start idle check loop
-      lastUserActivityRef.current = Date.now();
-      idleCheckIntervalRef.current = window.setInterval(() => {
-        const timeSinceActivity = Date.now() - lastUserActivityRef.current;
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        setElapsedSeconds(elapsed);
         
-        // If idle for > 30s AND not currently having AI speak AND haven't already triggered for this specific idle period
-        if (timeSinceActivity > IDLE_THRESHOLD_MS && !isAiSpeakingRef.current && !hasTriggeredIdleRef.current) {
-           console.log("Idle threshold reached. Prompting AI...");
-           hasTriggeredIdleRef.current = true;
-           
-           if (sessionPromiseRef.current) {
-             sessionPromiseRef.current.then((session: any) => {
-               // Send a text prompt to the model to trigger a gentle check-in
-               if (session.send) {
-                 const promptText = "The user has been silent. Gently ask: 'What thought is gently trying to surface right now?'";
-                 // Sending with true indicates end of user turn
-                 session.send([{ text: promptText }], true);
-               }
-             }).catch(err => {
-               console.error("Failed to send idle prompt:", err);
-             });
-           }
+        // CHECK PLAN LIMIT
+        if (elapsed >= limitConfig.maxDuration && status !== SessionStatus.LIMIT_REACHED) {
+            console.log("Session limit reached for plan:", userPlan);
+            setStatus(SessionStatus.LIMIT_REACHED);
+            if (sessionPromiseRef.current) {
+                sessionPromiseRef.current.then(s => { 
+                    // @ts-ignore
+                    if(s.close) s.close(); 
+                });
+            }
+            cleanupAudio();
         }
       }, 1000);
+      
+      // Idle detection removed for now to avoid session.send error
+      // Use system instructions for engagement if needed.
 
     } else {
       if (timerRef.current) clearInterval(timerRef.current);
@@ -241,7 +262,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
       if (timerRef.current) clearInterval(timerRef.current);
       if (idleCheckIntervalRef.current) clearInterval(idleCheckIntervalRef.current);
     };
-  }, [status]);
+  }, [status, limitConfig.maxDuration, userPlan, cleanupAudio]);
 
   // Notifications Effect
   useEffect(() => {
@@ -307,6 +328,8 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
     const val = parseFloat(e.target.value);
     setInputSensitivity(val);
     inputSensitivityRef.current = val;
+    // Persist setting
+    localStorage.setItem('pch_mic_sensitivity', val.toString());
   };
   
   const handleNotificationToggle = async () => {
@@ -338,6 +361,16 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
   const handleFeedback = (type: 'up' | 'down') => {
     setFeedback(type);
     setTimeout(() => setFeedback(null), 2000); 
+  };
+  
+  const handleVoiceChange = (v: 'male' | 'female') => {
+      if (!limitConfig.allowVoiceChange) {
+          // Trigger upgrade flow
+          setShowSettings(false);
+          onUpgrade();
+          return;
+      }
+      setVoice(v);
   };
 
   const connectToGemini = useCallback(async () => {
@@ -422,16 +455,8 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
         callbacks: {
           onopen: () => {
             setStatus(SessionStatus.CONNECTED);
-            
-            // NEW: Trigger initial greeting sequence
-            // Force the model to introduce itself immediately with time and tone adaptation
-            setTimeout(() => {
-                if (sessionPromiseRef.current) {
-                    sessionPromiseRef.current.then(session => {
-                        session.send([{ text: `The user has entered. Introduce yourself as Inner Voice PCH. The time is ${currentTime}. Welcome the user and adapt your tone to their state.` }], true);
-                    });
-                }
-            }, 100);
+            // Initial greeting logic removed to avoid session.send error.
+            // The system instruction effectively sets the context.
           },
           onmessage: async (message: LiveServerMessage) => {
             // Handle Audio Output
@@ -473,8 +498,8 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
             }
           },
           onclose: () => {
-            // Only set to ENDED if we haven't already hit an error
-            if (!hasErrorRef.current) {
+            // Only set to ENDED if we haven't already hit an error AND not limit reached
+            if (!hasErrorRef.current && statusRef.current !== SessionStatus.LIMIT_REACHED) {
                setStatus(SessionStatus.ENDED);
             }
           },
@@ -569,7 +594,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
       setErrorMsg(e.message || "Failed.");
       setStatus(SessionStatus.ERROR);
     }
-  }, [lang, text.status.error, resumeAudioContext, voice]); // Added 'voice' to dependency to reconnect on change
+  }, [lang, text.status.error, resumeAudioContext, voice, limitConfig.maxDuration]); // Removed status
 
   useEffect(() => {
     connectToGemini();
@@ -625,6 +650,34 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
     );
   }
 
+  // LIMIT REACHED SCREEN
+  if (status === SessionStatus.LIMIT_REACHED) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full space-y-8 text-center animate-fade-in p-8 relative">
+           <div className="absolute inset-0 bg-stone-950/80 -z-10"></div>
+           <div className="space-y-2">
+               <h3 className="text-2xl font-serif text-stone-300 tracking-widest uppercase">{text.status.limitReached}</h3>
+               <p className="text-stone-500 font-light text-sm max-w-xs mx-auto">The free sanctuary is brief. To dwell longer in the silence, unlock the infinite path.</p>
+           </div>
+           
+           <div className="flex flex-col space-y-4 w-full max-w-xs">
+               <button 
+                onClick={onUpgrade}
+                className="w-full py-3 bg-amber-900/20 border border-amber-900/40 text-amber-200 uppercase tracking-[0.2em] text-xs hover:bg-amber-900/40 transition-colors rounded-lg"
+               >
+                 {text.controls.upgrade}
+               </button>
+               <button 
+                onClick={onDisconnect}
+                className="text-[10px] uppercase tracking-widest text-stone-600 hover:text-stone-400 transition-colors"
+               >
+                 {text.status.returnHome}
+               </button>
+           </div>
+        </div>
+      );
+  }
+
   const isConnecting = status === SessionStatus.CONNECTING;
   const visualizerColor = isAiSpeaking ? "rgb(20, 184, 166)" : "rgb(120, 113, 108)"; // Teal when speaking, Stone when quiet
 
@@ -671,16 +724,24 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
                 
                 {/* Voice Selection */}
                 <div className="space-y-3 pb-4 border-b border-stone-800/50">
-                     <label className="text-[10px] text-stone-500 block uppercase tracking-wider">{text.settings?.voice}</label>
-                     <div className="flex bg-stone-950 p-1 rounded-lg border border-stone-800">
+                     <div className="flex justify-between items-center">
+                        <label className="text-[10px] text-stone-500 block uppercase tracking-wider">{text.settings?.voice}</label>
+                        {!limitConfig.allowVoiceChange && (
+                            <div className="flex items-center space-x-1 text-amber-700/80">
+                                <LockIcon className="w-3 h-3" />
+                                <span className="text-[9px] uppercase tracking-wider">{text.settings?.locked}</span>
+                            </div>
+                        )}
+                     </div>
+                     <div className={`flex bg-stone-950 p-1 rounded-lg border border-stone-800 ${!limitConfig.allowVoiceChange ? 'opacity-50' : ''}`}>
                          <button 
-                            onClick={() => setVoice('female')}
+                            onClick={() => handleVoiceChange('female')}
                             className={`flex-1 py-2 text-[10px] uppercase tracking-widest rounded-md transition-colors ${voice === 'female' ? 'bg-teal-900/40 text-teal-200' : 'text-stone-500 hover:text-stone-300'}`}
                          >
                             {text.settings?.female}
                          </button>
                          <button 
-                            onClick={() => setVoice('male')}
+                            onClick={() => handleVoiceChange('male')}
                             className={`flex-1 py-2 text-[10px] uppercase tracking-widest rounded-md transition-colors ${voice === 'male' ? 'bg-teal-900/40 text-teal-200' : 'text-stone-500 hover:text-stone-300'}`}
                          >
                             {text.settings?.male}
@@ -727,18 +788,18 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
                         <div className="h-0.5 w-full bg-stone-800 relative rounded-full overflow-hidden">
                             <div 
                               className="absolute top-0 bottom-0 left-0 bg-stone-500 transition-all duration-75" 
-                              style={{ width: `${Math.min(100, (inputLevel / 0.1) * 100)}%` }} 
+                              style={{ width: `${Math.min(100, (inputLevel / MAX_SENSITIVITY_RANGE) * 100)}%` }} 
                             />
                             <div 
                               className="absolute -top-1 bottom-0 w-0.5 h-2.5 bg-teal-500 z-10 shadow-[0_0_10px_rgba(20,184,166,0.8)]" 
-                              style={{ left: `${Math.min(100, (inputSensitivity / 0.1) * 100)}%` }} 
+                              style={{ left: `${Math.min(100, (inputSensitivity / MAX_SENSITIVITY_RANGE) * 100)}%` }} 
                             />
                         </div>
                         
                         <input 
                           type="range" 
                           min="0.001" 
-                          max="0.1" 
+                          max={MAX_SENSITIVITY_RANGE} 
                           step="0.001" 
                           value={inputSensitivity} 
                           onChange={handleSensitivityChange}
@@ -766,8 +827,8 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
               <span className="font-serif text-lg leading-none text-stone-300 tracking-wide">{text.title}</span>
             </div>
          </div>
-         <div className="font-mono text-[10px] tracking-widest text-stone-700">
-            {formatTime(elapsedSeconds)}
+         <div className={`font-mono text-[10px] tracking-widest transition-colors ${elapsedSeconds > limitConfig.maxDuration - 30 && userPlan === 'visitor' ? 'text-red-400' : 'text-stone-700'}`}>
+            {formatTime(elapsedSeconds)} {userPlan === 'visitor' ? '/ 03:00' : ''}
          </div>
       </div>
 

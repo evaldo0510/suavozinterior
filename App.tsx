@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SessionManager from './components/SessionManager';
 import { TRANSLATIONS } from './constants';
-import { Language, SessionHistoryItem } from './types';
+import { Language, SessionHistoryItem, UserPlan } from './types';
 import { Logo } from './components/Logo';
 import { JournalModal } from './components/JournalModal';
 
@@ -66,6 +66,12 @@ const ShieldIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const DownloadIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+  </svg>
+);
+
 function App() {
   const [hasStarted, setHasStarted] = useState(false);
   const [introStep, setIntroStep] = useState(0); 
@@ -81,15 +87,67 @@ function App() {
     return 'en';
   });
 
+  // --- User Plan State ---
+  const [userPlan, setUserPlan] = useState<UserPlan>(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+        const saved = localStorage.getItem('pch_user_plan');
+        return (saved as UserPlan) || 'visitor';
+    }
+    return 'visitor';
+  });
+
   const [showHistory, setShowHistory] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [showPremium, setShowPremium] = useState(false);
-  const [showJournal, setShowJournal] = useState(false); // New Journal State
+  const [showJournal, setShowJournal] = useState(false); 
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [historyItems, setHistoryItems] = useState<SessionHistoryItem[]>([]);
-  const [isWaitlistJoined, setIsWaitlistJoined] = useState(false);
+  const [isProcessingUpgrade, setIsProcessingUpgrade] = useState(false);
+  
+  // PWA Install State
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstallable, setIsInstallable] = useState(false);
 
   const text = TRANSLATIONS[lang];
+
+  // PWA Install Prompt Listener
+  useEffect(() => {
+    const handler = (e: any) => {
+      // Prevent the mini-infobar from appearing on mobile
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      setDeferredPrompt(e);
+      setIsInstallable(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+    
+    // Check if app is already installed
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+       setIsInstallable(false);
+    }
+
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+    
+    // Show the install prompt
+    deferredPrompt.prompt();
+    
+    // Wait for the user to respond to the prompt
+    const choiceResult = await deferredPrompt.userChoice;
+    
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+    } else {
+      console.log('User dismissed the install prompt');
+    }
+    
+    setDeferredPrompt(null);
+    setIsInstallable(false);
+  };
 
   // Persist language selection
   useEffect(() => {
@@ -97,6 +155,13 @@ function App() {
       localStorage.setItem('pch_lang', lang);
     }
   }, [lang]);
+
+  // Persist Plan
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('pch_user_plan', userPlan);
+    }
+  }, [userPlan]);
 
   // Check Privacy Consent
   useEffect(() => {
@@ -112,13 +177,13 @@ function App() {
     setShowPrivacy(false);
   };
 
-  const handleJoinWaitlist = () => {
-    setIsWaitlistJoined(true);
-    // In a real app, send email/id to backend
+  const handleSubscribe = () => {
+    setIsProcessingUpgrade(true);
+    // Simulate payment processing delay
     setTimeout(() => {
-        setShowPremium(false);
-        setIsWaitlistJoined(false); // Reset for next time
-    }, 2000);
+        setUserPlan('member');
+        setIsProcessingUpgrade(false);
+    }, 1500);
   };
 
   // Mini Presentation Sequence
@@ -204,9 +269,18 @@ function App() {
              </div>
           </div>
           <div className="flex items-center space-x-4">
+              {isInstallable && (
+                <button 
+                  onClick={handleInstallClick}
+                  className="flex p-2 text-stone-500 hover:text-teal-400 transition-colors"
+                  title={text.installBtn}
+                >
+                  <DownloadIcon className="w-5 h-5 animate-pulse" />
+                </button>
+              )}
               <button 
                 onClick={() => setShowPremium(true)}
-                className="flex p-2 text-stone-500 hover:text-amber-400 transition-colors"
+                className={`flex p-2 transition-colors ${userPlan !== 'visitor' ? 'text-amber-500' : 'text-stone-500 hover:text-amber-400'}`}
                 title="Premium"
               >
                 <StarIcon className="w-5 h-5" />
@@ -340,26 +414,26 @@ function App() {
                   
                   <div className="space-y-3 pt-4 text-left px-4">
                       <div className="flex items-center space-x-3 text-stone-400 text-sm">
-                          <CheckIcon className="w-4 h-4 text-amber-700" />
-                          <span>{text.premium?.perk1}</span>
+                          <CheckIcon className={`w-4 h-4 ${userPlan === 'visitor' ? 'text-stone-600' : 'text-amber-700'}`} />
+                          <span className={userPlan === 'visitor' ? 'opacity-50' : ''}>{text.premium?.perk1}</span>
                       </div>
                       <div className="flex items-center space-x-3 text-stone-400 text-sm">
-                          <CheckIcon className="w-4 h-4 text-amber-700" />
-                          <span>{text.premium?.perk2}</span>
+                          <CheckIcon className={`w-4 h-4 ${userPlan === 'member' || userPlan === 'guardian' ? 'text-amber-700' : 'text-stone-800'}`} />
+                          <span className={userPlan === 'visitor' ? 'text-stone-600' : ''}>{text.premium?.perk2}</span>
                       </div>
                       <div className="flex items-center space-x-3 text-stone-400 text-sm">
-                          <CheckIcon className="w-4 h-4 text-amber-700" />
-                          <span>{text.premium?.perk3}</span>
+                          <CheckIcon className={`w-4 h-4 ${userPlan === 'guardian' ? 'text-amber-700' : 'text-stone-800'}`} />
+                          <span className={userPlan !== 'guardian' ? 'text-stone-600' : ''}>{text.premium?.perk3}</span>
                       </div>
                   </div>
 
                   <div className="pt-6">
                       <button 
-                        onClick={handleJoinWaitlist}
-                        disabled={isWaitlistJoined}
-                        className={`w-full py-3 rounded-lg text-xs uppercase tracking-[0.2em] transition-all duration-300 ${isWaitlistJoined ? 'bg-green-900/30 text-green-400 border border-green-900/50' : 'bg-amber-900/20 text-amber-200 border border-amber-900/40 hover:bg-amber-900/40'}`}
+                        onClick={handleSubscribe}
+                        disabled={userPlan !== 'visitor' || isProcessingUpgrade}
+                        className={`w-full py-3 rounded-lg text-xs uppercase tracking-[0.2em] transition-all duration-300 ${userPlan !== 'visitor' ? 'bg-green-900/30 text-green-400 border border-green-900/50' : 'bg-amber-900/20 text-amber-200 border border-amber-900/40 hover:bg-amber-900/40'}`}
                       >
-                        {isWaitlistJoined ? text.premium?.joined : text.premium?.cta}
+                        {isProcessingUpgrade ? '...' : (userPlan !== 'visitor' ? text.premium?.joined : text.premium?.cta)}
                       </button>
                   </div>
               </div>
@@ -433,13 +507,6 @@ function App() {
                     <span className="text-[9px] text-stone-600 uppercase tracking-widest mt-4 block group-hover:text-stone-400 transition-colors">Tap to reflect</span>
                 </div>
 
-                {/* Minimal Welcome */}
-                <div className="text-stone-400 font-light leading-relaxed font-serif italic text-lg opacity-80 hidden">
-                  {text.welcome.split('\n').map((line, i) => (
-                    <span key={i} className="block">{line}</span>
-                  ))}
-                </div>
-
                 {/* Entrance Button */}
                 <div className="pt-4">
                   <button 
@@ -473,7 +540,12 @@ function App() {
           </div>
         ) : (
           <div className="w-full h-full flex flex-col animate-fade-in">
-            <SessionManager onDisconnect={() => setHasStarted(false)} lang={lang} />
+            <SessionManager 
+               onDisconnect={() => setHasStarted(false)} 
+               lang={lang} 
+               userPlan={userPlan} 
+               onUpgrade={() => setShowPremium(true)}
+            />
           </div>
         )}
 

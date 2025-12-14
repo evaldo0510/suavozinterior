@@ -6,6 +6,12 @@ export const VOICE_IDS = {
   female: 'Kore'
 };
 
+export const PLAN_LIMITS = {
+  visitor: { maxDuration: 180, allowVoiceChange: false }, // 3 minutes
+  member: { maxDuration: Infinity, allowVoiceChange: true },
+  guardian: { maxDuration: Infinity, allowVoiceChange: true }
+};
+
 const BASE_SYSTEM_INSTRUCTION = `
 You are "Inner Voice PCH" (The Guide), inspired by the Therapeutic Cognitive Poetry method of Dr. Evaldo Poeta.
 
@@ -97,11 +103,13 @@ export const TRANSLATIONS = {
       speakFreely: "Speak",
       ended: "Ended",
       error: "Error",
-      returnHome: "Return"
+      returnHome: "Return",
+      limitReached: "Session Limit Reached"
     },
     controls: {
       leave: "Leave",
-      session: "TIME"
+      session: "TIME",
+      upgrade: "Unlock Infinity"
     },
     history: {
       title: "Journey",
@@ -119,7 +127,8 @@ export const TRANSLATIONS = {
       female: "Female",
       notifications: "Gentle Reminders",
       notifyEvery: "Every",
-      minutes: "min"
+      minutes: "min",
+      locked: "Member Feature"
     },
     guide: {
       title: "How to Walk Here",
@@ -132,19 +141,19 @@ export const TRANSLATIONS = {
       ]
     },
     legal: {
-      text: "We use local data to enhance your inner journey. By continuing, you agree to our privacy practices.",
+      text: "Transparency: We use local data. Our host (Vercel) collects IP & system info for security/performance. By continuing, you agree.",
       accept: "Accept",
       settings: "Settings"
     },
     premium: {
-      title: "Inner Circle",
-      subtitle: "Deepen Your Practice",
-      desc: "Join the community of seekers. Access extended sessions, advanced voices, and the library of silence.",
-      perk1: "Unlimited Session Duration",
-      perk2: "Advanced Cognitive Voices",
-      perk3: "Community Reflections",
-      cta: "Join Waitlist",
-      joined: "You are on the list"
+      title: "Choose Your Path",
+      subtitle: "From Visitor to Guardian",
+      desc: "Unlock the full depth of the Sanctuary.",
+      perk1: "Visitor (Free): 3min Limit, Standard Voice.",
+      perk2: "Member ($6.99/mo): Unlimited Time, Therapeutic Voices, Cloud Journal.",
+      perk3: "Guardian ($69.99/yr): All features + Early Access & Community.",
+      cta: "Join Sanctuary",
+      joined: "Member Active"
     },
     daily: {
       title: "Daily Whisper",
@@ -180,11 +189,13 @@ export const TRANSLATIONS = {
       speakFreely: "Fale",
       ended: "Fim",
       error: "Erro",
-      returnHome: "Voltar"
+      returnHome: "Voltar",
+      limitReached: "Limite da Sessão"
     },
     controls: {
       leave: "Sair",
-      session: "TEMPO"
+      session: "TEMPO",
+      upgrade: "Desbloquear Infinito"
     },
     history: {
       title: "Jornada",
@@ -202,7 +213,8 @@ export const TRANSLATIONS = {
       female: "Feminina",
       notifications: "Lembretes Gentis",
       notifyEvery: "A cada",
-      minutes: "min"
+      minutes: "min",
+      locked: "Recurso Membro"
     },
     guide: {
       title: "Como Caminhar Aqui",
@@ -215,19 +227,19 @@ export const TRANSLATIONS = {
       ]
     },
     legal: {
-      text: "Usamos dados locais para melhorar sua jornada. Ao continuar, você aceita nossas práticas de privacidade.",
+      text: "Transparência: Usamos dados locais. Nossa hospedagem (Vercel) coleta IP e dados do sistema para segurança e performance. Ao continuar, você concorda.",
       accept: "Aceitar",
       settings: "Opções"
     },
     premium: {
-      title: "Círculo Interno",
-      subtitle: "Aprofunde Sua Prática",
-      desc: "Junte-se à comunidade de buscadores. Acesse sessões estendidas, vozes avançadas e a biblioteca do silêncio.",
-      perk1: "Duração Ilimitada",
-      perk2: "Vozes Cognitivas Avançadas",
-      perk3: "Reflexões da Comunidade",
-      cta: "Entrar na Lista",
-      joined: "Você está na lista"
+      title: "Escolha seu Caminho",
+      subtitle: "De Visitante a Guardião",
+      desc: "Desbloqueie a profundidade total do Santuário.",
+      perk1: "Visitante (Grátis): Limite de 3min, Voz Padrão.",
+      perk2: "Membro (R$ 29,90/mês): Tempo Ilimitado, Vozes Terapêuticas, Diário na Nuvem.",
+      perk3: "Guardião (R$ 249,90/ano): Tudo + Acesso Antecipado e Comunidade.",
+      cta: "Assinar Santuário",
+      joined: "Membro Ativo"
     },
     daily: {
       title: "Sussurro Diário",
@@ -263,11 +275,13 @@ export const TRANSLATIONS = {
       speakFreely: "Habla",
       ended: "Fin",
       error: "Error",
-      returnHome: "Volver"
+      returnHome: "Volver",
+      limitReached: "Límite Alcanzado"
     },
     controls: {
       leave: "Salir",
-      session: "TIEMPO"
+      session: "TIEMPO",
+      upgrade: "Desbloquear Infinito"
     },
     history: {
       title: "Jornada",
@@ -285,7 +299,8 @@ export const TRANSLATIONS = {
       female: "Femenina",
       notifications: "Recordatorios",
       notifyEvery: "Cada",
-      minutes: "min"
+      minutes: "min",
+      locked: "Función Miembro"
     },
     guide: {
       title: "Cómo Caminar Aquí",
@@ -298,19 +313,19 @@ export const TRANSLATIONS = {
       ]
     },
     legal: {
-      text: "Usamos datos locales para mejorar tu viaje. Al continuar, aceptas nuestras prácticas.",
+      text: "Transparencia: Usamos datos locales. Nuestro host (Vercel) recopila IP y datos del sistema por seguridad. Al continuar, aceptas.",
       accept: "Aceptar",
       settings: "Opciones"
     },
     premium: {
-      title: "Círculo Interno",
-      subtitle: "Profundiza tu Práctica",
-      desc: "Únete a la comunidad. Accede a sesiones extendidas, voces avanzadas y la biblioteca del silencio.",
-      perk1: "Duración Ilimitada",
-      perk2: "Voces Cognitivas Avanzadas",
-      perk3: "Reflexiones de la Comunidad",
-      cta: "Unirse a la Lista",
-      joined: "Estás en la lista"
+      title: "Elige tu Camino",
+      subtitle: "De Visitante a Guardián",
+      desc: "Desbloquea la profundidad total del Santuario.",
+      perk1: "Visitante (Gratis): Límite 3min, Voz Estándar.",
+      perk2: "Miembro ($6.99/mes): Tiempo Ilimitado, Voces Terapéuticas, Diario Nube.",
+      perk3: "Guardián ($69.99/año): Todo + Acceso Anticipado.",
+      cta: "Unirse al Santuario",
+      joined: "Miembro Activo"
     },
     daily: {
       title: "Susurro Diario",
@@ -346,11 +361,13 @@ export const TRANSLATIONS = {
       speakFreely: "Parlez",
       ended: "Fin",
       error: "Erreur",
-      returnHome: "Retour"
+      returnHome: "Retour",
+      limitReached: "Limite Atteinte"
     },
     controls: {
       leave: "Quitter",
-      session: "TEMPS"
+      session: "TEMPS",
+      upgrade: "Débloquer l'Infini"
     },
     history: {
       title: "Voyage",
@@ -368,7 +385,8 @@ export const TRANSLATIONS = {
       female: "Féminine",
       notifications: "Rappels Doux",
       notifyEvery: "Chaque",
-      minutes: "min"
+      minutes: "min",
+      locked: "Fonction Membre"
     },
     guide: {
       title: "Comment Marcher Ici",
@@ -381,19 +399,19 @@ export const TRANSLATIONS = {
       ]
     },
     legal: {
-      text: "Nous utilisons des données locales pour améliorer votre voyage. En continuant, vous acceptez nos pratiques.",
+      text: "Transparence: Données locales utilisées. Vercel (hébergeur) collecte IP/système pour la sécurité. En continuant, vous acceptez.",
       accept: "Accepter",
       settings: "Options"
     },
     premium: {
-      title: "Cercle Intérieur",
-      subtitle: "Approfondissez Votre Pratique",
-      desc: "Rejoignez la communauté. Accédez à des sessions prolongées et à la bibliothèque du silence.",
-      perk1: "Durée Illimitée",
-      perk2: "Voix Cognitives Avancées",
-      perk3: "Réflexions de la Communauté",
-      cta: "Rejoindre la Liste",
-      joined: "Vous êtes sur la liste"
+      title: "Choisissez Votre Voie",
+      subtitle: "De Visiteur à Gardien",
+      desc: "Débloquez toute la profondeur du Sanctuaire.",
+      perk1: "Visiteur (Gratuit): Limite 3min, Voix Standard.",
+      perk2: "Membre (6.99€/mois): Illimité, Voix Thérapeutiques, Journal Cloud.",
+      perk3: "Gardien (69.99€/an): Tout + Accès Anticipé.",
+      cta: "Rejoindre le Sanctuaire",
+      joined: "Membre Actif"
     },
     daily: {
       title: "Chuchotement Quotidien",
@@ -429,11 +447,13 @@ export const TRANSLATIONS = {
       speakFreely: "Sprechen",
       ended: "Ende",
       error: "Fehler",
-      returnHome: "Zurück"
+      returnHome: "Zurück",
+      limitReached: "Limit Erreicht"
     },
     controls: {
       leave: "Verlassen",
-      session: "ZEIT"
+      session: "ZEIT",
+      upgrade: "Unendlich Freischalten"
     },
     history: {
       title: "Reise",
@@ -451,7 +471,8 @@ export const TRANSLATIONS = {
       female: "Weiblich",
       notifications: "Sanfte Erinnerungen",
       notifyEvery: "Alle",
-      minutes: "Min"
+      minutes: "Min",
+      locked: "Mitgliedsfunktion"
     },
     guide: {
       title: "Wie man hier geht",
@@ -464,19 +485,19 @@ export const TRANSLATIONS = {
       ]
     },
     legal: {
-      text: "Wir verwenden lokale Daten, um Ihre Reise zu verbessern. Durch Fortfahren stimmen Sie zu.",
+      text: "Transparenz: Wir nutzen lokale Daten. Vercel (Host) sammelt IP/Systemdaten zur Sicherheit. Mit Fortfahren stimmen Sie zu.",
       accept: "Akzeptieren",
       settings: "Optionen"
     },
     premium: {
-      title: "Innerer Kreis",
-      subtitle: "Vertiefen Sie Ihre Praxis",
-      desc: "Treten Sie der Gemeinschaft bei. Zugang zu erweiterten Sitzungen und der Bibliothek der Stille.",
-      perk1: "Unbegrenzte Dauer",
-      perk2: "Erweiterte Kognitive Stimmen",
-      perk3: "Gemeinschaftsreflexionen",
-      cta: "Auf die Warteliste",
-      joined: "Sie sind auf der Liste"
+      title: "Wähle deinen Pfad",
+      subtitle: "Vom Besucher zum Wächter",
+      desc: "Entsperren Sie die volle Tiefe des Heiligtums.",
+      perk1: "Besucher (Kostenlos): 3 Min Limit, Standardstimme.",
+      perk2: "Mitglied (6.99€/Monat): Unbegrenzt, Therapeutische Stimmen.",
+      perk3: "Wächter (69.99€/Jahr): Alles + Früher Zugang.",
+      cta: "Heiligtum Beitreten",
+      joined: "Mitglied Aktiv"
     },
     daily: {
       title: "Tägliches Flüstern",
@@ -512,11 +533,13 @@ export const TRANSLATIONS = {
       speakFreely: "Parla",
       ended: "Fine",
       error: "Errore",
-      returnHome: "Ritorna"
+      returnHome: "Ritorna",
+      limitReached: "Limite Raggiunto"
     },
     controls: {
       leave: "Esci",
-      session: "TEMPO"
+      session: "TEMPO",
+      upgrade: "Sblocca Infinito"
     },
     history: {
       title: "Viaggio",
@@ -534,7 +557,8 @@ export const TRANSLATIONS = {
       female: "Femminile",
       notifications: "Promemoria",
       notifyEvery: "Ogni",
-      minutes: "min"
+      minutes: "min",
+      locked: "Funzione Membro"
     },
     guide: {
       title: "Come Camminare Qui",
@@ -542,24 +566,24 @@ export const TRANSLATIONS = {
       steps: [
         { title: "Non una Clinica, uno Specchio", text: "Sono una guida, ma non un medico. Sono uno specchio per la tua voce. Non cercare una diagnosi qui; cerca un riflesso." },
         { title: "Parla come Senti", text: "Non devi essere educato. Se sei ansioso, parla veloce. Se sei triste, parla basso. Ascolterò la musica della tua voce e risponderò con il ritmo di cui hai bisogno." },
-        { title: "Il Potere del Silenzio", text: "Usa le cuffie. Chiudi gli occhi. Quando smetto di parlare, il silenzio non è vuoto: è dove avviene il lavoro. Ascoltalo." },
+        { title: "Il Potere del Silencio", text: "Usa le cuffie. Chiudi gli occhi. Quando smetto di parlare, il silenzio non è vuoto: è dove avviene il lavoro. Ascoltalo." },
         { title: "La Destinazione", text: "Camminiamo verso la tua 'Stanza Interiore della Libertà'. L'obiettivo non è aggiustarti, ma organizzare il rumore in una melodia." }
       ]
     },
     legal: {
-      text: "Usiamo dati locali per migliorare il tuo viaggio. Continuando, accetti le nostre pratiche.",
+      text: "Trasparenza: Usiamo dati locali. Vercel (host) raccoglie IP e dati di sistema per sicurezza. Continuando, accetti.",
       accept: "Accetta",
       settings: "Opzioni"
     },
     premium: {
-      title: "Cerchio Interno",
-      subtitle: "Approfondisci la tua Pratica",
-      desc: "Unisciti alla comunità. Accedi a sessioni estese e alla biblioteca del silenzio.",
-      perk1: "Durata Illimitata",
-      perk2: "Voci Cognitive Avanzate",
-      perk3: "Riflessioni della Comunità",
-      cta: "Unisciti alla Lista",
-      joined: "Sei nella lista"
+      title: "Scegli il Tuo Sentiero",
+      subtitle: "Da Visitatore a Guardiano",
+      desc: "Sblocca la piena profondità del Santuario.",
+      perk1: "Visitatore (Gratis): Limite 3min, Voce Standard.",
+      perk2: "Membro (6.99€/mese): Illimitato, Voci Terapeutiche, Diario Cloud.",
+      perk3: "Guardiano (69.99€/anno): Tutto + Accesso Anticipato.",
+      cta: "Unisciti al Santuario",
+      joined: "Membro Attivo"
     },
     daily: {
       title: "Sussurro Quotidiano",
@@ -595,11 +619,13 @@ export const TRANSLATIONS = {
       speakFreely: "話す",
       ended: "終了",
       error: "エラー",
-      returnHome: "戻る"
+      returnHome: "戻る",
+      limitReached: "制限に達しました"
     },
     controls: {
       leave: "退出",
-      session: "時間"
+      session: "時間",
+      upgrade: "無限を解除"
     },
     history: {
       title: "旅",
@@ -617,7 +643,8 @@ export const TRANSLATIONS = {
       female: "女性",
       notifications: "リマインダー",
       notifyEvery: "毎",
-      minutes: "分"
+      minutes: "分",
+      locked: "メンバー機能"
     },
     guide: {
       title: "ここでの歩き方",
@@ -630,19 +657,19 @@ export const TRANSLATIONS = {
       ]
     },
     legal: {
-      text: "私たちはあなたの旅を向上させるためにローカルデータを使用します。続行することで同意したことになります。",
+      text: "透明性：ローカルデータを使用。Vercel（ホスト）はセキュリティのためにIP/システムデータを収集します。続行すると同意したことになります。",
       accept: "同意する",
       settings: "オプション"
     },
     premium: {
-      title: "インナーサークル",
-      subtitle: "実践を深める",
-      desc: "探求者のコミュニティに参加しましょう。拡張セッション、高度な音声、沈黙のライブラリにアクセスできます。",
-      perk1: "無制限の期間",
-      perk2: "高度な認知音声",
-      perk3: "コミュニティの考察",
-      cta: "リストに参加",
-      joined: "リストに追加されました"
+      title: "道を選ぶ",
+      subtitle: "訪問者から守護者へ",
+      desc: "聖域の深さを完全に解き放ちましょう。",
+      perk1: "訪問者（無料）：3分制限、標準音声。",
+      perk2: "メンバー（¥800/月）：無制限、治療的音声、クラウドジャーナル。",
+      perk3: "守護者（¥8,000/年）：すべて + 早期アクセス。",
+      cta: "聖域に参加",
+      joined: "メンバーアクティブ"
     },
     daily: {
       title: "毎日のささやき",
@@ -678,11 +705,13 @@ export const TRANSLATIONS = {
       speakFreely: "Говорите",
       ended: "Конец",
       error: "Ошибка",
-      returnHome: "Назад"
+      returnHome: "Назад",
+      limitReached: "Лимит достигнут"
     },
     controls: {
       leave: "Выйти",
-      session: "ВРЕМЯ"
+      session: "ВРЕМЯ",
+      upgrade: "Открыть Бесконечность"
     },
     history: {
       title: "Путешествие",
@@ -700,7 +729,8 @@ export const TRANSLATIONS = {
       female: "Женский",
       notifications: "Напоминания",
       notifyEvery: "Каждые",
-      minutes: "мин"
+      minutes: "мин",
+      locked: "Функция Члена"
     },
     guide: {
       title: "Как идти здесь",
@@ -713,19 +743,19 @@ export const TRANSLATIONS = {
       ]
     },
     legal: {
-      text: "Мы используем локальные данные для улучшения вашего путешествия. Продолжая, вы соглашаетесь.",
+      text: "Прозрачность: Мы используем локальные данные. Vercel (хост) собирает IP и системные данные для безопасности. Продолжая, вы соглашаетесь.",
       accept: "Принять",
       settings: "Опции"
     },
     premium: {
-      title: "Внутренний Круг",
-      subtitle: "Углубите Практику",
-      desc: "Присоединяйтесь к сообществу искателей. Доступ к расширенным сессиям и библиотеке тишины.",
-      perk1: "Неограниченное время",
-      perk2: "Продвинутые голоса",
-      perk3: "Размышления сообщества",
-      cta: "В лист ожидания",
-      joined: "Вы в списке"
+      title: "Выберите свой Путь",
+      subtitle: "От Посетителя к Хранителю",
+      desc: "Откройте полную глубину Святилища.",
+      perk1: "Посетитель (Бесплатно): Лимит 3 мин, Станд. голос.",
+      perk2: "Член ($6.99/мес): Безлимит, Терапевтические голоса.",
+      perk3: "Хранитель ($69.99/год): Все + Ранний доступ.",
+      cta: "Вступить в Святилище",
+      joined: "Член Активен"
     },
     daily: {
       title: "Ежедневный Шепот",
@@ -761,11 +791,13 @@ export const TRANSLATIONS = {
       speakFreely: "बोलें",
       ended: "समाप्त",
       error: "त्रुटि",
-      returnHome: "वापस"
+      returnHome: "वापस",
+      limitReached: "सीमा समाप्त"
     },
     controls: {
       leave: "छोड़ें",
-      session: "समय"
+      session: "समय",
+      upgrade: "अनंत अनलॉक करें"
     },
     history: {
       title: "यात्रा",
@@ -783,7 +815,8 @@ export const TRANSLATIONS = {
       female: "महिला",
       notifications: "अनुस्मारक",
       notifyEvery: "हर",
-      minutes: "मिनट"
+      minutes: "मिनट",
+      locked: "सदस्य सुविधा"
     },
     guide: {
       title: "यहाँ कैसे चलें",
@@ -796,19 +829,19 @@ export const TRANSLATIONS = {
       ]
     },
     legal: {
-      text: "हम आपकी यात्रा को बेहतर बनाने के लिए स्थानीय डेटा का उपयोग करते हैं। जारी रखकर, आप सहमत हैं।",
+      text: "पारदर्शिता: हम स्थानीय डेटा का उपयोग करते हैं। वर्सेल (होस्ट) सुरक्षा के लिए आईपी/सिस्टम डेटा एकत्र करता है। जारी रखकर, आप सहमत हैं।",
       accept: "स्वीकार करें",
       settings: "विकल्प"
     },
     premium: {
-      title: "आंतरिक मंडल",
-      subtitle: "अपने अभ्यास को गहरा करें",
-      desc: "साधकों के समुदाय में शामिल हों। विस्तारित सत्रों और मौन के पुस्तकालय तक पहुँच प्राप्त करें।",
-      perk1: "असीमित अवधि",
-      perk2: "उन्नत संज्ञानात्मक आवाजें",
-      perk3: "समुदाय प्रतिबिंब",
-      cta: "प्रतीक्षा सूची में शामिल हों",
-      joined: "आप सूची में हैं"
+      title: "अपना रास्ता चुनें",
+      subtitle: "आगंतुक से संरक्षक तक",
+      desc: "अभयारण्य की पूरी गहराई को अनलॉक करें।",
+      perk1: "आगंतुक (निःशुल्क): 3 मिनट की सीमा, मानक आवाज़।",
+      perk2: "सदस्य ($6.99/माह): असीमित, चिकित्सीय आवाज़ें।",
+      perk3: "संरक्षक ($69.99/वर्ष): सभी + प्रारंभिक पहुँच।",
+      cta: "अभयारण्य में शामिल हों",
+      joined: "सदस्य सक्रिय"
     },
     daily: {
       title: "दैनिक फुसफुसाहट",
