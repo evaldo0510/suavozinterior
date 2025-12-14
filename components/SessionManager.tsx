@@ -898,7 +898,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
                <Logo className="w-4 h-4 text-teal-400 drop-shadow-md" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-stone-400">Your Inner Voice</span>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-stone-400 hidden sm:block">Your Inner Voice</span>
               <span className="font-serif text-lg leading-none text-stone-200 tracking-wide drop-shadow-sm">{text.title}</span>
             </div>
          </div>

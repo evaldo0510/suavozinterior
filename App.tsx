@@ -384,7 +384,8 @@ function App() {
       {/* Minimal Header */}
       {introStep === 3 && (
         <header className={`absolute top-0 left-0 w-full p-4 md:p-6 flex flex-col md:flex-row justify-between items-center z-50 transition-opacity duration-1000 ${hasStarted ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
-          <div className="flex items-center space-x-3 mb-4 md:mb-0">
+          {/* Logo Section - Hidden on Mobile to avoid overlap */}
+          <div className="hidden md:flex items-center space-x-3 mb-4 md:mb-0">
              <Logo className="w-8 h-8 text-stone-400 drop-shadow-md" />
              <div className="font-serif text-sm tracking-[0.3em] text-stone-400 uppercase hover:text-stone-200 transition-colors cursor-default hidden md:block">
                {text.title}
@@ -514,43 +515,6 @@ function App() {
               </div>
            </div>
         </div>
-      )}
-
-      {/* Human Connection Task Modal (Gamification) */}
-      {showHumanTask && currentUser?.pendingTask && (
-          <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/90 backdrop-blur-xl p-6 animate-fade-in">
-              <div className="bg-stone-900 border border-teal-800/40 rounded-xl w-full max-w-sm text-center p-8 relative shadow-[0_0_50px_rgba(20,184,166,0.15)]">
-                  <div className="mx-auto w-12 h-12 rounded-full bg-teal-900/30 flex items-center justify-center mb-6 border border-teal-500/20">
-                      <HeartIcon className="w-6 h-6 text-teal-400" />
-                  </div>
-                  <h3 className="font-serif text-xl text-teal-100 tracking-widest uppercase mb-2 drop-shadow-md">{text.human?.title}</h3>
-                  <p className="text-[10px] uppercase tracking-widest text-teal-400/70 mb-6">{text.human?.subtitle}</p>
-                  
-                  <div className="bg-stone-950/80 p-6 rounded border border-stone-800 mb-8 shadow-inner">
-                      <p className="text-stone-500 text-[10px] uppercase tracking-widest mb-2">{text.human?.quest}</p>
-                      <p className="text-stone-200 font-serif italic text-lg leading-relaxed">
-                          "{currentUser.pendingTask.description}"
-                      </p>
-                  </div>
-
-                  <p className="text-stone-400 text-sm mb-6">{text.human?.question}</p>
-
-                  <div className="grid grid-cols-2 gap-3">
-                      <button 
-                        onClick={() => completeTask(true)}
-                        className="py-3 bg-teal-900/30 border border-teal-500/30 text-teal-100 uppercase text-[10px] tracking-widest rounded hover:bg-teal-900/50 hover:border-teal-400/50 transition-colors"
-                      >
-                          {text.human?.yes}
-                      </button>
-                      <button 
-                        onClick={() => completeTask(false)}
-                        className="py-3 bg-stone-800/40 border border-stone-700 text-stone-400 uppercase text-[10px] tracking-widest rounded hover:text-stone-200 hover:bg-stone-800 transition-colors"
-                      >
-                          {text.human?.no}
-                      </button>
-                  </div>
-              </div>
-          </div>
       )}
 
       {/* History Modal */}
