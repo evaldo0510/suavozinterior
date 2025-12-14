@@ -235,12 +235,13 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
       };
   }, []);
 
-  // Timer Effect & Plan Limits
+  // Timer Effect & Plan Limits & IDLE DETECTION
   useEffect(() => {
     if (status === SessionStatus.CONNECTED) {
       const startTime = Date.now();
       timerRef.current = window.setInterval(() => {
-        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        const now = Date.now();
+        const elapsed = Math.floor((now - startTime) / 1000);
         setElapsedSeconds(elapsed);
         
         // CHECK PLAN LIMIT
@@ -255,18 +256,29 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
             }
             cleanupAudio();
         }
-      }, 1000);
-      
-      // Idle detection removed for now to avoid session.send error
-      // Use system instructions for engagement if needed.
 
+        // CHECK IDLE (Silence Detection)
+        const idleTime = now - lastUserActivityRef.current;
+        if (idleTime > IDLE_THRESHOLD_MS && !hasTriggeredIdleRef.current) {
+            hasTriggeredIdleRef.current = true;
+            // Trigger AI to break silence
+            if (sessionPromiseRef.current) {
+                sessionPromiseRef.current.then((session: any) => {
+                    // Inject a text "system prompt" into the session if supported, or via send
+                    // Using text injection to prompt the model
+                    if (session.send) {
+                        session.send({ parts: [{ text: "The user has been silent for a while. Gently ask: 'What thought is gently trying to surface right now?'" }] }, true);
+                    }
+                }).catch(e => console.error("Failed to prompt idle", e));
+            }
+        }
+
+      }, 1000);
     } else {
       if (timerRef.current) clearInterval(timerRef.current);
-      if (idleCheckIntervalRef.current) clearInterval(idleCheckIntervalRef.current);
     }
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
-      if (idleCheckIntervalRef.current) clearInterval(idleCheckIntervalRef.current);
     };
   }, [status, limitConfig.maxDuration, userPlan, cleanupAudio]);
 
@@ -443,8 +455,23 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
       source.connect(processor);
       processor.connect(inputCtx.destination);
 
-      // --- TIME & CONTEXT INJECTION ---
+      // --- TIME & CONTEXT INJECTION (Persona & Time) ---
       const currentTime = new Date().toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' });
+      
+      // Construct enhanced system instruction
+      const baseInstruction = getSystemInstruction(lang, currentTime);
+      const enhancedInstruction = `
+      ${baseInstruction}
+      
+      ---
+      ADDITIONAL PERSONA RULES:
+      1. NAME: Introduce yourself explicitly as "Dr. Evaldo".
+      2. TIME: It is currently ${currentTime}. Mention this briefly at the start.
+      3. TONE ADAPTATION: Listen carefully to the user's speech rate and pitch. 
+         - If the user speaks FAST or with HIGH PITCH (anxiety/stress), you MUST slow your voice down significantly and lower your pitch to ground them.
+         - If the user speaks SLOWLY, match their calm but maintain warmth.
+      4. IDLE: If I send you a system message saying the user is silent, ask: "What thought is gently trying to surface right now?"
+      `;
 
       // Connect to Live API
       const sessionPromise = ai.live.connect({
@@ -456,7 +483,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
             voiceConfig: { prebuiltVoiceConfig: { voiceName: VOICE_IDS[voice] } },
           },
           // Dynamically inject the language AND TIME into the system prompt
-          systemInstruction: getSystemInstruction(lang, currentTime),
+          systemInstruction: enhancedInstruction,
         },
         callbacks: {
           onopen: () => {
