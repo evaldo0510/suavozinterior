@@ -10,10 +10,9 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ volume, isActive, col
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
   
-  // Smooth out volume changes but allow for sharper attacks
+  // State for organic movement
+  const timeRef = useRef(0);
   const smoothedVolumeRef = useRef(0);
-  const rotationRef = useRef(0);
-  const particlesRef = useRef<Array<{x: number, y: number, vx: number, vy: number, life: number}>>([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -21,125 +20,99 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ volume, isActive, col
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Phase for sine waves
-    let phase = 0;
-
     const render = () => {
-      // Non-linear sensitivity: boost lower volumes, cap higher
-      const targetVolume = isActive ? Math.max(0.02, volume * 1.5) : 0.01;
-      
-      // Responsive smoothing: attack fast, release slow
-      if (targetVolume > smoothedVolumeRef.current) {
-         smoothedVolumeRef.current += (targetVolume - smoothedVolumeRef.current) * 0.3; // Fast attack
-      } else {
-         smoothedVolumeRef.current += (targetVolume - smoothedVolumeRef.current) * 0.05; // Slow decay
-      }
+      // Smooth volume transition (Neuroplasticity feel: quick to adapt, slow to forget)
+      const targetVolume = isActive ? Math.max(0.05, volume) : 0;
+      smoothedVolumeRef.current += (targetVolume - smoothedVolumeRef.current) * 0.1;
       
       const v = smoothedVolumeRef.current;
-      
-      // Update rotation based on intensity
-      rotationRef.current += 0.002 + (v * 0.02);
+      timeRef.current += 0.01 + (v * 0.05); // Speed up slightly when loud
 
-      // Clear with trail effect
+      // Clear with very slight fade for "dreamy" trails
       ctx.fillStyle = 'rgba(12, 10, 9, 0.2)'; 
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       const centerX = canvas.width / 2;
       const centerY = canvas.height / 2;
-      const maxRadius = Math.min(canvas.width, canvas.height) / 2 - 20;
+      // Base size breathes slightly even when silent
+      const baseRadius = 100 + (Math.sin(timeRef.current * 0.5) * 5); 
+      const maxExpansion = 80;
 
-      // Extract RGB values for robust rgba creation
+      // Extract RGB
       const rgbMatch = color.match(/\d+\s*,\s*\d+\s*,\s*\d+/);
       const rgb = rgbMatch ? rgbMatch[0] : '120, 113, 108';
 
-      // --- Particles System ---
-      if (isActive && v > 0.1) {
-          // Spawn particles
-          if (Math.random() < v) {
-              const angle = Math.random() * Math.PI * 2;
-              const speed = 1 + Math.random() * 2;
-              particlesRef.current.push({
-                  x: centerX,
-                  y: centerY,
-                  vx: Math.cos(angle) * speed,
-                  vy: Math.sin(angle) * speed,
-                  life: 1.0
-              });
-          }
-      }
-
-      // Update and draw particles
-      particlesRef.current.forEach((p, index) => {
-          p.x += p.vx;
-          p.y += p.vy;
-          p.life -= 0.01;
-          if (p.life <= 0) {
-              particlesRef.current.splice(index, 1);
-              return;
-          }
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${rgb}, ${p.life * 0.5})`;
-          ctx.fill();
-      });
-
-
+      // Draw Organic "Mind" Blob
       ctx.save();
       ctx.translate(centerX, centerY);
-      ctx.rotate(rotationRef.current);
-      ctx.translate(-centerX, -centerY);
 
-      // Draw multiple rings
-      const rings = 6;
-      
-      for (let i = 0; i < rings; i++) {
+      // Create 3 layers of "fluid"
+      for (let layer = 1; layer <= 3; layer++) {
         ctx.beginPath();
+        const points = 100; // Resolution of the shape
         
-        // Dynamic radius calculation
-        const baseR = (maxRadius * 0.2) + (i * 20);
-        // Exaggerate the expansion for visual impact
-        const expansion = (v * 80) * (1 - i * 0.1); 
-        
-        // Add complex sine wave wobble
-        const wobble = Math.sin(phase * (i + 1) + i) * (5 + v * 15);
-        
-        const r = Math.max(0, baseR + expansion + wobble);
-        
-        ctx.arc(centerX, centerY, r, 0, Math.PI * 2);
-        
-        // Dynamic line width
-        ctx.lineWidth = 1 + (v * 5 * (1 - i/rings));
-        
-        // Dynamic opacity based on volume
-        const alpha = Math.max(0, 0.3 + (v * 0.5) - (i * 0.05));
-        ctx.strokeStyle = `rgba(${rgb}, ${alpha})`;
-        ctx.stroke();
+        for (let i = 0; i <= points; i++) {
+          const angle = (i / points) * Math.PI * 2;
+          
+          // Organic distortion math
+          // We combine multiple sine waves to create a non-repeating "blob" shape
+          const wave1 = Math.sin(angle * 3 + timeRef.current * (layer * 0.5));
+          const wave2 = Math.cos(angle * 5 - timeRef.current);
+          const wave3 = Math.sin(angle * 7 + timeRef.current * 2);
+          
+          // The volume heavily influences how far the blob stretches
+          const distortion = (wave1 + wave2 + wave3) * (v * maxExpansion);
+          
+          // Layer offset to create depth
+          const layerOffset = (layer - 1) * 10;
+          
+          const r = baseRadius + distortion + layerOffset;
+          
+          const x = Math.cos(angle) * r;
+          const y = Math.sin(angle) * r;
+
+          if (i === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+
+        ctx.closePath();
+
+        // Aesthetic: Soft, ethereal fill instead of hard lines
+        if (layer === 1) {
+            // Core
+            ctx.fillStyle = `rgba(${rgb}, ${0.1 + v * 0.3})`;
+            ctx.fill();
+            // Subtle border
+            ctx.strokeStyle = `rgba(${rgb}, ${0.3 + v * 0.5})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        } else if (layer === 2) {
+            // Middle Aura
+            ctx.strokeStyle = `rgba(${rgb}, ${0.1 + v * 0.2})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+        } else {
+            // Outer faint glow
+            ctx.strokeStyle = `rgba(${rgb}, ${0.05 + v * 0.1})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+        }
       }
       
-      // Inner glowing core
-      const coreBase = maxRadius * 0.1;
-      const corePulse = v * 40;
-      
-      // Glow effect
-      const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, coreBase + corePulse + 20);
-      gradient.addColorStop(0, `rgba(${rgb}, ${0.8})`);
-      gradient.addColorStop(0.5, `rgba(${rgb}, ${0.2})`);
-      gradient.addColorStop(1, `rgba(${rgb}, 0)`);
-      
-      ctx.fillStyle = gradient;
+      // Inner "Nucleus" - The constant self
+      const coreSize = 5 + (v * 10);
       ctx.beginPath();
-      ctx.arc(centerX, centerY, coreBase + corePulse + 20, 0, Math.PI * 2);
-      ctx.fill();
-      
-      // Solid core
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, coreBase + corePulse * 0.5, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 255, 255, ${0.4 + v * 0.6})`;
+      ctx.arc(0, 0, coreSize, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${0.5 + v * 0.5})`;
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = `rgba(${rgb}, 1)`;
       ctx.fill();
 
       ctx.restore();
 
-      phase += 0.05;
       animationRef.current = requestAnimationFrame(render);
     };
 
@@ -155,9 +128,9 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({ volume, isActive, col
   return (
     <canvas
       ref={canvasRef}
-      width={600}
-      height={600}
-      className="w-full h-full max-w-[600px] max-h-[600px]"
+      width={800} 
+      height={800}
+      className="w-full h-full object-contain"
     />
   );
 };

@@ -397,6 +397,11 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
         throw new Error("API Key not found in environment (Vercel). Please check Project Settings.");
       }
 
+      // 1. Check for Secure Context (HTTPS)
+      if (typeof window !== 'undefined' && !window.isSecureContext && window.location.hostname !== 'localhost') {
+         throw new Error("Microphone access requires a secure HTTPS connection. Please use a secure URL.");
+      }
+
       setStatus(SessionStatus.CONNECTING);
       hasErrorRef.current = false;
       
@@ -425,8 +430,13 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
       try {
         mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
       } catch (err: any) {
+        console.error("Mic Access Error:", err);
         if (err.name === 'NotAllowedError' || err.message.includes('Permission denied')) {
-            throw new Error("Microphone access denied. Please allow microphone permissions in your browser settings to continue.");
+            throw new Error("Microphone access denied. Please allow microphone permissions in your browser settings (click the lock icon in the URL bar) and click Retry.");
+        } else if (err.name === 'NotFoundError') {
+            throw new Error("No microphone found. Please check your system audio settings.");
+        } else if (err.name === 'NotReadableError') {
+             throw new Error("Microphone is busy or not readable. Please close other apps using the mic.");
         }
         throw err;
       }
@@ -627,7 +637,16 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
       setErrorMsg(e.message || "Failed.");
       setStatus(SessionStatus.ERROR);
     }
-  }, [lang, text.status.error, resumeAudioContext, voice, limitConfig.maxDuration]); // Removed status
+  }, [lang, text.status.error, resumeAudioContext, voice, limitConfig.maxDuration]);
+
+  // Retry logic wrapper
+  const handleRetry = () => {
+     cleanupAudio();
+     setErrorMsg(null);
+     setStatus(SessionStatus.CONNECTING);
+     // Re-trigger connection
+     connectToGemini();
+  };
 
   useEffect(() => {
     connectToGemini();
@@ -672,13 +691,22 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
   if (status === SessionStatus.ERROR) {
     return (
       <div className="flex flex-col items-center justify-center h-full space-y-6 text-center animate-fade-in p-8">
-        <div className="text-stone-400 font-serif text-lg">{errorMsg}</div>
-        <button 
-          onClick={onDisconnect}
-          className="text-xs uppercase tracking-widest text-stone-500 hover:text-stone-300 transition-colors border-b border-transparent hover:border-stone-500"
-        >
-          {text.status.returnHome}
-        </button>
+        <div className="text-stone-400 font-serif text-lg max-w-xs leading-relaxed">{errorMsg}</div>
+        
+        <div className="flex flex-col space-y-4">
+             <button 
+                onClick={handleRetry}
+                className="px-8 py-3 bg-stone-800 hover:bg-teal-900/30 text-stone-300 hover:text-teal-200 uppercase tracking-[0.2em] text-xs transition-colors rounded border border-stone-700 hover:border-teal-500/50"
+            >
+                Retry Connection
+            </button>
+            <button 
+                onClick={onDisconnect}
+                className="text-xs uppercase tracking-widest text-stone-600 hover:text-stone-400 transition-colors"
+            >
+                {text.status.returnHome}
+            </button>
+        </div>
       </div>
     );
   }
@@ -888,22 +916,11 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
       {/* --- VISUALIZER PORTAL --- */}
       <div className="flex-1 flex flex-col items-center justify-center w-full relative">
          
-         {/* Glass Container for Visualizer */}
-         <div className={`relative w-[320px] h-[320px] md:w-[450px] md:h-[450px] rounded-full flex items-center justify-center transition-all duration-1000 ${isAiSpeaking ? 'scale-105 shadow-[0_0_80px_-20px_rgba(20,184,166,0.2)]' : 'scale-100 shadow-none'}`}>
+         {/* Organic Container for Visualizer - No hard borders */}
+         <div className={`relative w-full h-full max-w-[500px] max-h-[500px] flex items-center justify-center transition-all duration-1000 ${isAiSpeaking ? 'scale-110' : 'scale-100'}`}>
              
-             {/* Text Label Top */}
-             <div className="absolute top-12 left-0 right-0 text-center z-20 pointer-events-none">
-                <span className="text-[9px] uppercase tracking-[0.4em] text-stone-600/60 font-light">Your Inner Voice</span>
-             </div>
-
-             {/* Outer Ring */}
-             <div className="absolute inset-0 rounded-full border border-stone-800/40 bg-black/20 backdrop-blur-sm z-0"></div>
-             
-             {/* Inner Ring (Pulsing) */}
-             <div className={`absolute inset-4 rounded-full border border-stone-800/30 z-10 transition-all duration-500 ${isAiSpeaking ? 'border-teal-900/40' : ''}`}></div>
-
              {/* Canvas Layer */}
-             <div className="absolute inset-0 z-20 opacity-80 mix-blend-screen p-8">
+             <div className="absolute inset-0 z-20">
                  <AudioVisualizer 
                     volume={volume} 
                     isActive={(isUserSpeaking && !isMicMuted) || isAiSpeaking} 
@@ -911,17 +928,17 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
                 />
              </div>
              
-             {/* Status Badge */}
-             <div className="absolute bottom-16 z-30 flex flex-col items-center space-y-2">
+             {/* Status Badge - Floating Minimal */}
+             <div className="absolute bottom-16 z-30 flex flex-col items-center space-y-2 pointer-events-none">
                  {isConnecting ? (
-                    <div className="text-stone-500 text-[10px] tracking-[0.3em] uppercase animate-pulse">{text.status.connecting}</div>
+                    <div className="text-stone-600 text-[10px] tracking-[0.3em] uppercase animate-pulse">{text.status.connecting}</div>
                  ) : isAiSpeaking ? (
-                    <div className="flex items-center space-x-2 bg-teal-950/30 border border-teal-900/50 px-3 py-1 rounded-full backdrop-blur-md">
-                        <div className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse shadow-[0_0_8px_rgba(20,184,166,0.8)]"></div>
-                        <span className="text-[10px] text-teal-200 uppercase tracking-widest">{text.status.aiSpeaking}</span>
+                    <div className="flex items-center space-x-2">
+                        <div className="w-1 h-1 rounded-full bg-teal-400 animate-ping"></div>
+                        <span className="text-[10px] text-teal-500/80 uppercase tracking-widest">{text.status.aiSpeaking}</span>
                     </div>
                  ) : (
-                    <div className="text-stone-600 text-[10px] uppercase tracking-widest transition-opacity duration-500">
+                    <div className="text-stone-700 text-[10px] uppercase tracking-widest transition-opacity duration-500">
                         {isUserSpeaking ? text.status.listening : text.status.aligning}
                     </div>
                  )}
