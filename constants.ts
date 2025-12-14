@@ -130,6 +130,37 @@ export const TRANSLATIONS = {
         { title: "The Power of Silence", text: "Use headphones. Close your eyes. When I stop speaking, the silence is not empty—it is where the work happens. Listen to it." },
         { title: "The Destination", text: "We walk towards your 'Inner Room of Freedom'. The goal is not to fix you, but to help you organize the noise into a melody." }
       ]
+    },
+    legal: {
+      text: "We use local data to enhance your inner journey. By continuing, you agree to our privacy practices.",
+      accept: "Accept",
+      settings: "Settings"
+    },
+    premium: {
+      title: "Inner Circle",
+      subtitle: "Deepen Your Practice",
+      desc: "Join the community of seekers. Access extended sessions, advanced voices, and the library of silence.",
+      perk1: "Unlimited Session Duration",
+      perk2: "Advanced Cognitive Voices",
+      perk3: "Community Reflections",
+      cta: "Join Waitlist",
+      joined: "You are on the list"
+    },
+    daily: {
+      title: "Daily Whisper",
+      quote: "The silence is not empty, it is full of answers."
+    },
+    journal: {
+      title: "Reflections",
+      newEntry: "New Reflection",
+      save: "Save Thought",
+      placeholder: "What is gently trying to surface right now?",
+      prompts: [
+        "What thought is asking for my attention?",
+        "If my anxiety had a voice, what would it say?",
+        "Where do I feel silence in my body today?",
+        "What am I ready to release?"
+      ]
     }
   },
   pt: {
@@ -181,6 +212,37 @@ export const TRANSLATIONS = {
         { title: "Fale como Sente", text: "Você não precisa ser polido. Se está ansioso, fale rápido. Se está triste, fale baixo. Ouvirei a música da sua voz e responderei com o ritmo que você precisa." },
         { title: "O Poder do Silêncio", text: "Use fones de ouvido. Feche os olhos. Quando eu paro de falar, o silêncio não está vazio — é onde o trabalho acontece. Escute-o." },
         { title: "O Destino", text: "Caminhamos em direção ao seu 'Quarto Interior da Liberdade'. O objetivo não é consertar você, mas ajudar a organizar o ruído em uma melodia." }
+      ]
+    },
+    legal: {
+      text: "Usamos dados locais para melhorar sua jornada. Ao continuar, você aceita nossas práticas de privacidade.",
+      accept: "Aceitar",
+      settings: "Opções"
+    },
+    premium: {
+      title: "Círculo Interno",
+      subtitle: "Aprofunde Sua Prática",
+      desc: "Junte-se à comunidade de buscadores. Acesse sessões estendidas, vozes avançadas e a biblioteca do silêncio.",
+      perk1: "Duração Ilimitada",
+      perk2: "Vozes Cognitivas Avançadas",
+      perk3: "Reflexões da Comunidade",
+      cta: "Entrar na Lista",
+      joined: "Você está na lista"
+    },
+    daily: {
+      title: "Sussurro Diário",
+      quote: "O silêncio não é vazio, ele é cheio de respostas."
+    },
+    journal: {
+      title: "Reflexões",
+      newEntry: "Nova Reflexão",
+      save: "Guardar Pensamento",
+      placeholder: "O que está tentando emergir suavemente agora?",
+      prompts: [
+        "Que pensamento pede minha atenção?",
+        "Se minha ansiedade tivesse voz, o que diria?",
+        "Onde sinto silêncio no meu corpo hoje?",
+        "O que estou pronto para soltar?"
       ]
     }
   },
@@ -234,6 +296,37 @@ export const TRANSLATIONS = {
         { title: "El Poder del Silencio", text: "Usa auriculares. Cierra los ojos. Cuando dejo de hablar, el silencio no está vacío: es donde ocurre el trabajo. Escúchalo." },
         { title: "El Destino", text: "Caminamos hacia tu 'Cuarto Interior de Libertad'. El objetivo no es arreglarte, sino ayudarte a organizar el ruido en una melodía." }
       ]
+    },
+    legal: {
+      text: "Usamos datos locales para mejorar tu viaje. Al continuar, aceptas nuestras prácticas.",
+      accept: "Aceptar",
+      settings: "Opciones"
+    },
+    premium: {
+      title: "Círculo Interno",
+      subtitle: "Profundiza tu Práctica",
+      desc: "Únete a la comunidad. Accede a sesiones extendidas, voces avanzadas y la biblioteca del silencio.",
+      perk1: "Duración Ilimitada",
+      perk2: "Voces Cognitivas Avanzadas",
+      perk3: "Reflexiones de la Comunidad",
+      cta: "Unirse a la Lista",
+      joined: "Estás en la lista"
+    },
+    daily: {
+      title: "Susurro Diario",
+      quote: "El silencio no está vacío, está lleno de respuestas."
+    },
+    journal: {
+      title: "Reflexiones",
+      newEntry: "Nueva Reflexión",
+      save: "Guardar Pensamiento",
+      placeholder: "¿Qué intenta emerger suavemente ahora?",
+      prompts: [
+        "¿Qué pensamiento pide mi atención?",
+        "Si mi ansiedad tuviera voz, ¿qué diría?",
+        "¿Dónde siento silencio en mi cuerpo hoy?",
+        "¿Qué estoy listo para soltar?"
+      ]
     }
   },
   fr: {
@@ -285,6 +378,37 @@ export const TRANSLATIONS = {
         { title: "Parlez comme vous Sentez", text: "Pas besoin d'être poli. Si vous êtes anxieux, parlez vite. Si vous êtes triste, parlez bas. J'écouterai la musique de votre voix et répondrai avec le rythme qu'il vous faut." },
         { title: "Le Pouvoir du Silence", text: "Utilisez des écouteurs. Fermez les yeux. Quand je m'arrête, le silence n'est pas vide — c'est là que le travail se fait. Écoutez-le." },
         { title: "La Destination", text: "Nous marchons vers votre 'Chambre Intérieure de Liberté'. Le but n'est pas de vous réparer, mais d'organiser le bruit en mélodie." }
+      ]
+    },
+    legal: {
+      text: "Nous utilisons des données locales pour améliorer votre voyage. En continuant, vous acceptez nos pratiques.",
+      accept: "Accepter",
+      settings: "Options"
+    },
+    premium: {
+      title: "Cercle Intérieur",
+      subtitle: "Approfondissez Votre Pratique",
+      desc: "Rejoignez la communauté. Accédez à des sessions prolongées et à la bibliothèque du silence.",
+      perk1: "Durée Illimitée",
+      perk2: "Voix Cognitives Avancées",
+      perk3: "Réflexions de la Communauté",
+      cta: "Rejoindre la Liste",
+      joined: "Vous êtes sur la liste"
+    },
+    daily: {
+      title: "Chuchotement Quotidien",
+      quote: "Le silence n'est pas vide, il est plein de réponses."
+    },
+    journal: {
+      title: "Réflexions",
+      newEntry: "Nouvelle Réflexion",
+      save: "Sauvegarder",
+      placeholder: "Qu'est-ce qui essaie d'émerger doucement ?",
+      prompts: [
+        "Quelle pensée demande mon attention ?",
+        "Si mon anxiété avait une voix, que dirait-elle ?",
+        "Où ressens-je le silence dans mon corps ?",
+        "Que suis-je prêt à lâcher ?"
       ]
     }
   },
@@ -338,6 +462,37 @@ export const TRANSLATIONS = {
         { title: "Die Kraft der Stille", text: "Verwenden Sie Kopfhörer. Schließen Sie die Augen. Wenn ich aufhöre zu sprechen, ist die Stille nicht leer – dort geschieht die Arbeit." },
         { title: "Das Ziel", text: "Wir gehen zu Ihrem 'Inneren Raum der Freiheit'. Das Ziel ist nicht, Sie zu reparieren, sondern den Lärm in eine Melodie zu verwandeln." }
       ]
+    },
+    legal: {
+      text: "Wir verwenden lokale Daten, um Ihre Reise zu verbessern. Durch Fortfahren stimmen Sie zu.",
+      accept: "Akzeptieren",
+      settings: "Optionen"
+    },
+    premium: {
+      title: "Innerer Kreis",
+      subtitle: "Vertiefen Sie Ihre Praxis",
+      desc: "Treten Sie der Gemeinschaft bei. Zugang zu erweiterten Sitzungen und der Bibliothek der Stille.",
+      perk1: "Unbegrenzte Dauer",
+      perk2: "Erweiterte Kognitive Stimmen",
+      perk3: "Gemeinschaftsreflexionen",
+      cta: "Auf die Warteliste",
+      joined: "Sie sind auf der Liste"
+    },
+    daily: {
+      title: "Tägliches Flüstern",
+      quote: "Die Stille ist nicht leer, sie ist voll von Antworten."
+    },
+    journal: {
+      title: "Reflexionen",
+      newEntry: "Neue Reflexion",
+      save: "Gedanken Speichern",
+      placeholder: "Was versucht gerade sanft aufzutauchen?",
+      prompts: [
+        "Welcher Gedanke verlangt meine Aufmerksamkeit?",
+        "Wenn meine Angst eine Stimme hätte, was würde sie sagen?",
+        "Wo spüre ich heute Stille in meinem Körper?",
+        "Was bin ich bereit loszulassen?"
+      ]
     }
   },
   it: {
@@ -389,6 +544,37 @@ export const TRANSLATIONS = {
         { title: "Parla come Senti", text: "Non devi essere educato. Se sei ansioso, parla veloce. Se sei triste, parla basso. Ascolterò la musica della tua voce e risponderò con il ritmo di cui hai bisogno." },
         { title: "Il Potere del Silenzio", text: "Usa le cuffie. Chiudi gli occhi. Quando smetto di parlare, il silenzio non è vuoto: è dove avviene il lavoro. Ascoltalo." },
         { title: "La Destinazione", text: "Camminiamo verso la tua 'Stanza Interiore della Libertà'. L'obiettivo non è aggiustarti, ma organizzare il rumore in una melodia." }
+      ]
+    },
+    legal: {
+      text: "Usiamo dati locali per migliorare il tuo viaggio. Continuando, accetti le nostre pratiche.",
+      accept: "Accetta",
+      settings: "Opzioni"
+    },
+    premium: {
+      title: "Cerchio Interno",
+      subtitle: "Approfondisci la tua Pratica",
+      desc: "Unisciti alla comunità. Accedi a sessioni estese e alla biblioteca del silenzio.",
+      perk1: "Durata Illimitata",
+      perk2: "Voci Cognitive Avanzate",
+      perk3: "Riflessioni della Comunità",
+      cta: "Unisciti alla Lista",
+      joined: "Sei nella lista"
+    },
+    daily: {
+      title: "Sussurro Quotidiano",
+      quote: "Il silenzio non è vuoto, è pieno di risposte."
+    },
+    journal: {
+      title: "Riflessioni",
+      newEntry: "Nuova Riflessione",
+      save: "Salva Pensiero",
+      placeholder: "Cosa sta cercando di emergere delicatamente?",
+      prompts: [
+        "Quale pensiero chiede la mia attenzione?",
+        "Se la mia ansia avesse una voce, cosa direbbe?",
+        "Dove sento il silenzio nel mio corpo oggi?",
+        "Cosa sono pronto a lasciare andare?"
       ]
     }
   },
@@ -442,6 +628,37 @@ export const TRANSLATIONS = {
         { title: "沈黙の力", text: "ヘッドフォンを使ってください。目を閉じて。私が話すのをやめたとき、沈黙は空虚ではありません。そこで変化が起こります。" },
         { title: "目的地", text: "私たちは「内なる自由の部屋」へ向かって歩いています。目的はあなたを直すことではなく、ノイズをメロディーに整理することです。" }
       ]
+    },
+    legal: {
+      text: "私たちはあなたの旅を向上させるためにローカルデータを使用します。続行することで同意したことになります。",
+      accept: "同意する",
+      settings: "オプション"
+    },
+    premium: {
+      title: "インナーサークル",
+      subtitle: "実践を深める",
+      desc: "探求者のコミュニティに参加しましょう。拡張セッション、高度な音声、沈黙のライブラリにアクセスできます。",
+      perk1: "無制限の期間",
+      perk2: "高度な認知音声",
+      perk3: "コミュニティの考察",
+      cta: "リストに参加",
+      joined: "リストに追加されました"
+    },
+    daily: {
+      title: "毎日のささやき",
+      quote: "沈黙は空虚ではなく、答えで満たされています。"
+    },
+    journal: {
+      title: "内省",
+      newEntry: "新しい内省",
+      save: "思考を保存",
+      placeholder: "今、静かに浮かび上がろうとしているものは何ですか？",
+      prompts: [
+        "どんな思考が私の注意を求めていますか？",
+        "私の不安に声があったら、何と言うでしょうか？",
+        "今日、体のどこに静寂を感じますか？",
+        "何を手放す準備ができていますか？"
+      ]
     }
   },
   ru: {
@@ -494,6 +711,37 @@ export const TRANSLATIONS = {
         { title: "Сила тишины", text: "Используйте наушники. Закройте глаза. Когда я замолкаю, тишина не пуста — именно в ней происходит работа. Слушайте её." },
         { title: "Назначение", text: "Мы идем к вашей «Внутренней Комнате Свободы». Цель — не исправить вас, а организовать шум в мелодию." }
       ]
+    },
+    legal: {
+      text: "Мы используем локальные данные для улучшения вашего путешествия. Продолжая, вы соглашаетесь.",
+      accept: "Принять",
+      settings: "Опции"
+    },
+    premium: {
+      title: "Внутренний Круг",
+      subtitle: "Углубите Практику",
+      desc: "Присоединяйтесь к сообществу искателей. Доступ к расширенным сессиям и библиотеке тишины.",
+      perk1: "Неограниченное время",
+      perk2: "Продвинутые голоса",
+      perk3: "Размышления сообщества",
+      cta: "В лист ожидания",
+      joined: "Вы в списке"
+    },
+    daily: {
+      title: "Ежедневный Шепот",
+      quote: "Тишина не пуста, она полна ответов."
+    },
+    journal: {
+      title: "Размышления",
+      newEntry: "Новая запись",
+      save: "Сохранить мысль",
+      placeholder: "Что мягко пытается проявиться прямо сейчас?",
+      prompts: [
+        "Какая мысль просит моего внимания?",
+        "Если бы у моей тревоги был голос, что бы она сказала?",
+        "Где я чувствую тишину в своем теле сегодня?",
+        "Что я готов отпустить?"
+      ]
     }
   },
   hi: {
@@ -545,6 +793,37 @@ export const TRANSLATIONS = {
         { title: "जैसा महसूस हो, वैसा बोलें", text: "विनम्र होने की आवश्यकता नहीं है। यदि आप चिंतित हैं, तो तेज़ी से बोलें। यदि आप दुखी हैं, तो धीरे बोलें। मैं आपकी आवाज़ के संगीत को सुनूँगा।" },
         { title: "मौन की शक्ति", text: "हेडफ़ोन का उपयोग करें। आँखें बंद करें। जब मैं बोलना बंद करता हूँ, तो सन्नाटा खाली नहीं होता - यही वह जगह है जहाँ काम होता है।" },
         { title: "गंतव्य", text: "हम आपके 'आंतरिक स्वतंत्रता कक्ष' की ओर चल रहे हैं। लक्ष्य आपको ठीक करना नहीं, बल्कि शोर को संगीत में व्यवस्थित करना है।" }
+      ]
+    },
+    legal: {
+      text: "हम आपकी यात्रा को बेहतर बनाने के लिए स्थानीय डेटा का उपयोग करते हैं। जारी रखकर, आप सहमत हैं।",
+      accept: "स्वीकार करें",
+      settings: "विकल्प"
+    },
+    premium: {
+      title: "आंतरिक मंडल",
+      subtitle: "अपने अभ्यास को गहरा करें",
+      desc: "साधकों के समुदाय में शामिल हों। विस्तारित सत्रों और मौन के पुस्तकालय तक पहुँच प्राप्त करें।",
+      perk1: "असीमित अवधि",
+      perk2: "उन्नत संज्ञानात्मक आवाजें",
+      perk3: "समुदाय प्रतिबिंब",
+      cta: "प्रतीक्षा सूची में शामिल हों",
+      joined: "आप सूची में हैं"
+    },
+    daily: {
+      title: "दैनिक फुसफुसाहट",
+      quote: "सन्नाटा खाली नहीं है, यह उत्तरों से भरा है।"
+    },
+    journal: {
+      title: "चिंतन",
+      newEntry: "नया विचार",
+      save: "विचार सहेजें",
+      placeholder: "अभी क्या धीरे-धीरे सतह पर आने की कोशिश कर रहा है?",
+      prompts: [
+        "कौन सा विचार मेरा ध्यान मांग रहा है?",
+        "यदि मेरी चिंता की कोई आवाज़ होती, तो वह क्या कहती?",
+        "आज मैं अपने शरीर में कहाँ मौन महसूस करता हूँ?",
+        "मैं क्या छोड़ने के लिए तैयार हूँ?"
       ]
     }
   }

@@ -3,6 +3,7 @@ import SessionManager from './components/SessionManager';
 import { TRANSLATIONS } from './constants';
 import { Language, SessionHistoryItem } from './types';
 import { Logo } from './components/Logo';
+import { JournalModal } from './components/JournalModal';
 
 const LANGUAGES: { code: Language; label: string }[] = [
   { code: 'en', label: 'English' },
@@ -16,6 +17,7 @@ const LANGUAGES: { code: Language; label: string }[] = [
   { code: 'hi', label: 'हिन्दी' },
 ];
 
+// --- Icons ---
 const ClockIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -40,12 +42,35 @@ const BookIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const PenIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+  </svg>
+);
+
+const StarIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+  </svg>
+);
+
+const CheckIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+  </svg>
+);
+
+const ShieldIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+  </svg>
+);
+
 function App() {
   const [hasStarted, setHasStarted] = useState(false);
-  const [introStep, setIntroStep] = useState(0); // 0, 1, 2 for words, 3 for final
+  const [introStep, setIntroStep] = useState(0); 
   const [introOpacity, setIntroOpacity] = useState(0);
   
-  // Initialize language from localStorage or default to 'en'
   const [lang, setLang] = useState<Language>(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
       const saved = localStorage.getItem('pch_lang');
@@ -58,7 +83,11 @@ function App() {
 
   const [showHistory, setShowHistory] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
+  const [showPremium, setShowPremium] = useState(false);
+  const [showJournal, setShowJournal] = useState(false); // New Journal State
+  const [showPrivacy, setShowPrivacy] = useState(false);
   const [historyItems, setHistoryItems] = useState<SessionHistoryItem[]>([]);
+  const [isWaitlistJoined, setIsWaitlistJoined] = useState(false);
 
   const text = TRANSLATIONS[lang];
 
@@ -69,46 +98,56 @@ function App() {
     }
   }, [lang]);
 
+  // Check Privacy Consent
+  useEffect(() => {
+    const consent = localStorage.getItem('pch_privacy_consent');
+    if (!consent) {
+       // Small delay for aesthetics
+       setTimeout(() => setShowPrivacy(true), 1500);
+    }
+  }, []);
+
+  const handleConsent = () => {
+    localStorage.setItem('pch_privacy_consent', 'true');
+    setShowPrivacy(false);
+  };
+
+  const handleJoinWaitlist = () => {
+    setIsWaitlistJoined(true);
+    // In a real app, send email/id to backend
+    setTimeout(() => {
+        setShowPremium(false);
+        setIsWaitlistJoined(false); // Reset for next time
+    }, 2000);
+  };
+
   // Mini Presentation Sequence
   useEffect(() => {
-    // Sequence:
-    // 0ms: Start Step 0 (Word 1) -> Fade In
-    // 1500ms: Fade Out
-    // 2500ms: Start Step 1 (Word 2) -> Fade In
-    // 4000ms: Fade Out
-    // 5000ms: Start Step 2 (Word 3) -> Fade In
-    // 6500ms: Fade Out
-    // 7500ms: Final Step -> Show Title/Button
-    
     const runIntro = async () => {
-      // Step 0
       setIntroStep(0);
       setIntroOpacity(1);
       await new Promise(r => setTimeout(r, 2000));
       setIntroOpacity(0);
       await new Promise(r => setTimeout(r, 1000));
 
-      // Step 1
       setIntroStep(1);
       setIntroOpacity(1);
       await new Promise(r => setTimeout(r, 2000));
       setIntroOpacity(0);
       await new Promise(r => setTimeout(r, 1000));
 
-      // Step 2
       setIntroStep(2);
       setIntroOpacity(1);
       await new Promise(r => setTimeout(r, 2000));
       setIntroOpacity(0);
       await new Promise(r => setTimeout(r, 1000));
 
-      // Final
       setIntroStep(3);
       setIntroOpacity(1);
     };
 
     runIntro();
-  }, [lang]); // Re-run if language changes during intro, though unlikely
+  }, [lang]);
 
   // Load history when modal opens
   useEffect(() => {
@@ -155,16 +194,30 @@ function App() {
   return (
     <div className="min-h-screen w-full bg-stone-950 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-stone-900 via-stone-950 to-black text-stone-200 overflow-hidden flex flex-col font-sans">
       
-      {/* Minimal Header - Only show when Main Content is Ready or in History */}
+      {/* Minimal Header */}
       {introStep === 3 && (
-        <header className={`absolute top-0 left-0 w-full p-6 flex justify-between items-center z-50 transition-opacity duration-1000 ${hasStarted ? 'opacity-0 hover:opacity-100' : 'opacity-60'}`}>
+        <header className={`absolute top-0 left-0 w-full p-6 flex justify-between items-center z-50 transition-opacity duration-1000 ${hasStarted ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
           <div className="flex items-center space-x-2">
              <Logo className="w-8 h-8 text-stone-600" />
-             <div className="font-serif text-sm tracking-[0.3em] text-stone-600 uppercase hover:text-stone-400 transition-colors cursor-default">
+             <div className="font-serif text-sm tracking-[0.3em] text-stone-600 uppercase hover:text-stone-400 transition-colors cursor-default hidden md:block">
                {text.title}
              </div>
           </div>
           <div className="flex items-center space-x-4">
+              <button 
+                onClick={() => setShowPremium(true)}
+                className="flex p-2 text-stone-500 hover:text-amber-400 transition-colors"
+                title="Premium"
+              >
+                <StarIcon className="w-5 h-5" />
+              </button>
+              <button 
+                onClick={() => setShowJournal(true)}
+                className="flex p-2 text-stone-500 hover:text-teal-400 transition-colors"
+                title="Journal"
+              >
+                <PenIcon className="w-5 h-5" />
+              </button>
               <button 
                 onClick={() => setShowGuide(true)}
                 className="flex p-2 text-stone-600 hover:text-stone-300 transition-colors"
@@ -182,6 +235,9 @@ function App() {
           </div>
         </header>
       )}
+
+      {/* Components Modals */}
+      <JournalModal isOpen={showJournal} onClose={() => setShowJournal(false)} lang={lang} />
 
       {/* Guide Modal */}
       {showGuide && (
@@ -262,6 +318,77 @@ function App() {
         </div>
       )}
 
+      {/* Premium / Community Teaser Modal */}
+      {showPremium && (
+        <div className="fixed inset-0 z-[95] flex items-center justify-center bg-stone-950/95 backdrop-blur-xl p-6 animate-fade-in" onClick={() => setShowPremium(false)}>
+           <div className="bg-gradient-to-b from-stone-900 to-stone-950 border border-amber-900/30 rounded-2xl w-full max-w-sm flex flex-col relative shadow-2xl shadow-amber-900/10" onClick={e => e.stopPropagation()}>
+              <button onClick={() => setShowPremium(false)} className="absolute top-4 right-4 text-stone-600 hover:text-stone-300">
+                  <XMarkIcon className="w-6 h-6" />
+              </button>
+              
+              <div className="p-8 text-center space-y-4">
+                  <div className="flex justify-center mb-4">
+                      <div className="p-3 bg-amber-950/30 rounded-full border border-amber-900/40">
+                          <StarIcon className="w-8 h-8 text-amber-500/80" />
+                      </div>
+                  </div>
+                  <h3 className="font-serif text-2xl text-amber-100/90 tracking-widest uppercase">{text.premium?.title}</h3>
+                  <p className="text-amber-700/60 text-xs uppercase tracking-[0.2em]">{text.premium?.subtitle}</p>
+                  <p className="text-stone-400 font-light text-sm leading-relaxed px-2 py-2">
+                    {text.premium?.desc}
+                  </p>
+                  
+                  <div className="space-y-3 pt-4 text-left px-4">
+                      <div className="flex items-center space-x-3 text-stone-400 text-sm">
+                          <CheckIcon className="w-4 h-4 text-amber-700" />
+                          <span>{text.premium?.perk1}</span>
+                      </div>
+                      <div className="flex items-center space-x-3 text-stone-400 text-sm">
+                          <CheckIcon className="w-4 h-4 text-amber-700" />
+                          <span>{text.premium?.perk2}</span>
+                      </div>
+                      <div className="flex items-center space-x-3 text-stone-400 text-sm">
+                          <CheckIcon className="w-4 h-4 text-amber-700" />
+                          <span>{text.premium?.perk3}</span>
+                      </div>
+                  </div>
+
+                  <div className="pt-6">
+                      <button 
+                        onClick={handleJoinWaitlist}
+                        disabled={isWaitlistJoined}
+                        className={`w-full py-3 rounded-lg text-xs uppercase tracking-[0.2em] transition-all duration-300 ${isWaitlistJoined ? 'bg-green-900/30 text-green-400 border border-green-900/50' : 'bg-amber-900/20 text-amber-200 border border-amber-900/40 hover:bg-amber-900/40'}`}
+                      >
+                        {isWaitlistJoined ? text.premium?.joined : text.premium?.cta}
+                      </button>
+                  </div>
+              </div>
+           </div>
+        </div>
+      )}
+
+      {/* Privacy Consent Banner */}
+      {showPrivacy && (
+        <div className="fixed bottom-0 left-0 w-full z-[100] bg-stone-900/95 backdrop-blur-md border-t border-stone-800 p-4 md:p-6 animate-slide-up">
+           <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+               <div className="flex items-center space-x-3">
+                   <ShieldIcon className="w-5 h-5 text-stone-500" />
+                   <p className="text-stone-400 text-xs md:text-sm font-light leading-snug text-center md:text-left">
+                       {text.legal?.text}
+                   </p>
+               </div>
+               <div className="flex items-center space-x-4">
+                   <button 
+                     onClick={handleConsent}
+                     className="px-6 py-2 bg-stone-200 text-stone-900 rounded text-xs uppercase tracking-widest hover:bg-white transition-colors"
+                   >
+                       {text.legal?.accept}
+                   </button>
+               </div>
+           </div>
+        </div>
+      )}
+
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col items-center justify-center relative">
         
@@ -277,7 +404,7 @@ function App() {
              </div>
 
              {/* Final Landing Screen */}
-             <div className={`max-w-md mx-auto px-8 text-center space-y-16 transition-opacity duration-1000 ${introStep === 3 ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+             <div className={`max-w-md mx-auto px-8 text-center space-y-12 transition-opacity duration-1000 ${introStep === 3 ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                
                 {/* Minimal Title */}
                 <div className="space-y-4 flex flex-col items-center">
@@ -291,15 +418,30 @@ function App() {
                   </p>
                 </div>
 
+                {/* Daily Insight / Engagement Layer */}
+                <div 
+                    onClick={() => setShowJournal(true)}
+                    className="bg-stone-900/30 border border-stone-800/50 p-6 rounded-lg backdrop-blur-sm transform hover:scale-[1.02] transition-transform duration-500 cursor-pointer group"
+                >
+                    <div className="flex justify-between items-center mb-3">
+                         <span className="text-[10px] text-teal-600/70 uppercase tracking-[0.3em] block">{text.daily?.title}</span>
+                         <PenIcon className="w-3 h-3 text-stone-600 group-hover:text-teal-500 transition-colors" />
+                    </div>
+                    <p className="font-serif italic text-stone-400 text-lg leading-relaxed">
+                      "{text.daily?.quote}"
+                    </p>
+                    <span className="text-[9px] text-stone-600 uppercase tracking-widest mt-4 block group-hover:text-stone-400 transition-colors">Tap to reflect</span>
+                </div>
+
                 {/* Minimal Welcome */}
-                <div className="text-stone-400 font-light leading-relaxed font-serif italic text-lg opacity-80">
+                <div className="text-stone-400 font-light leading-relaxed font-serif italic text-lg opacity-80 hidden">
                   {text.welcome.split('\n').map((line, i) => (
                     <span key={i} className="block">{line}</span>
                   ))}
                 </div>
 
                 {/* Entrance Button */}
-                <div className="pt-8">
+                <div className="pt-4">
                   <button 
                     onClick={() => setHasStarted(true)}
                     className="group relative inline-flex items-center justify-center px-10 py-3 overflow-hidden transition-all duration-500 hover:scale-105 focus:outline-none"
@@ -312,7 +454,7 @@ function App() {
                 </div>
 
                 {/* Minimal Language Selector (Bottom Center) */}
-                <div className="pt-12 opacity-40 hover:opacity-100 transition-opacity">
+                <div className="pt-8 opacity-40 hover:opacity-100 transition-opacity">
                     <select
                       value={lang}
                       onChange={(e) => setLang(e.target.value as Language)}

@@ -4,12 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="theme-color" content="#0c0a09">
+    
+    <!-- SEO & Discovery -->
+    <title>Inner Voice PCH | Therapeutic Cognitive Poetry & Sanctuary</title>
+    <meta name="description" content="A guided inner sanctuary for mental clarity. Transform anxiety into poetic wisdom using the PCH method. Not a clinical tool, but a mirror for your voice.">
+    <meta name="keywords" content="Inner Voice, PCH, Therapeutic Poetry, Cognitive Reframing, Mental Clarity, Introspective Affirmations, Anxiety Relief, Guided Reflection, Evaldo Poeta">
+    <meta name="author" content="Inner Voice PCH">
+    
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Inner Voice PCH - Your Cognitive Sanctuary">
+    <meta property="og:description" content="Enter your inner room of freedom. A voice-first guide for emotional organization and presence.">
+    <meta property="og:image" content="/logo.svg">
+    <meta property="og:url" content="https://innervoice.app">
+    
+    <!-- PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Inner Voice PCH</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" type="image/svg+xml" href="/logo.svg">
     <link rel="apple-touch-icon" href="/logo.svg">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Lato:wght@300;400&display=swap');
@@ -26,6 +41,21 @@
 
       .breathing-glow {
         animation: breathe 8s ease-in-out infinite;
+      }
+
+      /* Custom Scrollbar for Journals */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(28, 25, 23, 0.5);
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(68, 64, 60, 0.5);
+        border-radius: 2px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(168, 162, 158, 0.5);
       }
 
       @keyframes breathe {
