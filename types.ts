@@ -17,5 +17,3 @@ export interface SessionHistoryItem {
 }
 
 export type Language = 'en' | 'pt' | 'es' | 'fr' | 'de' | 'it' | 'ja' | 'ru' | 'hi';
-
-export type VoiceType = 'male' | 'female';

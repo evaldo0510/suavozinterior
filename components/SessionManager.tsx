@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { GoogleGenAI, LiveServerMessage, Modality } from '@google/genai';
-import { SessionStatus, Language, VoiceType } from '../types';
+import { SessionStatus, Language } from '../types';
 import { getSystemInstruction, MODEL_NAME, TRANSLATIONS, VOICE_IDS } from '../constants';
 import AudioVisualizer from './AudioVisualizer';
 import { Logo } from './Logo';
@@ -82,12 +82,12 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
   // New features state
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [outputVolume, setOutputVolume] = useState(0.8);
-  const [inputSensitivity, setInputSensitivity] = useState(0.02);
-  const [selectedVoice, setSelectedVoice] = useState<VoiceType>('female'); // Default to female (Kore)
+  const [inputSensitivity, setInputSensitivity] = useState(0.01);
   const [isMicMuted, setIsMicMuted] = useState(false);
   const [feedback, setFeedback] = useState<'up' | 'down' | null>(null);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [voice, setVoice] = useState<'male' | 'female'>('female'); // Defaulting to female as requested
   
   // Notification State
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
@@ -113,7 +113,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
   // Audio state refs to access in loops
   const isMicMutedRef = useRef(false); 
   const outputVolumeRef = useRef(0.8);
-  const inputSensitivityRef = useRef(0.02);
+  const inputSensitivityRef = useRef(0.01);
   const isAiSpeakingRef = useRef(false);
   const hasErrorRef = useRef(false);
   const currentRmsRef = useRef(0);
@@ -309,10 +309,6 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
     inputSensitivityRef.current = val;
   };
   
-  const handleVoiceChange = (voice: VoiceType) => {
-    setSelectedVoice(voice);
-  };
-  
   const handleNotificationToggle = async () => {
       if (!notificationsEnabled) {
           const perm = await Notification.requestPermission();
@@ -417,8 +413,8 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
         config: {
           responseModalities: [Modality.AUDIO],
           speechConfig: {
-            // Dynamically select voice based on state
-            voiceConfig: { prebuiltVoiceConfig: { voiceName: VOICE_IDS[selectedVoice] } },
+            // Use selected voice (defaulting to Female 'Kore')
+            voiceConfig: { prebuiltVoiceConfig: { voiceName: VOICE_IDS[voice] } },
           },
           // Dynamically inject the language AND TIME into the system prompt
           systemInstruction: getSystemInstruction(lang, currentTime),
@@ -426,6 +422,16 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
         callbacks: {
           onopen: () => {
             setStatus(SessionStatus.CONNECTED);
+            
+            // NEW: Trigger initial greeting sequence
+            // Force the model to introduce itself immediately with time and tone adaptation
+            setTimeout(() => {
+                if (sessionPromiseRef.current) {
+                    sessionPromiseRef.current.then(session => {
+                        session.send([{ text: `The user has entered. Introduce yourself as Inner Voice PCH. The time is ${currentTime}. Welcome the user and adapt your tone to their state.` }], true);
+                    });
+                }
+            }, 100);
           },
           onmessage: async (message: LiveServerMessage) => {
             // Handle Audio Output
@@ -563,7 +569,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
       setErrorMsg(e.message || "Failed.");
       setStatus(SessionStatus.ERROR);
     }
-  }, [lang, selectedVoice, text.status.error, resumeAudioContext]);
+  }, [lang, text.status.error, resumeAudioContext, voice]); // Added 'voice' to dependency to reconnect on change
 
   useEffect(() => {
     connectToGemini();
@@ -663,23 +669,23 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
                     </button>
                 </div>
                 
-                {/* Voice */}
+                {/* Voice Selection */}
                 <div className="space-y-3 pb-4 border-b border-stone-800/50">
-                    <label className="text-[10px] text-stone-500 block uppercase tracking-wider">{text.settings?.voice}</label>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button 
-                         onClick={() => handleVoiceChange('female')}
-                         className={`text-[10px] py-2 rounded-lg border transition-all ${selectedVoice === 'female' ? 'bg-stone-800 border-teal-900 text-teal-100 shadow-lg' : 'bg-transparent border-stone-800 text-stone-500 hover:text-stone-300'}`}
-                      >
-                         {text.settings?.female}
-                      </button>
-                      <button 
-                         onClick={() => handleVoiceChange('male')}
-                         className={`text-[10px] py-2 rounded-lg border transition-all ${selectedVoice === 'male' ? 'bg-stone-800 border-teal-900 text-teal-100 shadow-lg' : 'bg-transparent border-stone-800 text-stone-500 hover:text-stone-300'}`}
-                      >
-                         {text.settings?.male}
-                      </button>
-                    </div>
+                     <label className="text-[10px] text-stone-500 block uppercase tracking-wider">{text.settings?.voice}</label>
+                     <div className="flex bg-stone-950 p-1 rounded-lg border border-stone-800">
+                         <button 
+                            onClick={() => setVoice('female')}
+                            className={`flex-1 py-2 text-[10px] uppercase tracking-widest rounded-md transition-colors ${voice === 'female' ? 'bg-teal-900/40 text-teal-200' : 'text-stone-500 hover:text-stone-300'}`}
+                         >
+                            {text.settings?.female}
+                         </button>
+                         <button 
+                            onClick={() => setVoice('male')}
+                            className={`flex-1 py-2 text-[10px] uppercase tracking-widest rounded-md transition-colors ${voice === 'male' ? 'bg-teal-900/40 text-teal-200' : 'text-stone-500 hover:text-stone-300'}`}
+                         >
+                            {text.settings?.male}
+                         </button>
+                     </div>
                 </div>
 
                 {/* Notifications */}
@@ -712,27 +718,38 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
 
                 {/* Sensitivity */}
                 <div className="space-y-3">
-                    <label className="text-[10px] text-stone-500 block uppercase tracking-wider">{text.settings?.sensitivity}</label>
-                    <div className="h-0.5 w-full bg-stone-800 relative rounded-full overflow-hidden">
-                        <div 
-                          className="absolute top-0 bottom-0 left-0 bg-stone-500 transition-all duration-75" 
-                          style={{ width: `${Math.min(100, (inputLevel / 0.1) * 100)}%` }} 
-                        />
-                        <div 
-                          className="absolute -top-1 bottom-0 w-0.5 h-2.5 bg-teal-500 z-10 shadow-[0_0_10px_rgba(20,184,166,0.8)]" 
-                          style={{ left: `${Math.min(100, (inputSensitivity / 0.1) * 100)}%` }} 
-                        />
+                    <div className="flex justify-between items-end">
+                       <label className="text-[10px] text-stone-500 block uppercase tracking-wider">{text.settings?.sensitivity}</label>
+                       <span className="text-[9px] font-mono text-stone-600">{(inputSensitivity * 100).toFixed(1)}%</span>
                     </div>
                     
-                    <input 
-                      type="range" 
-                      min="0.001" 
-                      max="0.1" 
-                      step="0.001" 
-                      value={inputSensitivity} 
-                      onChange={handleSensitivityChange}
-                      className="w-full h-4 -mt-2 opacity-0 cursor-pointer"
-                    />
+                    <div className="relative pt-1">
+                        <div className="h-0.5 w-full bg-stone-800 relative rounded-full overflow-hidden">
+                            <div 
+                              className="absolute top-0 bottom-0 left-0 bg-stone-500 transition-all duration-75" 
+                              style={{ width: `${Math.min(100, (inputLevel / 0.1) * 100)}%` }} 
+                            />
+                            <div 
+                              className="absolute -top-1 bottom-0 w-0.5 h-2.5 bg-teal-500 z-10 shadow-[0_0_10px_rgba(20,184,166,0.8)]" 
+                              style={{ left: `${Math.min(100, (inputSensitivity / 0.1) * 100)}%` }} 
+                            />
+                        </div>
+                        
+                        <input 
+                          type="range" 
+                          min="0.001" 
+                          max="0.1" 
+                          step="0.001" 
+                          value={inputSensitivity} 
+                          onChange={handleSensitivityChange}
+                          className="absolute inset-0 w-full h-4 opacity-0 cursor-pointer z-20"
+                        />
+
+                        <div className="flex justify-between mt-2 text-[9px] text-stone-600 uppercase tracking-widest font-light">
+                            <span>{text.settings?.sensitive}</span>
+                            <span>{text.settings?.strict}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
          </div>

@@ -34,6 +34,12 @@ const XMarkIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const BookIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+  </svg>
+);
+
 function App() {
   const [hasStarted, setHasStarted] = useState(false);
   const [introStep, setIntroStep] = useState(0); // 0, 1, 2 for words, 3 for final
@@ -51,6 +57,7 @@ function App() {
   });
 
   const [showHistory, setShowHistory] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
   const [historyItems, setHistoryItems] = useState<SessionHistoryItem[]>([]);
 
   const text = TRANSLATIONS[lang];
@@ -159,6 +166,13 @@ function App() {
           </div>
           <div className="flex items-center space-x-4">
               <button 
+                onClick={() => setShowGuide(true)}
+                className="flex p-2 text-stone-600 hover:text-stone-300 transition-colors"
+                title="Guide"
+              >
+                <BookIcon className="w-5 h-5" />
+              </button>
+              <button 
                 onClick={() => setShowHistory(true)}
                 className="flex p-2 text-stone-600 hover:text-stone-300 transition-colors"
                 title="History"
@@ -167,6 +181,40 @@ function App() {
               </button>
           </div>
         </header>
+      )}
+
+      {/* Guide Modal */}
+      {showGuide && (
+        <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/95 backdrop-blur-md p-6 animate-fade-in" onClick={() => setShowGuide(false)}>
+           <div className="bg-stone-900/50 border border-stone-800 rounded-lg w-full max-w-lg flex flex-col max-h-[85vh] relative" onClick={e => e.stopPropagation()}>
+              <button onClick={() => setShowGuide(false)} className="absolute top-4 right-4 text-stone-600 hover:text-stone-300">
+                  <XMarkIcon className="w-6 h-6" />
+              </button>
+              
+              <div className="p-8 pb-4 text-center border-b border-stone-800/50">
+                  <h3 className="font-serif text-2xl text-teal-500/80 tracking-widest uppercase mb-1">{text.guide?.title}</h3>
+                  <div className="w-12 h-px bg-teal-900/50 mx-auto mt-4"></div>
+              </div>
+              
+              <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+                  {text.guide?.steps.map((step: any, idx: number) => (
+                      <div key={idx} className="space-y-2">
+                          <h4 className="text-stone-300 font-serif text-lg tracking-wide">{step.title}</h4>
+                          <p className="text-stone-500 font-light leading-relaxed text-sm">{step.text}</p>
+                      </div>
+                  ))}
+              </div>
+
+              <div className="p-6 border-t border-stone-800/50 flex justify-center">
+                  <button 
+                    onClick={() => setShowGuide(false)}
+                    className="text-xs uppercase tracking-[0.3em] text-stone-500 hover:text-stone-200 transition-colors"
+                  >
+                    {text.guide?.close}
+                  </button>
+              </div>
+           </div>
+        </div>
       )}
 
       {/* History Modal */}
