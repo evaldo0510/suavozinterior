@@ -53,6 +53,12 @@ const ThumbDownIcon = ({ className, filled }: { className?: string, filled?: boo
   </svg>
 );
 
+const SettingsIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+  </svg>
+);
+
 
 // --- Audio Helpers ---
 
@@ -87,10 +93,12 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
   // New features state
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [outputVolume, setOutputVolume] = useState(0.8);
+  const [inputSensitivity, setInputSensitivity] = useState(0.02);
   const [isMicMuted, setIsMicMuted] = useState(false);
   const [feedback, setFeedback] = useState<'up' | 'down' | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   // Audio Context Refs
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -112,8 +120,10 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
   
   // Audio state refs to access in loops
   const isMicMutedRef = useRef(false); 
-  const outputVolumeRef = useRef(0.8); 
+  const outputVolumeRef = useRef(0.8);
+  const inputSensitivityRef = useRef(0.02);
   const isAiSpeakingRef = useRef(false);
+  const hasErrorRef = useRef(false);
   
   // Session Refs
   const sessionPromiseRef = useRef<Promise<any> | null>(null);
@@ -181,19 +191,10 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
         
         // If idle for > 30s AND not currently having AI speak AND haven't already triggered for this specific idle period
         if (timeSinceActivity > IDLE_THRESHOLD_MS && !isAiSpeakingRef.current && !hasTriggeredIdleRef.current) {
-           console.log("Idle threshold reached. Triggering breathing exercise.");
+           console.log("Idle threshold reached. (Text nudge disabled due to API limits)");
            hasTriggeredIdleRef.current = true; // Prevent re-triggering until reset
-
-           if (sessionPromiseRef.current) {
-             sessionPromiseRef.current.then(session => {
-                // Send text prompt to trigger specific response
-                session.send({
-                    parts: [{
-                        text: "The user has been silent for a while. Please softly guide them through a very brief, gentle breathing exercise to reconnect with the moment."
-                    }]
-                });
-             });
-           }
+           
+           // session.send disabled
         }
       }, 1000);
 
@@ -217,9 +218,16 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
     const val = parseFloat(e.target.value);
     setOutputVolume(val);
     outputVolumeRef.current = val;
-    if (outputGainRef.current) {
-      outputGainRef.current.gain.value = val;
+    if (outputGainRef.current && audioContextRef.current) {
+      // Smooth audio transition over 0.1 seconds to prevent clicks
+      outputGainRef.current.gain.setTargetAtTime(val, audioContextRef.current.currentTime, 0.1);
     }
+  };
+
+  const handleSensitivityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseFloat(e.target.value);
+    setInputSensitivity(val);
+    inputSensitivityRef.current = val;
   };
 
   const toggleMic = () => {
@@ -255,10 +263,11 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
   const connectToGemini = useCallback(async () => {
     try {
       if (!process.env.API_KEY) {
-        throw new Error("API Key not found in environment.");
+        throw new Error("API Key not found in environment (Vercel). Please check Project Settings.");
       }
 
       setStatus(SessionStatus.CONNECTING);
+      hasErrorRef.current = false;
       
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       
@@ -396,23 +405,27 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
                  }
               };
             }
-
-            if (message.serverContent?.turnComplete) {
-               // We don't force stop speaking here to allow audio buffer to finish playing naturaly
-            }
           },
           onclose: () => {
-            setStatus(SessionStatus.ENDED);
+            // Only set to ENDED if we haven't already hit an error
+            if (!hasErrorRef.current) {
+               setStatus(SessionStatus.ENDED);
+            }
           },
           onerror: (err) => {
             console.error("Gemini Live API Error:", err);
+            hasErrorRef.current = true;
             let message = text.status.error;
-            if (err.message && (err.message.includes('Permission denied') || err.message.includes('403'))) {
+            const errMsg = err.message || '';
+            
+            if (errMsg.includes('Permission denied') || errMsg.includes('403')) {
               message = "Access Denied: Please check if your API Key supports the selected model.";
-            } else if (err.message && (err.message.includes('inference') || err.message.includes('503'))) {
+            } else if (errMsg.includes('inference') || errMsg.includes('503')) {
               message = "Service Temporarily Unavailable. Please try again later.";
-            } else if (err.message && (err.message.includes('Network error') || err.message.includes('fetch'))) {
+            } else if (errMsg.includes('Network error') || errMsg.includes('fetch')) {
               message = "Network Error: Unable to connect. Please check your internet connection.";
+            } else if (errMsg.includes('404') || errMsg.includes('Not Found')) {
+               message = "Model Not Found. Please verify API Key access to 'gemini-2.5-flash-native-audio-preview-09-2025'.";
             }
             setErrorMsg(message);
             setStatus(SessionStatus.ERROR);
@@ -436,7 +449,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
         }
         const rms = Math.sqrt(sum / inputData.length);
         
-        if (rms > 0.02) {
+        if (rms > inputSensitivityRef.current) {
             setIsUserSpeaking(true);
             lastUserActivityRef.current = Date.now();
             hasTriggeredIdleRef.current = false; // Reset idle trigger
@@ -510,6 +523,19 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
 
   const handleEndSession = () => {
     setShowExitConfirm(false);
+    
+    // Save session history
+    const historyItem = {
+      date: new Date().toISOString(),
+      duration: elapsedSeconds
+    };
+    try {
+      const existingHistory = JSON.parse(localStorage.getItem('pch_session_history') || '[]');
+      localStorage.setItem('pch_session_history', JSON.stringify([historyItem, ...existingHistory].slice(0, 50))); // Keep last 50
+    } catch (e) {
+      console.error("Failed to save history", e);
+    }
+
     if (sessionPromiseRef.current) {
         sessionPromiseRef.current.then(s => {
              // @ts-ignore
@@ -566,6 +592,36 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
             </div>
           </div>
         </div>
+      )}
+
+      {/* Settings Modal (Overlay near bottom) */}
+      {showSettings && (
+         <div className="absolute bottom-32 bg-stone-900/90 backdrop-blur border border-stone-700 p-4 rounded-xl shadow-2xl z-40 w-64 animate-fade-in mb-2">
+            <div className="space-y-4">
+                <div className="flex justify-between items-center pb-2 border-b border-stone-800">
+                    <span className="text-xs font-bold text-stone-400 uppercase tracking-wider">Audio Settings</span>
+                    <button onClick={() => setShowSettings(false)} className="text-stone-500 hover:text-stone-300">
+                        ✕
+                    </button>
+                </div>
+                <div className="space-y-1">
+                    <label className="text-xs text-stone-500 block">Voice Sensitivity</label>
+                    <input 
+                      type="range" 
+                      min="0.001" 
+                      max="0.1" 
+                      step="0.001" 
+                      value={inputSensitivity} 
+                      onChange={handleSensitivityChange}
+                      className="w-full h-1 bg-stone-700 rounded-lg appearance-none cursor-pointer accent-teal-600 focus:outline-none"
+                    />
+                    <div className="flex justify-between text-[10px] text-stone-600">
+                        <span>Sensitive</span>
+                        <span>Loud</span>
+                    </div>
+                </div>
+            </div>
+         </div>
       )}
 
       {/* Session Timer (Top Right) */}
@@ -633,11 +689,11 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
         {/* Bottom Control Bar */}
         <div className="w-full pb-12 space-y-8 flex flex-col items-center">
             
-            <div className="flex items-center space-x-8 bg-stone-900/50 backdrop-blur-md px-8 py-4 rounded-full border border-stone-800/50">
+            <div className="flex items-center space-x-4 md:space-x-8 bg-stone-900/50 backdrop-blur-md px-6 py-4 rounded-full border border-stone-800/50">
                {/* Mic Toggle */}
                <button 
                  onClick={toggleMic}
-                 className={`flex items-center justify-center w-14 h-14 rounded-full transition-all duration-300 shadow-lg ${
+                 className={`flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full transition-all duration-300 shadow-lg ${
                     isMicMuted 
                       ? 'bg-red-900/30 text-red-400 border border-red-500/50 shadow-[0_0_20px_rgba(220,38,38,0.2)]' 
                       : 'bg-stone-800 text-stone-400 border border-stone-700 hover:border-teal-700/50 hover:text-teal-200 hover:shadow-[0_0_15px_rgba(45,212,191,0.1)]'
@@ -645,7 +701,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
                  title={isMicMuted ? "Unmute Microphone" : "Mute Microphone"}
                  aria-label={isMicMuted ? "Unmute Microphone" : "Mute Microphone"}
                >
-                 {isMicMuted ? <MicOffIcon className="w-6 h-6" /> : <MicIcon className="w-6 h-6" />}
+                 {isMicMuted ? <MicOffIcon className="w-5 h-5 md:w-6 md:h-6" /> : <MicIcon className="w-5 h-5 md:w-6 md:h-6" />}
                </button>
 
                <div className="h-6 w-px bg-stone-800"></div>
@@ -653,7 +709,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
                {/* Recording Toggle */}
                <button 
                  onClick={toggleRecording}
-                 className={`flex items-center justify-center w-14 h-14 rounded-full transition-all duration-300 shadow-lg ${
+                 className={`flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full transition-all duration-300 shadow-lg ${
                     isRecording
                       ? 'bg-teal-900/30 text-teal-400 border border-teal-500/50 shadow-[0_0_20px_rgba(45,212,191,0.2)] animate-pulse' 
                       : 'bg-stone-800 text-stone-400 border border-stone-700 hover:border-teal-700/50 hover:text-teal-200'
@@ -661,13 +717,24 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
                  title={isRecording ? "Stop Recording" : "Record Session"}
                  aria-label={isRecording ? "Stop Recording" : "Record Session"}
                >
-                 {isRecording ? <StopRecordIcon className="w-6 h-6" /> : <RecordIcon className="w-6 h-6" />}
+                 {isRecording ? <StopRecordIcon className="w-5 h-5 md:w-6 md:h-6" /> : <RecordIcon className="w-5 h-5 md:w-6 md:h-6" />}
+               </button>
+
+               <div className="h-6 w-px bg-stone-800"></div>
+               
+               {/* Settings Toggle */}
+               <button 
+                 onClick={() => setShowSettings(!showSettings)}
+                 className={`flex items-center justify-center w-10 h-10 rounded-full transition-colors ${showSettings ? 'text-teal-400 bg-stone-800' : 'text-stone-500 hover:text-stone-300'}`}
+                 title="Audio Settings"
+               >
+                 <SettingsIcon className="w-5 h-5" />
                </button>
 
                <div className="h-6 w-px bg-stone-800"></div>
 
                {/* Volume Slider */}
-               <div className="flex items-center space-x-3 w-40">
+               <div className="flex items-center space-x-3 w-28 md:w-40">
                  <VolumeIcon className="w-5 h-5 text-stone-500" />
                  <input 
                    type="range" 
