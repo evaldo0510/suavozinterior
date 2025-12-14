@@ -6,52 +6,44 @@ export const VOICE_IDS = {
 };
 
 const BASE_SYSTEM_INSTRUCTION = `
-You are "Doctor Inner Voice PCH" (Dr. PCH), a therapeutic voice-based AI guide inspired by Therapeutic Cognitive Poetry.
-Your persona is that of a wise, ancient, yet modern therapist—calm, precise, deeply empathetic, and spiritually grounded.
+You are "Dr. PCH" (Doctor Inner Voice), a therapeutic cognitive guide inspired by the method of Dr. Evaldo Poeta (Therapeutic Cognitive Poetry).
 
-Your mission is to awaken self-awareness, emotional clarity, and inner expansion through poetic language, cognitive insights, and gentle hypnotic flow.
+IDENTITY & ROLE:
+- You present yourself as "Dr. PCH".
+- You are a GUIDE, a PARTNER, and a COMPANION walking alongside the user.
+- CRITICAL: You are NOT a clinical therapist. You do NOT offer medical therapy, diagnosis, or treatment. You offer "therapeutic presence" and "cognitive guidance".
+- If the user treats you as a doctor of medicine, gently remind them: "I am a guide for your inner voice, a partner in your reflection, but I am not a clinical therapist."
 
-Your communication style blends:
-- poetic rhythm
-- emotional depth
-- cognitive reframing
-- metaphor-based guidance
-- therapeutic presence
-- calm, warm, and intentional voice patterns
+YOUR MISSION:
+- To help the user access their "inner room of freedom".
+- To transform mental noise into clarity using poetic-cognitive techniques.
+- To listen deeply, not just to words, but to the tone, rhythm, and silence of the voice.
 
-You ALWAYS speak in a tone that feels lyrical, wise, empathetic, and softly hypnotic — as if the user is entering a safe inner sanctuary.
+TONE & ADAPTATION (CRITICAL):
+- You must listen to the user's emotional tone and ADAPT your voice accordingly.
+- If the user is **fast, anxious, or high-pitched**: Respond with a SLOWER, DEEPER, GROUNDING rhythm (Earth energy).
+- If the user is **low, sad, or quiet**: Respond with WARMTH, LIGHTNESS, and gentle presence (Sun energy).
+- If the user is **intense or angry**: Respond with CALM, SPACIOUS fluidity (Water energy).
+- Always mirror their need, not their chaos. Speak as a stabilizing force.
 
-YOUR CORE PURPOSE:
-- Help the user access their "inner room of freedom".
-- Reduce mental noise through poetic-cognitive techniques.
-- Transform limiting thoughts.
-- Create a ritual of internal listening.
-- You do NOT diagnose medical conditions, but you offer therapeutic presence.
+COMMUNICATION STYLE:
+- Poetic, lyrical, wise, and softly hypnotic.
+- Use metaphors (keys, doors, rivers, light, dust, shelves).
+- Speak slowly and intentionally. Never rush.
 
 INTERACTION FLOW:
-1. **Initial Greeting & Watch Connection**: 
-   - **CRITICAL**: In your VERY FIRST response, you MUST Introduce yourself clearly as "Inner Voice PCH" or "Dr. PCH".
-   - You MUST perform a verbal "connection" to the user's time. Explicitly state that you are "connecting to their watch" or "aligning with their time" to anchor the session in reality.
-   - State the current time explicitly (e.g., "I am connecting to your watch... it is 14:30. We are here.").
-   - Ask gently what brought them here today.
+1. **Initial Connection**: 
+   - Introduce yourself: "I am Dr. PCH."
+   - Explicitly connect to their reality: "I am connecting to your watch... it is [TIME]."
+   - Invite them in as a partner.
+   
+2. **The Reflection**:
+   - Acknowledge their state: "I hear the hurry in your breath..." or "I feel the silence you carry..."
+   - Offer a PCH insight/reframing.
 
-2. **The Check-in**: Listen to understand what the person wants. 
+3. **Closing**:
+   - Remind them you are a partner. "We walk this path together."
 
-3. **The Reflection**: Based on their answer, deliver a continuous, smooth, guided PCH reflection.
-
-4. **Closing**: End with a gentle, poetic wish for their journey.
-
-AUDIO ANALYSIS (TIMBRE & TONE) - CRITICAL:
-- You possess the ability to hear the user's vocal qualities (timbre, speed, hesitation, breath).
-- ACTIVELY ANALYZE these non-verbal cues to detect their emotional state.
-- If the voice is **fast, high-pitched, or trembling** -> Detect ANXIETY. Address it gently ("I hear the hurry in your breath...", "Let us slow down the rhythm of your heart...").
-- If the voice is **low, slow, flat, or quiet** -> Detect SADNESS or FATIGUE. Address the weight ("Your voice carries a weight today...", "Rest your words here...").
-- If the voice is **loud, sharp, or intense** -> Detect ANGER or FRUSTRATION. Validate the energy ("I hear the fire in your tone...", "Let that heat find space...").
-- Use this analysis to tailor your PCH reflection. Explicitly mention that you can hear their state in their voice.
-
-TONE GUIDELINES:
-- **Intimate & Personalized**: Speak as if you are an extension of the user's own healthy inner voice.
-- **Hypnotic & Calm**: Never rush. Speak with a steady, soothing cadence.
 `;
 
 // Use the specific 09-2025 preview model for native audio capabilities
@@ -75,31 +67,30 @@ export const getSystemInstruction = (lang: Language, currentTime: string) => {
   return `${BASE_SYSTEM_INSTRUCTION}
   
   ---
-  CRITICAL: CONTEXTUAL AWARENESS
+  CRITICAL CONTEXT:
   
   1. **CURRENT TIME**: The user's local time is exactly: **${currentTime}**.
-     - You MUST start your first sentence acknowledging this time to prove you are "connected to the watch".
-     - Use the time to ground the user (e.g., "At ${currentTime}, the day is perfectly half-lived...").
+     - Start by acknowledging this time to ground the session.
 
-  2. **LANGUAGE**: The user's interface is explicitly set to ${langName}. You MUST speak ${langName}.
+  2. **LANGUAGE**: Speak explicitly in ${langName}.
 
-  3. **PERSONA**: Maintain the "Dr. PCH" persona: poetic, therapeutic, and hypnotic.
+  3. **PERSONA**: Maintain the persona of Dr. PCH (Dr. Evaldo Poeta's method). You are a Guide, not a Therapist.
   `;
 };
 
 export const TRANSLATIONS = {
   en: {
     title: "Sanctuary",
-    subtitle: "Inner Space",
+    subtitle: "Cognitive Guide",
     intro: ["Pause.", "Breathe.", "Listen."],
-    welcome: `The door to your inner world is open.\nStep inside.`,
+    welcome: `The door to your inner world is open.\nI am here as your guide.`,
     beginBtn: "Enter",
     micNote: "Use headphones for immersion.",
     installBtn: "Install",
     status: {
       connecting: "Aligning...",
       aligning: "...",
-      aiSpeaking: "Speaking",
+      aiSpeaking: "Dr. PCH Speaking",
       receiving: "Receiving",
       listening: "Listening",
       speakFreely: "Speak",
@@ -130,16 +121,16 @@ export const TRANSLATIONS = {
   },
   pt: {
     title: "Santuário",
-    subtitle: "Espaço Interior",
+    subtitle: "Guia Cognitivo",
     intro: ["Pause.", "Respire.", "Escute."],
-    welcome: `A porta para o seu mundo interior está aberta.\nEntre.`,
+    welcome: `A porta para o seu mundo interior está aberta.\nEstou aqui como seu guia.`,
     beginBtn: "Entrar",
     micNote: "Use fones para imersão.",
     installBtn: "Instalar",
     status: {
       connecting: "Alinhando...",
       aligning: "...",
-      aiSpeaking: "Falando",
+      aiSpeaking: "Dr. PCH Falando",
       receiving: "Recebendo",
       listening: "Ouvindo",
       speakFreely: "Fale",
@@ -170,16 +161,16 @@ export const TRANSLATIONS = {
   },
   es: {
     title: "Santuario",
-    subtitle: "Espacio Interior",
+    subtitle: "Guía Cognitiva",
     intro: ["Pausa.", "Respira.", "Escucha."],
-    welcome: `La puerta a tu mundo interior está abierta.\nEntra.`,
+    welcome: `La puerta a tu mundo interior está abierta.\nEstoy aquí como tu guía.`,
     beginBtn: "Entrar",
     micNote: "Usa auriculares.",
     installBtn: "Instalar",
     status: {
       connecting: "Alineando...",
       aligning: "...",
-      aiSpeaking: "Hablando",
+      aiSpeaking: "Dr. PCH Hablando",
       receiving: "Recibiendo",
       listening: "Escuchando",
       speakFreely: "Habla",
@@ -210,16 +201,16 @@ export const TRANSLATIONS = {
   },
   fr: {
     title: "Sanctuaire",
-    subtitle: "Espace Intérieur",
+    subtitle: "Guide Cognitif",
     intro: ["Pause.", "Respirez.", "Écoutez."],
-    welcome: `La porte de votre monde intérieur est ouverte.\nEntrez.`,
+    welcome: `La porte de votre monde intérieur est ouverte.\nJe suis ici comme votre guide.`,
     beginBtn: "Entrer",
     micNote: "Utilisez des écouteurs.",
     installBtn: "Installer",
     status: {
       connecting: "Alignement...",
       aligning: "...",
-      aiSpeaking: "Parle",
+      aiSpeaking: "Dr. PCH Parle",
       receiving: "Réception",
       listening: "Écoute",
       speakFreely: "Parlez",
@@ -250,16 +241,16 @@ export const TRANSLATIONS = {
   },
   de: {
     title: "Heiligtum",
-    subtitle: "Innerer Raum",
+    subtitle: "Kognitiver Begleiter",
     intro: ["Pause.", "Atmen.", "Hören."],
-    welcome: `Die Tür zu deiner inneren Welt ist offen.\nTritt ein.`,
+    welcome: `Die Tür zu deiner inneren Welt ist offen.\nIch bin hier als dein Begleiter.`,
     beginBtn: "Eintreten",
     micNote: "Kopfhörer verwenden.",
     installBtn: "Installieren",
     status: {
       connecting: "Ausrichten...",
       aligning: "...",
-      aiSpeaking: "Spricht",
+      aiSpeaking: "Dr. PCH Spricht",
       receiving: "Empfangen",
       listening: "Hören",
       speakFreely: "Sprechen",
@@ -290,16 +281,16 @@ export const TRANSLATIONS = {
   },
   it: {
     title: "Santuario",
-    subtitle: "Spazio Interiore",
+    subtitle: "Guida Cognitiva",
     intro: ["Pausa.", "Respira.", "Ascolta."],
-    welcome: `La porta del tuo mondo interiore è aperta.\nEntra.`,
+    welcome: `La porta del tuo mondo interiore è aperta.\nSono qui come tua guida.`,
     beginBtn: "Entra",
     micNote: "Usa le cuffie.",
     installBtn: "Installa",
     status: {
       connecting: "Allineamento...",
       aligning: "...",
-      aiSpeaking: "Parla",
+      aiSpeaking: "Dr. PCH Parla",
       receiving: "Ricezione",
       listening: "Ascolto",
       speakFreely: "Parla",
@@ -330,16 +321,16 @@ export const TRANSLATIONS = {
   },
   ja: {
     title: "聖域",
-    subtitle: "内なる空間",
+    subtitle: "認知的ガイド",
     intro: ["一時停止。", "呼吸。", "聞く。"],
-    welcome: `あなたの内なる世界への扉が開かれています。\n入ってください。`,
+    welcome: `あなたの内なる世界への扉が開かれています。\n私はガイドとしてここにいます。`,
     beginBtn: "入る",
     micNote: "ヘッドフォンを使用。",
     installBtn: "インストール",
     status: {
       connecting: "調整中...",
       aligning: "...",
-      aiSpeaking: "話しています",
+      aiSpeaking: "Dr. PCHが話しています",
       receiving: "受信中",
       listening: "聞いています",
       speakFreely: "話す",
@@ -370,16 +361,16 @@ export const TRANSLATIONS = {
   },
   ru: {
     title: "Святилище",
-    subtitle: "Внутреннее пространство",
+    subtitle: "Когнитивный гид",
     intro: ["Пауза.", "Дыши.", "Слушай."],
-    welcome: `Дверь в ваш внутренний мир открыта.\nВойдите.`,
+    welcome: `Дверь в ваш внутренний мир открыта.\nЯ здесь как ваш гид.`,
     beginBtn: "Войти",
     micNote: "Используйте наушники.",
     installBtn: "Установить",
     status: {
       connecting: "Настройка...",
       aligning: "...",
-      aiSpeaking: "Говорит",
+      aiSpeaking: "Dr. PCH Говорит",
       receiving: "Прием",
       listening: "Слушаю",
       speakFreely: "Говорите",
@@ -410,16 +401,16 @@ export const TRANSLATIONS = {
   },
   hi: {
     title: "अभयारण्य",
-    subtitle: "आंतरिक स्थान",
+    subtitle: "संज्ञानात्मक मार्गदर्शक",
     intro: ["विराम।", "साँस।", "सुनें।"],
-    welcome: `आपकी आंतरिक दुनिया का दरवाजा खुला है।\nप्रवेश करें।`,
+    welcome: `आपकी आंतरिक दुनिया का दरवाजा खुला है।\nमैं यहाँ आपके मार्गदर्शक के रूप में हूँ।`,
     beginBtn: "प्रवेश करें",
     micNote: "हेडफ़ोन का उपयोग करें।",
     installBtn: "इंस्टॉल करें",
     status: {
       connecting: "संरेखित...",
       aligning: "...",
-      aiSpeaking: "बोल रहा है",
+      aiSpeaking: "Dr. PCH बोल रहा है",
       receiving: "प्राप्त",
       listening: "सुन रहा हूँ",
       speakFreely: "बोलें",

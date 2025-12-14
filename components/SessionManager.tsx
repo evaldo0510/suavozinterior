@@ -165,6 +165,41 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
     }
   }, []);
 
+  const resumeAudioContext = useCallback(async () => {
+    if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+        try {
+            await audioContextRef.current.resume();
+            console.log("AudioContext resumed");
+        } catch (e) {
+            console.error("Failed to resume AudioContext", e);
+        }
+    }
+  }, []);
+
+  // Ensure AudioContext is unlocked on any user gesture
+  useEffect(() => {
+      const handleUserGesture = async () => {
+          if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+              try {
+                  await audioContextRef.current.resume();
+                  console.log("AudioContext resumed by user gesture");
+              } catch (e) {
+                  // ignore
+              }
+          }
+      };
+      
+      window.addEventListener('click', handleUserGesture);
+      window.addEventListener('touchstart', handleUserGesture);
+      window.addEventListener('keydown', handleUserGesture);
+      
+      return () => {
+          window.removeEventListener('click', handleUserGesture);
+          window.removeEventListener('touchstart', handleUserGesture);
+          window.removeEventListener('keydown', handleUserGesture);
+      };
+  }, []);
+
   // Timer Effect
   useEffect(() => {
     if (status === SessionStatus.CONNECTED) {
@@ -180,9 +215,21 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
         
         // If idle for > 30s AND not currently having AI speak AND haven't already triggered for this specific idle period
         if (timeSinceActivity > IDLE_THRESHOLD_MS && !isAiSpeakingRef.current && !hasTriggeredIdleRef.current) {
-           // We do not send a prompt here to avoid the 'session.send is not a function' error.
-           console.log("Idle threshold reached (silent).");
-           hasTriggeredIdleRef.current = true; // Prevent re-triggering until reset
+           console.log("Idle threshold reached. Prompting AI...");
+           hasTriggeredIdleRef.current = true;
+           
+           if (sessionPromiseRef.current) {
+             sessionPromiseRef.current.then((session: any) => {
+               // Send a text prompt to the model to trigger a gentle check-in
+               if (session.send) {
+                 const promptText = "The user has been silent. Gently ask: 'What thought is gently trying to surface right now?'";
+                 // Sending with true indicates end of user turn
+                 session.send([{ text: promptText }], true);
+               }
+             }).catch(err => {
+               console.error("Failed to send idle prompt:", err);
+             });
+           }
         }
       }, 1000);
 
@@ -296,17 +343,6 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
     setFeedback(type);
     setTimeout(() => setFeedback(null), 2000); 
   };
-
-  const resumeAudioContext = useCallback(async () => {
-    if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
-        try {
-            await audioContextRef.current.resume();
-            console.log("AudioContext resumed");
-        } catch (e) {
-            console.error("Failed to resume AudioContext", e);
-        }
-    }
-  }, []);
 
   const connectToGemini = useCallback(async () => {
     try {
