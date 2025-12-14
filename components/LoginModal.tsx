@@ -33,9 +33,14 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose, lang, o
     const isAdmin = ADMIN_EMAILS.includes(normalizedEmail);
 
     const user: User = {
+      id: Date.now().toString(),
       name,
       email: normalizedEmail,
-      isAdmin
+      isAdmin,
+      plan: isAdmin ? 'guardian' : 'member',
+      registeredAt: new Date().toISOString(),
+      lastActive: new Date().toISOString(),
+      resonanceScore: 0
     };
 
     onLogin(user);

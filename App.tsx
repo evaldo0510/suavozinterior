@@ -737,4 +737,33 @@ function App() {
                     <select
                       value={lang}
                       onChange={(e) => setLang(e.target.value as Language)}
-                      className="bg-transparent text-stone-600 text-[10px] uppercase tracking-widest text-
+                      className="bg-transparent text-stone-600 text-[10px] uppercase tracking-widest text-center focus:outline-none cursor-pointer hover:text-stone-400 appearance-none"
+                      style={{ textAlignLast: 'center' }}
+                    >
+                      {LANGUAGES.map(({ code, label }) => (
+                        <option key={code} value={code} className="bg-stone-950 text-stone-400">
+                          {label}
+                        </option>
+                      ))}
+                    </select>
+                </div>
+
+             </div>
+          </div>
+        ) : (
+          <div className="w-full h-full flex flex-col animate-fade-in">
+            <SessionManager 
+               onDisconnect={handleSessionDisconnect} 
+               lang={lang} 
+               userPlan={userPlan} 
+               onUpgrade={() => setShowPremium(true)}
+            />
+          </div>
+        )}
+
+      </main>
+    </div>
+  );
+}
+
+export default App;
