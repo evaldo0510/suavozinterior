@@ -180,17 +180,10 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
         
         // If idle for > 30s AND not currently having AI speak AND haven't already triggered for this specific idle period
         if (timeSinceActivity > IDLE_THRESHOLD_MS && !isAiSpeakingRef.current && !hasTriggeredIdleRef.current) {
-           console.log("Idle threshold reached. Prompting AI.");
+           // We do not send a prompt here to avoid the 'session.send is not a function' error.
+           // Future implementation could rely on ClientContent messages if supported by the SDK.
+           console.log("Idle threshold reached (silent).");
            hasTriggeredIdleRef.current = true; // Prevent re-triggering until reset
-           
-           // Send a gentle prompt to the AI to engage the user
-           if (sessionPromiseRef.current) {
-             sessionPromiseRef.current.then(session => {
-                session.send({
-                    parts: [{ text: "The user has been silent for 30 seconds. Gently invite them back to the present moment with a brief, poetic reflection about silence and presence." }]
-                });
-             });
-           }
         }
       }, 1000);
 
