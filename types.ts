@@ -11,4 +11,11 @@ export interface AudioVolumeState {
   outputVolume: number;
 }
 
+export interface SessionHistoryItem {
+  date: string;
+  duration: number; // in seconds
+}
+
 export type Language = 'en' | 'pt' | 'es' | 'fr' | 'de' | 'it' | 'ja' | 'ru' | 'hi';
+
+export type VoiceType = 'male' | 'female';
