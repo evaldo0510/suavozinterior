@@ -370,6 +370,9 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
     setIsMicMuted(newState);
     isMicMutedRef.current = newState;
     
+    // Ensure audio context is active when toggling mic
+    resumeAudioContext();
+    
     // Also toggle the actual media track enabled state
     if (streamRef.current) {
       streamRef.current.getAudioTracks().forEach(track => {
@@ -754,7 +757,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
   const visualizerColor = isAiSpeaking ? "rgb(20, 184, 166)" : "rgb(168, 162, 158)"; // Teal or Lighter Stone
 
   return (
-    <div className="relative flex flex-col items-center justify-between w-full h-full p-6 overflow-hidden">
+    <div className="relative flex flex-col items-center justify-between w-full h-full p-4 md:p-6 overflow-hidden">
       
       {/* Background Ambience - Enhanced for 'Inner Light' */}
       <div className="absolute inset-0 bg-stone-950/80 -z-10"></div>
@@ -785,7 +788,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
 
       {/* Settings Modal */}
       {showSettings && (
-         <div className="absolute bottom-28 bg-stone-900/95 backdrop-blur-xl border border-stone-700/50 p-6 rounded-2xl z-40 w-72 animate-fade-in mb-2 shadow-2xl ring-1 ring-stone-800">
+         <div className="absolute bottom-24 md:bottom-28 left-1/2 -translate-x-1/2 bg-stone-900/95 backdrop-blur-xl border border-stone-700/50 p-6 rounded-2xl z-40 w-[85vw] md:w-72 animate-fade-in mb-2 shadow-2xl ring-1 ring-stone-800">
             <div className="space-y-6">
                 <div className="flex justify-between items-center pb-4 border-b border-stone-800">
                     <span className="text-[10px] font-bold text-stone-300 uppercase tracking-widest">{text.settings?.title}</span>
@@ -908,7 +911,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
       <div className="flex-1 flex flex-col items-center justify-center w-full relative">
          
          {/* Organic Container for Visualizer - No hard borders */}
-         <div className={`relative w-full h-full max-w-[500px] max-h-[500px] flex items-center justify-center transition-all duration-1000 ${isAiSpeaking ? 'scale-110' : 'scale-100'}`}>
+         <div className={`relative w-full h-full max-h-[40vh] md:max-h-[500px] flex items-center justify-center transition-all duration-1000 ${isAiSpeaking ? 'scale-110' : 'scale-100'}`}>
              
              {/* Canvas Layer */}
              <div className="absolute inset-0 z-20">
@@ -920,7 +923,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
              </div>
              
              {/* Status Badge - Floating Minimal */}
-             <div className="absolute bottom-16 z-30 flex flex-col items-center space-y-2 pointer-events-none">
+             <div className="absolute bottom-4 md:bottom-16 z-30 flex flex-col items-center space-y-2 pointer-events-none">
                  {isConnecting ? (
                     <div className="text-stone-500 text-[10px] tracking-[0.3em] uppercase animate-pulse">{text.status.connecting}</div>
                  ) : isAiSpeaking ? (
@@ -939,10 +942,10 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
       </div>
 
       {/* --- CONTROL DECK --- */}
-      <div className="w-full flex flex-col items-center justify-center z-20 pb-4">
+      <div className="w-full flex flex-col items-center justify-center z-20 pb-safe">
         
         {/* Floating Glass Deck - More defined border */}
-        <div className="flex items-center gap-6 px-8 py-4 bg-stone-900/60 backdrop-blur-xl border border-stone-700/50 rounded-full shadow-[0_0_25px_rgba(0,0,0,0.3)] transition-all hover:border-stone-600/60 hover:bg-stone-900/80">
+        <div className="flex items-center justify-between w-[95vw] max-w-lg gap-3 md:gap-6 px-4 py-3 md:px-8 md:py-4 bg-stone-900/60 backdrop-blur-xl border border-stone-700/50 rounded-full shadow-[0_0_25px_rgba(0,0,0,0.3)] transition-all hover:border-stone-600/60 hover:bg-stone-900/80">
             
             {/* Settings */}
             <button 
@@ -956,20 +959,20 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
             {/* Mic (Main Action) */}
             <button 
                 onClick={toggleMic}
-                className={`relative flex items-center justify-center w-14 h-14 rounded-full border transition-all duration-300 shadow-md ${
+                className={`relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border transition-all duration-300 shadow-md ${
                 isMicMuted 
                     ? 'border-red-900/30 bg-red-950/20 text-red-800' 
                     : 'border-stone-600 bg-stone-800/60 text-stone-200 hover:border-teal-600/50 hover:text-white hover:shadow-[0_0_15px_-5px_rgba(20,184,166,0.3)]'
                 }`}
             >
-                {isMicMuted ? <MicOffIcon className="w-6 h-6" /> : <MicIcon className="w-6 h-6" />}
+                {isMicMuted ? <MicOffIcon className="w-5 h-5 md:w-6 md:h-6" /> : <MicIcon className="w-5 h-5 md:w-6 md:h-6" />}
             </button>
 
             {/* Volume & Feedback Group */}
-            <div className="flex items-center gap-4 border-l border-stone-700/50 pl-6">
+            <div className="flex items-center gap-3 md:gap-4 border-l border-stone-700/50 pl-3 md:pl-6">
                 
-                {/* Volume */}
-                <div className="group flex items-center space-x-2">
+                {/* Volume - Hidden on Mobile */}
+                <div className="hidden md:flex group items-center space-x-2">
                     <VolumeIcon className="w-4 h-4 text-stone-500 group-hover:text-stone-300 transition-colors" />
                     <input 
                     type="range" 

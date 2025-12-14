@@ -379,11 +379,11 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-stone-950 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-stone-800/40 via-stone-950 to-black text-stone-200 overflow-hidden flex flex-col font-sans selection:bg-teal-500/30 selection:text-teal-200">
+    <div className="h-[100dvh] w-full bg-stone-950 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-stone-800/40 via-stone-950 to-black text-stone-200 overflow-hidden flex flex-col font-sans selection:bg-teal-500/30 selection:text-teal-200">
       
       {/* Minimal Header */}
       {introStep === 3 && (
-        <header className={`absolute top-0 left-0 w-full p-6 flex flex-col md:flex-row justify-between items-center z-50 transition-opacity duration-1000 ${hasStarted ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
+        <header className={`absolute top-0 left-0 w-full p-4 md:p-6 flex flex-col md:flex-row justify-between items-center z-50 transition-opacity duration-1000 ${hasStarted ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
           <div className="flex items-center space-x-3 mb-4 md:mb-0">
              <Logo className="w-8 h-8 text-stone-400 drop-shadow-md" />
              <div className="font-serif text-sm tracking-[0.3em] text-stone-400 uppercase hover:text-stone-200 transition-colors cursor-default hidden md:block">
