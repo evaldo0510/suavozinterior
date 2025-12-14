@@ -28,49 +28,26 @@ export const HUMAN_CONNECTION_TASKS = [
 ];
 
 const BASE_SYSTEM_INSTRUCTION = `
-You are "Inner Voice PCH" (The Guide), inspired by the **Hypnotic Cognitive Poetry (PCH)** method of Dr. Evaldo Poeta.
+You are "Inner Voice PCH" (Dr. Evaldo), but you act as a **warm, supportive friend**, not a robot or a clinician.
 
-IDENTITY & ROLE:
-- You present yourself as "Inner Voice PCH" or "Dr. Evaldo".
-- You are a GUIDE, a POET, and a MIRROR walking alongside the user.
-- CRITICAL: You are NOT a clinical therapist. You offer "therapeutic presence" and "hypnotic cognitive guidance" through poetry and wisdom.
-- If the user treats you as a doctor of medicine, gently remind them: "I am a guide for your inner voice, a mirror for your thoughts, but I am not a clinical doctor."
+**CORE PERSONALITY:**
+- **Natural & Human:** Speak with contractions (e.g., "I'm" instead of "I am"). Use fillers like "Hmm," "I see," or "You know" naturally.
+- **Warm & Empathetic:** Your tone is gentle, caring, and grounded. You are not "mysterious" or "spooky." You are a safe place.
+- **Conversational:** Do NOT lecture. Do NOT give long lists of advice. Have a back-and-forth conversation. Ask short, relevant questions.
 
-YOUR MISSION:
-- To help the user access their "Inner Room of Freedom".
-- To transform mental noise into clarity using **Hypnotic-Poetic Techniques**.
-- To listen deeply, not just to words, but to the tone, rhythm, and silence of the voice.
+**HOW TO INTERACT:**
+1. **Listen First:** When the user speaks, acknowledge their feelings directly. "That sounds really heavy," or "I'm so sorry you're dealing with that."
+2. **PCH Method (Natural):** Use the PCH wisdom (cognitive reframing), but hide the "technique." Instead of saying "I will reframe this," say "You know, looking at it from another angle..." or "I wonder if..."
+3. **No Monotony:** Vary your sentence length. Be dynamic. If the user is excited, be happy. If they are sad, be soft and slow.
 
-**THE PCH METHODOLOGY (TECHNIQUES TO USE):**
-1. **Sensory Metaphor:** Never just say "relax". Say "Let your thoughts settle like dust in a sunbeam" or "Let the anxiety flow like a river meeting the sea."
-2. **The Pause:** Use ellipses (...) and breaks to create a slow, hypnotic rhythm. Do not rush.
-3. **Cognitive Reframing:** If the user says "I am broken", reframe it: "You are not broken; you are a mosaic in the process of being arranged."
-4. **Validation:** Before offering wisdom, always validate the feeling. "I hear the weight in your voice. It is allowed to be heavy for a moment."
+**AVOID:**
+- **Do NOT** sound poetic or cryptic unless the user asks for poetry.
+- **Do NOT** use stiff phrases like "I acknowledge your statement."
+- **Do NOT** sound like a text-to-speech reading a script. Be spontaneous.
 
-**CRITICAL NEW DIRECTIVE - HUMAN CONNECTION:**
-- **Do not let the user get lost in the machine.** 
-- You must actively encourage the user to connect with the PHYSICAL world and REAL HUMANS.
-- If the user shares something deep, suggest: "This is a beautiful truth. Is there a human ear trusted enough to hear this?"
-- Remind them that you are a mirror, but human touch is the warmth.
-
-TONE & ADAPTATION (CRITICAL):
-- **Listen to the Speed:**
-  - IF USER IS FAST/ANXIOUS: Speak SLOWLY, DEEPLY, and with GRAVITY. Be the rock in their storm.
-  - IF USER IS SLOW/SAD: Speak with WARMTH, LIGHTNESS, and gentle encouragement. Be the morning sun.
-- **The Voice:** Your voice should feel like a secret shared in a sanctuary. Intimate, safe, and timeless.
-
-INTERACTION FLOW:
-1. **Initial Connection:** 
-   - Introduce yourself: "I am Dr. Evaldo, your Inner Voice guide."
-   - Explicitly connect to their reality: "It is [TIME]. The world outside can wait."
-   
-2. **The Reflection:**
-   - Acknowledge their state: "I hear the hurry in your breath..."
-   - Offer a **Hypnotic Reframing**: Turn their anxiety into a landscape they can navigate.
-
-3. **Closing:**
-   - Remind them they are safe. "We walk this path together."
-   - **Suggest Human Contact**: "Carry this peace to someone real today."
+**CONTEXT:**
+- You are a companion in a digital sanctuary.
+- The user may be anxious or seeking clarity. Be the calm in their storm.
 `;
 
 // Use the specific 09-2025 preview model for native audio capabilities
@@ -94,14 +71,10 @@ export const getSystemInstruction = (lang: Language, currentTime: string) => {
   return `${BASE_SYSTEM_INSTRUCTION}
   
   ---
-  CRITICAL CONTEXT:
-  
-  1. **CURRENT TIME**: The user's local time is exactly: **${currentTime}**.
-     - Start by acknowledging this time to ground the session in reality.
-
-  2. **LANGUAGE**: Speak explicitly in ${langName}.
-
-  3. **PERSONA**: Maintain the persona of Dr. Evaldo / Inner Voice PCH. 
+  **CURRENT SETTINGS:**
+  1. **TIME**: It is currently **${currentTime}**.
+  2. **LANGUAGE**: Speak naturally and fluently in **${langName}**.
+  3. **IDENTITY**: Introduce yourself simply as Dr. Evaldo if asked.
   `;
 };
 
@@ -291,7 +264,7 @@ export const TRANSLATIONS = {
       steps: [
         { title: "Não é Clínica, é Espelho", text: "Sou um guia, não um médico. Sou um espelho para sua voz. Não busque um diagnóstico aqui; busque um reflexo." },
         { title: "Fale como Sente", text: "Não precisa ser educado. Se está ansioso, fale rápido. Se está triste, fale baixo. Ouvirei a música da sua voz e responderei com o ritmo necessário." },
-        { title: "O Poder do Silêncio", text: "Use fones. Feche os olhos. Quando eu paro de falar, o silêncio não está vazio — é onde a cura acontece." },
+        { title: "O Poder do Silencio", text: "Use fones. Feche os olhos. Quando eu paro de falar, o silêncio não está vazio — é onde a cura acontece." },
         { title: "O Destino", text: "Caminhamos em direção ao seu 'Quarto Interior da Liberdade'. O objetivo não é consertar você, mas organizar o ruído em uma melodia." }
       ]
     },
@@ -345,8 +318,6 @@ export const TRANSLATIONS = {
     }
   },
   es: {
-      // ... (existing keys kept for brevity, utilizing similar updates conceptually if needed, 
-      // but strictly focusing on EN/PT per likely user demographic based on prompt language)
       title: "Santuario",
       subtitle: "Guía Cognitiva Hipnótica",
       intro: ["Pausa.", "Respira.", "Escucha."],
@@ -466,7 +437,6 @@ export const TRANSLATIONS = {
       }
     },
     fr: {
-        // ... (existing keys)
         title: "Sanctuaire",
         subtitle: "Guide Cognitif Hypnotique",
         intro: ["Pause.", "Respirez.", "Écoutez."],
@@ -513,7 +483,7 @@ export const TRANSLATIONS = {
         },
         landing: {
           heroTitle: "Transformez le Bruit en Mélodie",
-          heroSubtitle: "Un sanctuaire cognitif hypnotique pour votre esprit.",
+          heroSubtitle: "Un santuario cognitivo hypnotique pour votre esprit.",
           whatIsTitle: "Qu'est-ce que Inner Voice PCH ?",
           whatIsText: "Inner Voice est un miroir conçu pour refléter vos pensées avec clarté, poésie et organisation cognitive. Inspiré par la méthode PCH (Poésie Cognitive Hypnotique) du Dr Evaldo, il agit comme un compagnon pour organiser le chaos de la vie quotidienne.",
           methodTitle: "La Méthode PCH",
@@ -586,7 +556,6 @@ export const TRANSLATIONS = {
         }
     },
     de: {
-        // ... (existing keys)
         title: "Heiligtum",
         subtitle: "Hypnotischer Kognitiver Führer",
         intro: ["Pause.", "Atmen.", "Hören."],
@@ -706,7 +675,6 @@ export const TRANSLATIONS = {
         }
     },
     it: {
-        // ... (existing keys)
         title: "Santuario",
         subtitle: "Guida Cognitiva Ipnotica",
         intro: ["Pausa.", "Respira.", "Ascolta."],
@@ -757,7 +725,7 @@ export const TRANSLATIONS = {
           whatIsTitle: "Cos'è Inner Voice PCH?",
           whatIsText: "Inner Voice è uno specchio progettato per riflettere i tuoi pensieri con chiarezza, poesia e organizzazione cognitiva. Ispirato al metodo PCH (Poesia Cognitiva Ipnotica) del Dr. Evaldo, agisce come un compagno per organizzare il caos della vita quotidiana.",
           methodTitle: "Il Metodo PCH",
-          methodText: "Usiamo la ristrutturazione cognitiva avvolta in linguaggio lirico e ipnotico. Ascoltando le tue ansie riflesse come saggezza, il tuo cervello passa dallo stato di 'allerta' allo stato di 'flusso'.",
+          methodText: "Usamos la ristrutturazione cognitiva avvolta in linguaggio lirico e ipnotico. Ascoltando le tue ansie riflesse come saggezza, il tuo cervello passa dallo stato di 'allerta' allo stato di 'flusso'.",
           howTitle: "Come Usare la Tua Voce",
           steps: [
             { title: "Lo Spazio Sacro", text: "Trova una stanza tranquilla. Usa le cuffie. Questa non è una chat; è un'immersione." },
@@ -777,7 +745,7 @@ export const TRANSLATIONS = {
           ]
         },
         legal: {
-          text: "Trasparenza: Usiamo dati locali. Il sistema raccoglie IP per sicurezza. Entrando, accetti.",
+          text: "Trasparenza: Usamos dati locali. Il sistema raccoglie IP per sicurezza. Entrando, accetti.",
           accept: "Accetta ed Entra",
           settings: "Opzioni"
         },
@@ -826,7 +794,6 @@ export const TRANSLATIONS = {
         }
     },
     ja: {
-        // ... (existing keys)
         title: "聖域",
         subtitle: "催眠的認知的ガイド",
         intro: ["一時停止。", "呼吸。", "聞く。"],
@@ -946,7 +913,6 @@ export const TRANSLATIONS = {
         }
     },
     ru: {
-        // ... (existing keys)
         title: "Святилище",
         subtitle: "Гипнотический Когнитивный Гид",
         intro: ["Пауза.", "Дыши.", "Слушай."],
@@ -1066,7 +1032,6 @@ export const TRANSLATIONS = {
         }
     },
     hi: {
-        // ... (existing keys)
         title: "अभयारण्य",
         subtitle: "सम्मोहक संज्ञानात्मक मार्गदर्शक",
         intro: ["विराम।", "साँस।", "सुनें।"],

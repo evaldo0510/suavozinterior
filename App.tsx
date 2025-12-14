@@ -379,14 +379,14 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-stone-950 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-stone-900 via-stone-950 to-black text-stone-200 overflow-hidden flex flex-col font-sans">
+    <div className="min-h-screen w-full bg-stone-950 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-stone-800/40 via-stone-950 to-black text-stone-200 overflow-hidden flex flex-col font-sans selection:bg-teal-500/30 selection:text-teal-200">
       
       {/* Minimal Header */}
       {introStep === 3 && (
         <header className={`absolute top-0 left-0 w-full p-6 flex flex-col md:flex-row justify-between items-center z-50 transition-opacity duration-1000 ${hasStarted ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
-          <div className="flex items-center space-x-2 mb-4 md:mb-0">
-             <Logo className="w-8 h-8 text-stone-600" />
-             <div className="font-serif text-sm tracking-[0.3em] text-stone-600 uppercase hover:text-stone-400 transition-colors cursor-default hidden md:block">
+          <div className="flex items-center space-x-3 mb-4 md:mb-0">
+             <Logo className="w-8 h-8 text-stone-400 drop-shadow-md" />
+             <div className="font-serif text-sm tracking-[0.3em] text-stone-400 uppercase hover:text-stone-200 transition-colors cursor-default hidden md:block">
                {text.title}
              </div>
           </div>
@@ -395,7 +395,7 @@ function App() {
               {/* Concept/Landing Button */}
               <button 
                 onClick={() => setShowLanding(true)}
-                className="px-3 py-1.5 rounded-full border border-stone-800 bg-stone-900/50 text-[10px] uppercase tracking-widest text-teal-500/80 hover:bg-teal-900/20 hover:text-teal-400 transition-all mr-2"
+                className="px-4 py-1.5 rounded-full border border-stone-700/50 bg-stone-900/60 backdrop-blur-sm text-[10px] uppercase tracking-widest text-stone-300 hover:bg-stone-800/80 hover:text-white hover:border-teal-500/30 transition-all mr-2"
               >
                   {text.conceptBtn || "The Concept"}
               </button>
@@ -403,7 +403,7 @@ function App() {
               {isInstallable && (
                 <button 
                   onClick={handleInstallClick}
-                  className="flex p-2 text-stone-500 hover:text-teal-400 transition-colors"
+                  className="flex p-2 text-stone-400 hover:text-teal-400 transition-colors"
                   title={text.installBtn}
                 >
                   <DownloadIcon className="w-5 h-5 animate-pulse" />
@@ -419,7 +419,7 @@ function App() {
                   >
                      <UserIcon className="w-5 h-5" />
                      {currentUser.resonanceScore > 0 && (
-                         <span className="text-[9px] font-mono border border-teal-900 px-1 rounded bg-teal-950/50">
+                         <span className="text-[9px] font-mono border border-teal-900 px-1 rounded bg-teal-950/50 text-teal-300">
                              Lvl {currentUser.resonanceScore}
                          </span>
                      )}
@@ -427,7 +427,7 @@ function App() {
               ) : (
                   <button 
                     onClick={() => setShowLogin(true)}
-                    className="flex p-2 text-stone-500 hover:text-teal-400 transition-colors"
+                    className="flex p-2 text-stone-400 hover:text-teal-400 transition-colors"
                     title="Login / Access"
                   >
                      <UserIcon className="w-5 h-5" />
@@ -436,28 +436,28 @@ function App() {
 
               <button 
                 onClick={() => setShowPremium(true)}
-                className={`flex p-2 transition-colors ${userPlan !== 'visitor' ? 'text-amber-500' : 'text-stone-500 hover:text-amber-400'}`}
+                className={`flex p-2 transition-colors ${userPlan !== 'visitor' ? 'text-amber-400' : 'text-stone-400 hover:text-amber-300'}`}
                 title="Premium"
               >
                 <StarIcon className="w-5 h-5" />
               </button>
               <button 
                 onClick={() => setShowJournal(true)}
-                className="flex p-2 text-stone-500 hover:text-teal-400 transition-colors"
+                className="flex p-2 text-stone-400 hover:text-teal-400 transition-colors"
                 title="Journal"
               >
                 <PenIcon className="w-5 h-5" />
               </button>
               <button 
                 onClick={() => setShowGuide(true)}
-                className="flex p-2 text-stone-600 hover:text-stone-300 transition-colors"
+                className="flex p-2 text-stone-400 hover:text-stone-200 transition-colors"
                 title="Guide"
               >
                 <BookIcon className="w-5 h-5" />
               </button>
               <button 
                 onClick={() => setShowHistory(true)}
-                className="flex p-2 text-stone-600 hover:text-stone-300 transition-colors"
+                className="flex p-2 text-stone-400 hover:text-stone-200 transition-colors"
                 title="History"
               >
                 <ClockIcon className="w-5 h-5" />
@@ -484,22 +484,22 @@ function App() {
 
       {/* Guide Modal */}
       {showGuide && (
-        <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/95 backdrop-blur-md p-6 animate-fade-in" onClick={() => setShowGuide(false)}>
-           <div className="bg-stone-900/50 border border-stone-800 rounded-lg w-full max-w-lg flex flex-col max-h-[85vh] relative" onClick={e => e.stopPropagation()}>
-              <button onClick={() => setShowGuide(false)} className="absolute top-4 right-4 text-stone-600 hover:text-stone-300">
+        <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/90 backdrop-blur-md p-6 animate-fade-in" onClick={() => setShowGuide(false)}>
+           <div className="bg-stone-900 border border-stone-800 rounded-lg w-full max-w-lg flex flex-col max-h-[85vh] relative shadow-2xl" onClick={e => e.stopPropagation()}>
+              <button onClick={() => setShowGuide(false)} className="absolute top-4 right-4 text-stone-500 hover:text-stone-200">
                   <XMarkIcon className="w-6 h-6" />
               </button>
               
               <div className="p-8 pb-4 text-center border-b border-stone-800/50">
-                  <h3 className="font-serif text-2xl text-teal-500/80 tracking-widest uppercase mb-1">{text.guide?.title}</h3>
+                  <h3 className="font-serif text-2xl text-teal-400 tracking-widest uppercase mb-1 drop-shadow-md">{text.guide?.title}</h3>
                   <div className="w-12 h-px bg-teal-900/50 mx-auto mt-4"></div>
               </div>
               
               <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
                   {text.guide?.steps.map((step: any, idx: number) => (
                       <div key={idx} className="space-y-2">
-                          <h4 className="text-stone-300 font-serif text-lg tracking-wide">{step.title}</h4>
-                          <p className="text-stone-500 font-light leading-relaxed text-sm">{step.text}</p>
+                          <h4 className="text-stone-200 font-serif text-lg tracking-wide">{step.title}</h4>
+                          <p className="text-stone-400 font-light leading-relaxed text-sm">{step.text}</p>
                       </div>
                   ))}
               </div>
@@ -518,15 +518,15 @@ function App() {
 
       {/* Human Connection Task Modal (Gamification) */}
       {showHumanTask && currentUser?.pendingTask && (
-          <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/95 backdrop-blur-xl p-6 animate-fade-in">
-              <div className="bg-stone-900/80 border border-teal-900/40 rounded-xl w-full max-w-sm text-center p-8 relative shadow-[0_0_50px_rgba(20,184,166,0.1)]">
-                  <div className="mx-auto w-12 h-12 rounded-full bg-teal-900/20 flex items-center justify-center mb-6">
-                      <HeartIcon className="w-6 h-6 text-teal-500" />
+          <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/90 backdrop-blur-xl p-6 animate-fade-in">
+              <div className="bg-stone-900 border border-teal-800/40 rounded-xl w-full max-w-sm text-center p-8 relative shadow-[0_0_50px_rgba(20,184,166,0.15)]">
+                  <div className="mx-auto w-12 h-12 rounded-full bg-teal-900/30 flex items-center justify-center mb-6 border border-teal-500/20">
+                      <HeartIcon className="w-6 h-6 text-teal-400" />
                   </div>
-                  <h3 className="font-serif text-xl text-teal-100 tracking-widest uppercase mb-2">{text.human?.title}</h3>
-                  <p className="text-[10px] uppercase tracking-widest text-teal-500/60 mb-6">{text.human?.subtitle}</p>
+                  <h3 className="font-serif text-xl text-teal-100 tracking-widest uppercase mb-2 drop-shadow-md">{text.human?.title}</h3>
+                  <p className="text-[10px] uppercase tracking-widest text-teal-400/70 mb-6">{text.human?.subtitle}</p>
                   
-                  <div className="bg-stone-950/50 p-6 rounded border border-stone-800 mb-8">
+                  <div className="bg-stone-950/80 p-6 rounded border border-stone-800 mb-8 shadow-inner">
                       <p className="text-stone-500 text-[10px] uppercase tracking-widest mb-2">{text.human?.quest}</p>
                       <p className="text-stone-200 font-serif italic text-lg leading-relaxed">
                           "{currentUser.pendingTask.description}"
@@ -538,13 +538,13 @@ function App() {
                   <div className="grid grid-cols-2 gap-3">
                       <button 
                         onClick={() => completeTask(true)}
-                        className="py-3 bg-teal-900/20 border border-teal-500/30 text-teal-200 uppercase text-[10px] tracking-widest rounded hover:bg-teal-900/40 transition-colors"
+                        className="py-3 bg-teal-900/30 border border-teal-500/30 text-teal-100 uppercase text-[10px] tracking-widest rounded hover:bg-teal-900/50 hover:border-teal-400/50 transition-colors"
                       >
                           {text.human?.yes}
                       </button>
                       <button 
                         onClick={() => completeTask(false)}
-                        className="py-3 bg-stone-800/30 border border-stone-700 text-stone-500 uppercase text-[10px] tracking-widest rounded hover:text-stone-300 transition-colors"
+                        className="py-3 bg-stone-800/40 border border-stone-700 text-stone-400 uppercase text-[10px] tracking-widest rounded hover:text-stone-200 hover:bg-stone-800 transition-colors"
                       >
                           {text.human?.no}
                       </button>
@@ -555,25 +555,25 @@ function App() {
 
       {/* History Modal */}
       {showHistory && (
-        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/95 backdrop-blur-md p-6 animate-fade-in" onClick={() => setShowHistory(false)}>
-           <div className="bg-stone-900/50 border border-stone-800 rounded-none w-full max-w-md flex flex-col max-h-[80vh]" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 backdrop-blur-md p-6 animate-fade-in" onClick={() => setShowHistory(false)}>
+           <div className="bg-stone-900/90 border border-stone-800 rounded-none w-full max-w-md flex flex-col max-h-[80vh] shadow-2xl" onClick={e => e.stopPropagation()}>
               <div className="p-6 border-b border-stone-800 flex justify-between items-center">
-                <h3 className="font-serif text-xl text-stone-300 tracking-widest uppercase">{text.history.title}</h3>
-                <button onClick={() => setShowHistory(false)} className="text-stone-600 hover:text-stone-300">
+                <h3 className="font-serif text-xl text-stone-200 tracking-widest uppercase drop-shadow-sm">{text.history.title}</h3>
+                <button onClick={() => setShowHistory(false)} className="text-stone-500 hover:text-stone-200">
                   <XMarkIcon className="w-6 h-6" />
                 </button>
               </div>
               
               <div className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar">
                 {historyItems.length === 0 ? (
-                  <div className="text-center py-10 text-stone-600 font-light text-sm tracking-widest">
+                  <div className="text-center py-10 text-stone-500 font-light text-sm tracking-widest">
                     {text.history.empty}
                   </div>
                 ) : (
                   historyItems.map((item, idx) => (
-                    <div key={idx} className="bg-stone-950/30 border border-stone-800/30 p-4 flex justify-between items-center hover:bg-stone-900/50 transition-colors">
+                    <div key={idx} className="bg-stone-950/50 border border-stone-800/50 p-4 flex justify-between items-center hover:bg-stone-800/50 transition-colors">
                       <div className="flex flex-col">
-                        <span className="text-sm text-stone-400 font-serif">{formatDate(item.date)}</span>
+                        <span className="text-sm text-stone-300 font-serif">{formatDate(item.date)}</span>
                       </div>
                       <div className="font-mono text-stone-500 text-xs">
                         {formatDuration(item.duration)}
@@ -584,10 +584,10 @@ function App() {
               </div>
 
               {historyItems.length > 0 && (
-                <div className="p-4 border-t border-stone-800 bg-stone-900/30 flex justify-end">
+                <div className="p-4 border-t border-stone-800 bg-stone-900/50 flex justify-end">
                    <button 
                      onClick={clearHistory}
-                     className="flex items-center text-[10px] text-red-900 hover:text-red-500 transition-colors uppercase tracking-[0.2em] space-x-2 px-3 py-2"
+                     className="flex items-center text-[10px] text-red-800 hover:text-red-400 transition-colors uppercase tracking-[0.2em] space-x-2 px-3 py-2"
                    >
                      <TrashIcon className="w-3 h-3" />
                      <span>{text.history.clear}</span>
@@ -602,19 +602,19 @@ function App() {
       {showPremium && (
         <div className="fixed inset-0 z-[95] flex items-center justify-center bg-stone-950/95 backdrop-blur-xl p-6 animate-fade-in" onClick={() => setShowPremium(false)}>
            <div className="bg-gradient-to-b from-stone-900 to-stone-950 border border-amber-900/30 rounded-2xl w-full max-w-sm flex flex-col relative shadow-2xl shadow-amber-900/10" onClick={e => e.stopPropagation()}>
-              <button onClick={() => setShowPremium(false)} className="absolute top-4 right-4 text-stone-600 hover:text-stone-300">
+              <button onClick={() => setShowPremium(false)} className="absolute top-4 right-4 text-stone-500 hover:text-stone-200">
                   <XMarkIcon className="w-6 h-6" />
               </button>
               
               <div className="p-8 text-center space-y-4">
                   <div className="flex justify-center mb-4">
-                      <div className="p-3 bg-amber-950/30 rounded-full border border-amber-900/40">
-                          <StarIcon className="w-8 h-8 text-amber-500/80" />
+                      <div className="p-3 bg-amber-950/30 rounded-full border border-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
+                          <StarIcon className="w-8 h-8 text-amber-400" />
                       </div>
                   </div>
-                  <h3 className="font-serif text-2xl text-amber-100/90 tracking-widest uppercase">{text.premium?.title}</h3>
-                  <p className="text-amber-700/60 text-xs uppercase tracking-[0.2em]">{text.premium?.subtitle}</p>
-                  <p className="text-stone-400 font-light text-sm leading-relaxed px-2 py-2">
+                  <h3 className="font-serif text-2xl text-amber-100 tracking-widest uppercase drop-shadow-md">{text.premium?.title}</h3>
+                  <p className="text-amber-600/80 text-xs uppercase tracking-[0.2em]">{text.premium?.subtitle}</p>
+                  <p className="text-stone-300 font-light text-sm leading-relaxed px-2 py-2">
                     {text.premium?.desc}
                   </p>
                   
@@ -625,17 +625,17 @@ function App() {
                   )}
 
                   <div className="space-y-3 pt-4 text-left px-4">
-                      <div className="flex items-center space-x-3 text-stone-400 text-sm">
-                          <CheckIcon className={`w-4 h-4 ${userPlan === 'visitor' ? 'text-stone-600' : 'text-amber-700'}`} />
+                      <div className="flex items-center space-x-3 text-stone-300 text-sm">
+                          <CheckIcon className={`w-4 h-4 ${userPlan === 'visitor' ? 'text-stone-600' : 'text-amber-500'}`} />
                           <span className={userPlan === 'visitor' ? 'opacity-50' : ''}>{text.premium?.perk1}</span>
                       </div>
-                      <div className="flex items-center space-x-3 text-stone-400 text-sm">
-                          <CheckIcon className={`w-4 h-4 ${userPlan === 'member' || userPlan === 'guardian' ? 'text-amber-700' : 'text-stone-800'}`} />
-                          <span className={userPlan === 'visitor' ? 'text-stone-600' : ''}>{text.premium?.perk2}</span>
+                      <div className="flex items-center space-x-3 text-stone-300 text-sm">
+                          <CheckIcon className={`w-4 h-4 ${userPlan === 'member' || userPlan === 'guardian' ? 'text-amber-500' : 'text-stone-700'}`} />
+                          <span className={userPlan === 'visitor' ? 'text-stone-500' : ''}>{text.premium?.perk2}</span>
                       </div>
-                      <div className="flex items-center space-x-3 text-stone-400 text-sm">
-                          <CheckIcon className={`w-4 h-4 ${userPlan === 'guardian' ? 'text-amber-700' : 'text-stone-800'}`} />
-                          <span className={userPlan !== 'guardian' ? 'text-stone-600' : ''}>{text.premium?.perk3}</span>
+                      <div className="flex items-center space-x-3 text-stone-300 text-sm">
+                          <CheckIcon className={`w-4 h-4 ${userPlan === 'guardian' ? 'text-amber-500' : 'text-stone-700'}`} />
+                          <span className={userPlan !== 'guardian' ? 'text-stone-500' : ''}>{text.premium?.perk3}</span>
                       </div>
                   </div>
 
@@ -643,7 +643,7 @@ function App() {
                       <button 
                         onClick={handleSubscribe}
                         disabled={userPlan !== 'visitor' || isProcessingUpgrade}
-                        className={`w-full py-3 rounded-lg text-xs uppercase tracking-[0.2em] transition-all duration-300 ${userPlan !== 'visitor' ? 'bg-green-900/30 text-green-400 border border-green-900/50' : 'bg-amber-900/20 text-amber-200 border border-amber-900/40 hover:bg-amber-900/40'}`}
+                        className={`w-full py-3 rounded-lg text-xs uppercase tracking-[0.2em] transition-all duration-300 ${userPlan !== 'visitor' ? 'bg-green-900/30 text-green-400 border border-green-900/50' : 'bg-amber-900/20 text-amber-100 border border-amber-500/30 hover:bg-amber-900/40 hover:shadow-[0_0_15px_rgba(245,158,11,0.2)]'}`}
                       >
                         {isProcessingUpgrade ? '...' : (userPlan !== 'visitor' ? text.premium?.joined : text.premium?.cta)}
                       </button>
@@ -658,15 +658,15 @@ function App() {
         <div className="fixed bottom-0 left-0 w-full z-[100] bg-stone-900/95 backdrop-blur-md border-t border-stone-800 p-4 md:p-6 animate-slide-up">
            <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
                <div className="flex items-center space-x-3">
-                   <ShieldIcon className="w-5 h-5 text-stone-500" />
-                   <p className="text-stone-400 text-xs md:text-sm font-light leading-snug text-center md:text-left">
+                   <ShieldIcon className="w-5 h-5 text-stone-400" />
+                   <p className="text-stone-300 text-xs md:text-sm font-light leading-snug text-center md:text-left">
                        {text.legal?.text}
                    </p>
                </div>
                <div className="flex items-center space-x-4">
                    <button 
                      onClick={handleConsent}
-                     className="px-6 py-2 bg-stone-200 text-stone-900 rounded text-xs uppercase tracking-widest hover:bg-white transition-colors"
+                     className="px-6 py-2 bg-stone-200 text-stone-900 rounded text-xs uppercase tracking-widest hover:bg-white transition-colors font-semibold"
                    >
                        {text.legal?.accept}
                    </button>
@@ -684,7 +684,7 @@ function App() {
              {/* Mini Presentation Intro Sequence */}
              <div className={`text-center transition-opacity duration-1000 ease-in-out absolute inset-0 flex items-center justify-center pointer-events-none`}
                   style={{ opacity: introStep < 3 ? introOpacity : 0 }}>
-                  <span className="text-3xl md:text-5xl font-serif text-stone-300 tracking-[0.3em] uppercase">
+                  <span className="text-3xl md:text-5xl font-serif text-stone-200 tracking-[0.3em] uppercase drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
                     {introStep < 3 ? text.intro[introStep] : ''}
                   </span>
              </div>
@@ -694,12 +694,12 @@ function App() {
                
                 {/* Minimal Title */}
                 <div className="space-y-4 flex flex-col items-center">
-                  <Logo className="w-24 h-24 text-stone-200 opacity-90 mb-6" />
-                  <h1 className="text-4xl md:text-6xl font-serif text-stone-200 tracking-wider">
+                  <Logo className="w-24 h-24 text-stone-100 opacity-90 mb-6 drop-shadow-[0_0_20px_rgba(20,184,166,0.3)]" />
+                  <h1 className="text-4xl md:text-6xl font-serif text-stone-100 tracking-wider drop-shadow-lg">
                     {text.title}
                   </h1>
-                  <div className="h-px w-12 bg-stone-800 mx-auto"></div>
-                  <p className="text-xs font-light tracking-[0.4em] text-stone-500 uppercase">
+                  <div className="h-px w-12 bg-stone-700 mx-auto shadow-[0_0_10px_white]"></div>
+                  <p className="text-xs font-light tracking-[0.4em] text-stone-400 uppercase">
                     {text.subtitle}
                   </p>
                 </div>
@@ -707,16 +707,16 @@ function App() {
                 {/* Daily Insight / Engagement Layer */}
                 <div 
                     onClick={() => setShowJournal(true)}
-                    className="bg-stone-900/30 border border-stone-800/50 p-6 rounded-lg backdrop-blur-sm transform hover:scale-[1.02] transition-transform duration-500 cursor-pointer group"
+                    className="bg-stone-900/40 border border-stone-700/50 p-6 rounded-lg backdrop-blur-sm transform hover:scale-[1.02] transition-all duration-500 cursor-pointer group shadow-lg hover:shadow-[0_0_20px_rgba(255,255,255,0.05)]"
                 >
                     <div className="flex justify-between items-center mb-3">
-                         <span className="text-[10px] text-teal-600/70 uppercase tracking-[0.3em] block">{text.daily?.title}</span>
-                         <PenIcon className="w-3 h-3 text-stone-600 group-hover:text-teal-500 transition-colors" />
+                         <span className="text-[10px] text-teal-500/80 uppercase tracking-[0.3em] block">{text.daily?.title}</span>
+                         <PenIcon className="w-3 h-3 text-stone-500 group-hover:text-teal-400 transition-colors" />
                     </div>
-                    <p className="font-serif italic text-stone-400 text-lg leading-relaxed">
+                    <p className="font-serif italic text-stone-300 text-lg leading-relaxed">
                       "{text.daily?.quote}"
                     </p>
-                    <span className="text-[9px] text-stone-600 uppercase tracking-widest mt-4 block group-hover:text-stone-400 transition-colors">Tap to reflect</span>
+                    <span className="text-[9px] text-stone-500 uppercase tracking-widest mt-4 block group-hover:text-stone-300 transition-colors">Tap to reflect</span>
                 </div>
 
                 {/* Entrance Button */}
@@ -725,23 +725,23 @@ function App() {
                     onClick={() => setHasStarted(true)}
                     className="group relative inline-flex items-center justify-center px-10 py-3 overflow-hidden transition-all duration-500 hover:scale-105 focus:outline-none"
                   >
-                    <span className="absolute inset-0 w-full h-full border border-stone-800 rounded-full group-hover:border-stone-600 transition-colors duration-500"></span>
-                    <span className="relative text-stone-300 font-serif text-sm tracking-[0.2em] uppercase group-hover:text-white transition-colors">
+                    <span className="absolute inset-0 w-full h-full border border-stone-600 rounded-full group-hover:border-stone-400 transition-colors duration-500 shadow-[0_0_15px_rgba(255,255,255,0.05)]"></span>
+                    <span className="relative text-stone-200 font-serif text-sm tracking-[0.2em] uppercase group-hover:text-white transition-colors drop-shadow-md">
                       {text.beginBtn}
                     </span>
                   </button>
                 </div>
 
                 {/* Minimal Language Selector (Bottom Center) */}
-                <div className="pt-8 opacity-40 hover:opacity-100 transition-opacity">
+                <div className="pt-8 opacity-60 hover:opacity-100 transition-opacity">
                     <select
                       value={lang}
                       onChange={(e) => setLang(e.target.value as Language)}
-                      className="bg-transparent text-stone-600 text-[10px] uppercase tracking-widest text-center focus:outline-none cursor-pointer hover:text-stone-400 appearance-none"
+                      className="bg-transparent text-stone-500 text-[10px] uppercase tracking-widest text-center focus:outline-none cursor-pointer hover:text-stone-300 appearance-none"
                       style={{ textAlignLast: 'center' }}
                     >
                       {LANGUAGES.map(({ code, label }) => (
-                        <option key={code} value={code} className="bg-stone-950 text-stone-400">
+                        <option key={code} value={code} className="bg-stone-900 text-stone-300">
                           {label}
                         </option>
                       ))}

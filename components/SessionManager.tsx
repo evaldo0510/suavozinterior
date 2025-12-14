@@ -111,7 +111,9 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
   const [feedback, setFeedback] = useState<'up' | 'down' | null>(null);
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [voice, setVoice] = useState<'male' | 'female'>('female'); // Defaulting to female as requested
+  
+  // DR. EVALDO PERSONA ENFORCEMENT: Default to 'male'
+  const [voice, setVoice] = useState<'male' | 'female'>('male');
   
   // Notification State
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
@@ -468,20 +470,9 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
       // --- TIME & CONTEXT INJECTION (Persona & Time) ---
       const currentTime = new Date().toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' });
       
-      // Construct enhanced system instruction
-      const baseInstruction = getSystemInstruction(lang, currentTime);
-      const enhancedInstruction = `
-      ${baseInstruction}
-      
-      ---
-      ADDITIONAL PERSONA RULES:
-      1. NAME: Introduce yourself explicitly as "Dr. Evaldo".
-      2. TIME: It is currently ${currentTime}. Mention this briefly at the start.
-      3. TONE ADAPTATION: Listen carefully to the user's speech rate and pitch. 
-         - If the user speaks FAST or with HIGH PITCH (anxiety/stress), you MUST slow your voice down significantly and lower your pitch to ground them.
-         - If the user speaks SLOWLY, match their calm but maintain warmth.
-      4. IDLE: If I send you a system message saying the user is silent, ask: "What thought is gently trying to surface right now?"
-      `;
+      // Construct enhanced system instruction - USING THE NEW RELAXED RULES
+      // We removed the rigid "ADDITIONAL PERSONA RULES" block that was causing robotic behavior.
+      const enhancedInstruction = getSystemInstruction(lang, currentTime);
 
       // Connect to Live API
       const sessionPromise = ai.live.connect({
@@ -489,7 +480,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
         config: {
           responseModalities: [Modality.AUDIO],
           speechConfig: {
-            // Use selected voice (defaulting to Female 'Kore')
+            // Use selected voice (defaulting to Male 'Puck' for Dr. Evaldo)
             voiceConfig: { prebuiltVoiceConfig: { voiceName: VOICE_IDS[voice] } },
           },
           // Dynamically inject the language AND TIME into the system prompt
@@ -691,18 +682,18 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
   if (status === SessionStatus.ERROR) {
     return (
       <div className="flex flex-col items-center justify-center h-full space-y-6 text-center animate-fade-in p-8">
-        <div className="text-stone-400 font-serif text-lg max-w-xs leading-relaxed">{errorMsg}</div>
+        <div className="text-stone-300 font-serif text-lg max-w-xs leading-relaxed drop-shadow-md">{errorMsg}</div>
         
         <div className="flex flex-col space-y-4">
              <button 
                 onClick={handleRetry}
-                className="px-8 py-3 bg-stone-800 hover:bg-teal-900/30 text-stone-300 hover:text-teal-200 uppercase tracking-[0.2em] text-xs transition-colors rounded border border-stone-700 hover:border-teal-500/50"
+                className="px-8 py-3 bg-stone-800 hover:bg-teal-900/40 text-stone-200 hover:text-white uppercase tracking-[0.2em] text-xs transition-colors rounded border border-stone-600 hover:border-teal-400/50 shadow-lg"
             >
                 Retry Connection
             </button>
             <button 
                 onClick={onDisconnect}
-                className="text-xs uppercase tracking-widest text-stone-600 hover:text-stone-400 transition-colors"
+                className="text-xs uppercase tracking-widest text-stone-500 hover:text-stone-300 transition-colors"
             >
                 {text.status.returnHome}
             </button>
@@ -717,20 +708,20 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
         <div className="flex flex-col items-center justify-center h-full space-y-8 text-center animate-fade-in p-8 relative overflow-hidden">
            {/* Background Ambience */}
            <div className="absolute inset-0 bg-stone-950/90 -z-10"></div>
-           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(146,64,14,0.15),_transparent_70%)] -z-10 animate-pulse"></div>
+           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(146,64,14,0.25),_transparent_70%)] -z-10 animate-pulse"></div>
            
            <div className="relative z-10 space-y-6 max-w-sm mx-auto">
-               <div className="mx-auto w-16 h-16 rounded-full bg-amber-900/10 border border-amber-800/40 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(245,158,11,0.1)]">
-                   <LockIcon className="w-8 h-8 text-amber-500/80" />
+               <div className="mx-auto w-16 h-16 rounded-full bg-amber-900/20 border border-amber-500/40 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(245,158,11,0.2)]">
+                   <LockIcon className="w-8 h-8 text-amber-400" />
                </div>
 
                <div className="space-y-3">
-                   <h3 className="text-3xl font-serif text-amber-100/90 tracking-widest uppercase">Limit Reached</h3>
-                   <div className="h-px w-12 bg-amber-900/50 mx-auto"></div>
-                   <p className="text-stone-400 font-light text-sm leading-relaxed px-4">
+                   <h3 className="text-3xl font-serif text-amber-100 tracking-widest uppercase drop-shadow-lg">Limit Reached</h3>
+                   <div className="h-px w-12 bg-amber-600/50 mx-auto shadow-[0_0_10px_orange]"></div>
+                   <p className="text-stone-300 font-light text-sm leading-relaxed px-4">
                        Your journey has just begun. The free sanctuary is brief, but the inner room of freedom is infinite.
                    </p>
-                   <p className="text-amber-500/80 text-xs uppercase tracking-[0.2em] pt-2">
+                   <p className="text-amber-400 text-xs uppercase tracking-[0.2em] pt-2">
                        Become a Guardian
                    </p>
                </div>
@@ -738,7 +729,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
                <div className="flex flex-col space-y-4 w-full pt-4">
                    <button 
                     onClick={onUpgrade}
-                    className="group relative w-full py-4 bg-gradient-to-r from-amber-900/20 to-stone-900/40 border border-amber-700/40 text-amber-100 uppercase tracking-[0.2em] text-xs hover:border-amber-500/60 hover:shadow-[0_0_20px_rgba(245,158,11,0.15)] transition-all duration-500 rounded-sm overflow-hidden"
+                    className="group relative w-full py-4 bg-gradient-to-r from-amber-900/30 to-stone-900/50 border border-amber-600/40 text-amber-100 uppercase tracking-[0.2em] text-xs hover:border-amber-400/60 hover:shadow-[0_0_25px_rgba(245,158,11,0.2)] transition-all duration-500 rounded-sm overflow-hidden"
                    >
                      <span className="absolute inset-0 w-full h-full bg-amber-600/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
                      <span className="relative flex items-center justify-center space-x-2">
@@ -749,7 +740,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
                    
                    <button 
                     onClick={onDisconnect}
-                    className="text-[10px] uppercase tracking-widest text-stone-600 hover:text-stone-400 transition-colors"
+                    className="text-[10px] uppercase tracking-widest text-stone-500 hover:text-stone-300 transition-colors"
                    >
                      {text.status.returnHome}
                    </button>
@@ -760,30 +751,30 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
   }
 
   const isConnecting = status === SessionStatus.CONNECTING;
-  const visualizerColor = isAiSpeaking ? "rgb(20, 184, 166)" : "rgb(120, 113, 108)"; // Teal when speaking, Stone when quiet
+  const visualizerColor = isAiSpeaking ? "rgb(20, 184, 166)" : "rgb(168, 162, 158)"; // Teal or Lighter Stone
 
   return (
     <div className="relative flex flex-col items-center justify-between w-full h-full p-6 overflow-hidden">
       
-      {/* Background Ambience */}
+      {/* Background Ambience - Enhanced for 'Inner Light' */}
       <div className="absolute inset-0 bg-stone-950/80 -z-10"></div>
-      <div className={`absolute inset-0 transition-opacity duration-[2000ms] -z-10 ${isAiSpeaking ? 'opacity-30' : 'opacity-10'} bg-[radial-gradient(circle_at_center,_rgba(20,184,166,0.15),_transparent_70%)]`}></div>
+      <div className={`absolute inset-0 transition-opacity duration-[2000ms] -z-10 ${isAiSpeaking ? 'opacity-40' : 'opacity-20'} bg-[radial-gradient(circle_at_center,_rgba(20,184,166,0.2),_transparent_60%)]`}></div>
 
       {/* Exit Confirmation Modal */}
       {showExitConfirm && (
         <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-6 animate-fade-in">
           <div className="bg-transparent text-center space-y-8">
-            <h3 className="font-serif text-2xl text-stone-300">Leave Sanctuary?</h3>
+            <h3 className="font-serif text-2xl text-stone-200 drop-shadow-md">Leave Sanctuary?</h3>
             <div className="flex flex-col space-y-4">
               <button 
                 onClick={handleEndSession}
-                className="text-xs uppercase tracking-[0.2em] text-stone-400 hover:text-red-400 transition-colors"
+                className="text-xs uppercase tracking-[0.2em] text-stone-300 hover:text-red-400 transition-colors"
               >
                 Yes
               </button>
               <button 
                 onClick={cancelEndSession}
-                className="text-xs uppercase tracking-[0.2em] text-stone-600 hover:text-stone-400 transition-colors"
+                className="text-xs uppercase tracking-[0.2em] text-stone-500 hover:text-stone-300 transition-colors"
               >
                 No
               </button>
@@ -794,11 +785,11 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
 
       {/* Settings Modal */}
       {showSettings && (
-         <div className="absolute bottom-28 bg-stone-900/95 backdrop-blur-xl border border-stone-800 p-6 rounded-2xl z-40 w-72 animate-fade-in mb-2 shadow-2xl ring-1 ring-stone-800">
+         <div className="absolute bottom-28 bg-stone-900/95 backdrop-blur-xl border border-stone-700/50 p-6 rounded-2xl z-40 w-72 animate-fade-in mb-2 shadow-2xl ring-1 ring-stone-800">
             <div className="space-y-6">
                 <div className="flex justify-between items-center pb-4 border-b border-stone-800">
-                    <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">{text.settings?.title}</span>
-                    <button onClick={() => setShowSettings(false)} className="text-stone-600 hover:text-stone-300">
+                    <span className="text-[10px] font-bold text-stone-300 uppercase tracking-widest">{text.settings?.title}</span>
+                    <button onClick={() => setShowSettings(false)} className="text-stone-500 hover:text-stone-200">
                         ✕
                     </button>
                 </div>
@@ -806,9 +797,9 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
                 {/* Voice Selection */}
                 <div className="space-y-3 pb-4 border-b border-stone-800/50">
                      <div className="flex justify-between items-center">
-                        <label className="text-[10px] text-stone-500 block uppercase tracking-wider">{text.settings?.voice}</label>
+                        <label className="text-[10px] text-stone-400 block uppercase tracking-wider">{text.settings?.voice}</label>
                         {!limitConfig.allowVoiceChange && (
-                            <div className="flex items-center space-x-1 text-amber-700/80">
+                            <div className="flex items-center space-x-1 text-amber-600/80">
                                 <LockIcon className="w-3 h-3" />
                                 <span className="text-[9px] uppercase tracking-wider">{text.settings?.locked}</span>
                             </div>
@@ -817,13 +808,13 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
                      <div className={`flex bg-stone-950 p-1 rounded-lg border border-stone-800 ${!limitConfig.allowVoiceChange ? 'opacity-50' : ''}`}>
                          <button 
                             onClick={() => handleVoiceChange('female')}
-                            className={`flex-1 py-2 text-[10px] uppercase tracking-widest rounded-md transition-colors ${voice === 'female' ? 'bg-teal-900/40 text-teal-200' : 'text-stone-500 hover:text-stone-300'}`}
+                            className={`flex-1 py-2 text-[10px] uppercase tracking-widest rounded-md transition-colors ${voice === 'female' ? 'bg-teal-900/40 text-teal-200 shadow-sm' : 'text-stone-500 hover:text-stone-300'}`}
                          >
                             {text.settings?.female}
                          </button>
                          <button 
                             onClick={() => handleVoiceChange('male')}
-                            className={`flex-1 py-2 text-[10px] uppercase tracking-widest rounded-md transition-colors ${voice === 'male' ? 'bg-teal-900/40 text-teal-200' : 'text-stone-500 hover:text-stone-300'}`}
+                            className={`flex-1 py-2 text-[10px] uppercase tracking-widest rounded-md transition-colors ${voice === 'male' ? 'bg-teal-900/40 text-teal-200 shadow-sm' : 'text-stone-500 hover:text-stone-300'}`}
                          >
                             {text.settings?.male}
                          </button>
@@ -833,7 +824,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
                 {/* Notifications */}
                  <div className="space-y-3 pb-4 border-b border-stone-800/50">
                      <div className="flex justify-between items-center">
-                         <label className="text-[10px] text-stone-500 block uppercase tracking-wider">{text.settings?.notifications}</label>
+                         <label className="text-[10px] text-stone-400 block uppercase tracking-wider">{text.settings?.notifications}</label>
                          <button 
                            onClick={handleNotificationToggle}
                            className={`w-8 h-4 rounded-full transition-colors relative ${notificationsEnabled ? 'bg-teal-900/50' : 'bg-stone-800'}`}
@@ -843,7 +834,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
                      </div>
                      
                      {notificationsEnabled && (
-                         <div className="flex items-center space-x-2 text-[10px] text-stone-500 justify-end">
+                         <div className="flex items-center space-x-2 text-[10px] text-stone-400 justify-end">
                             <span>{text.settings?.notifyEvery}</span>
                             <input 
                               type="number" 
@@ -861,8 +852,8 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
                 {/* Sensitivity */}
                 <div className="space-y-3">
                     <div className="flex justify-between items-end">
-                       <label className="text-[10px] text-stone-500 block uppercase tracking-wider">{text.settings?.sensitivity}</label>
-                       <span className="text-[9px] font-mono text-stone-600">{(inputSensitivity * 100).toFixed(1)}%</span>
+                       <label className="text-[10px] text-stone-400 block uppercase tracking-wider">{text.settings?.sensitivity}</label>
+                       <span className="text-[9px] font-mono text-stone-500">{(inputSensitivity * 100).toFixed(1)}%</span>
                     </div>
                     
                     <div className="relative pt-1">
@@ -887,7 +878,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
                           className="absolute inset-0 w-full h-4 opacity-0 cursor-pointer z-20"
                         />
 
-                        <div className="flex justify-between mt-2 text-[9px] text-stone-600 uppercase tracking-widest font-light">
+                        <div className="flex justify-between mt-2 text-[9px] text-stone-500 uppercase tracking-widest font-light">
                             <span>{text.settings?.sensitive}</span>
                             <span>{text.settings?.strict}</span>
                         </div>
@@ -899,16 +890,16 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
 
       {/* --- HEADER IDENTITY --- */}
       <div className="w-full flex justify-between items-start z-10 pt-2">
-         <div className="flex items-center space-x-3 opacity-80">
-            <div className="p-1.5 rounded-full border border-stone-800 bg-stone-900/50">
-               <Logo className="w-4 h-4 text-teal-500/80" />
+         <div className="flex items-center space-x-3 opacity-90">
+            <div className="p-1.5 rounded-full border border-stone-700 bg-stone-900/50 shadow-sm">
+               <Logo className="w-4 h-4 text-teal-400 drop-shadow-md" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-stone-500">Your Inner Voice</span>
-              <span className="font-serif text-lg leading-none text-stone-300 tracking-wide">{text.title}</span>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-stone-400">Your Inner Voice</span>
+              <span className="font-serif text-lg leading-none text-stone-200 tracking-wide drop-shadow-sm">{text.title}</span>
             </div>
          </div>
-         <div className={`font-mono text-[10px] tracking-widest transition-colors ${elapsedSeconds > limitConfig.maxDuration - 30 && userPlan === 'visitor' ? 'text-red-400' : 'text-stone-700'}`}>
+         <div className={`font-mono text-[10px] tracking-widest transition-colors ${elapsedSeconds > limitConfig.maxDuration - 30 && userPlan === 'visitor' ? 'text-red-400' : 'text-stone-500'}`}>
             {formatTime(elapsedSeconds)} {userPlan === 'visitor' ? '/ 05:00' : ''}
          </div>
       </div>
@@ -931,14 +922,14 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
              {/* Status Badge - Floating Minimal */}
              <div className="absolute bottom-16 z-30 flex flex-col items-center space-y-2 pointer-events-none">
                  {isConnecting ? (
-                    <div className="text-stone-600 text-[10px] tracking-[0.3em] uppercase animate-pulse">{text.status.connecting}</div>
+                    <div className="text-stone-500 text-[10px] tracking-[0.3em] uppercase animate-pulse">{text.status.connecting}</div>
                  ) : isAiSpeaking ? (
                     <div className="flex items-center space-x-2">
                         <div className="w-1 h-1 rounded-full bg-teal-400 animate-ping"></div>
-                        <span className="text-[10px] text-teal-500/80 uppercase tracking-widest">{text.status.aiSpeaking}</span>
+                        <span className="text-[10px] text-teal-400/80 uppercase tracking-widest drop-shadow-md">{text.status.aiSpeaking}</span>
                     </div>
                  ) : (
-                    <div className="text-stone-700 text-[10px] uppercase tracking-widest transition-opacity duration-500">
+                    <div className="text-stone-400 text-[10px] uppercase tracking-widest transition-opacity duration-500">
                         {isUserSpeaking ? text.status.listening : text.status.aligning}
                     </div>
                  )}
@@ -950,13 +941,13 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
       {/* --- CONTROL DECK --- */}
       <div className="w-full flex flex-col items-center justify-center z-20 pb-4">
         
-        {/* Floating Glass Deck */}
-        <div className="flex items-center gap-6 px-8 py-4 bg-stone-900/40 backdrop-blur-xl border border-stone-800/60 rounded-full shadow-2xl transition-all hover:border-stone-700/60 hover:bg-stone-900/60">
+        {/* Floating Glass Deck - More defined border */}
+        <div className="flex items-center gap-6 px-8 py-4 bg-stone-900/60 backdrop-blur-xl border border-stone-700/50 rounded-full shadow-[0_0_25px_rgba(0,0,0,0.3)] transition-all hover:border-stone-600/60 hover:bg-stone-900/80">
             
             {/* Settings */}
             <button 
                 onClick={() => setShowSettings(!showSettings)}
-                className={`p-2 rounded-full transition-colors ${showSettings ? 'bg-stone-800 text-stone-200' : 'text-stone-500 hover:text-stone-300 hover:bg-stone-800/50'}`}
+                className={`p-2 rounded-full transition-colors ${showSettings ? 'bg-stone-800 text-stone-200' : 'text-stone-400 hover:text-stone-200 hover:bg-stone-800/50'}`}
                 title="Settings"
             >
                 <SettingsIcon className="w-5 h-5" />
@@ -965,21 +956,21 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
             {/* Mic (Main Action) */}
             <button 
                 onClick={toggleMic}
-                className={`relative flex items-center justify-center w-14 h-14 rounded-full border transition-all duration-300 ${
+                className={`relative flex items-center justify-center w-14 h-14 rounded-full border transition-all duration-300 shadow-md ${
                 isMicMuted 
-                    ? 'border-red-900/30 bg-red-950/10 text-red-800' 
-                    : 'border-stone-700 bg-stone-800/50 text-stone-300 hover:border-teal-700/50 hover:text-white hover:shadow-[0_0_15px_-5px_rgba(20,184,166,0.3)]'
+                    ? 'border-red-900/30 bg-red-950/20 text-red-800' 
+                    : 'border-stone-600 bg-stone-800/60 text-stone-200 hover:border-teal-600/50 hover:text-white hover:shadow-[0_0_15px_-5px_rgba(20,184,166,0.3)]'
                 }`}
             >
                 {isMicMuted ? <MicOffIcon className="w-6 h-6" /> : <MicIcon className="w-6 h-6" />}
             </button>
 
             {/* Volume & Feedback Group */}
-            <div className="flex items-center gap-4 border-l border-stone-800 pl-6">
+            <div className="flex items-center gap-4 border-l border-stone-700/50 pl-6">
                 
                 {/* Volume */}
                 <div className="group flex items-center space-x-2">
-                    <VolumeIcon className="w-4 h-4 text-stone-600 group-hover:text-stone-400 transition-colors" />
+                    <VolumeIcon className="w-4 h-4 text-stone-500 group-hover:text-stone-300 transition-colors" />
                     <input 
                     type="range" 
                     min="0" 
@@ -987,16 +978,16 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
                     step="0.01" 
                     value={outputVolume} 
                     onChange={handleVolumeChange}
-                    className="w-16 h-1 bg-stone-800 rounded-full appearance-none cursor-pointer accent-stone-500 hover:accent-stone-400"
+                    className="w-16 h-1 bg-stone-800 rounded-full appearance-none cursor-pointer accent-stone-500 hover:accent-stone-300"
                     />
                 </div>
 
                 {/* Feedback */}
                 <div className="flex space-x-1">
-                    <button onClick={() => handleFeedback('up')} className={`p-1.5 rounded hover:bg-stone-800/50 transition-colors ${feedback === 'up' ? 'text-teal-500' : 'text-stone-600 hover:text-teal-600'}`}>
+                    <button onClick={() => handleFeedback('up')} className={`p-1.5 rounded hover:bg-stone-800/50 transition-colors ${feedback === 'up' ? 'text-teal-500' : 'text-stone-500 hover:text-teal-500'}`}>
                         <ThumbUpIcon className="w-4 h-4" filled={feedback === 'up'} />
                     </button>
-                    <button onClick={() => handleFeedback('down')} className={`p-1.5 rounded hover:bg-stone-800/50 transition-colors ${feedback === 'down' ? 'text-red-500' : 'text-stone-600 hover:text-red-600'}`}>
+                    <button onClick={() => handleFeedback('down')} className={`p-1.5 rounded hover:bg-stone-800/50 transition-colors ${feedback === 'down' ? 'text-red-500' : 'text-stone-500 hover:text-red-500'}`}>
                         <ThumbDownIcon className="w-4 h-4" filled={feedback === 'down'} />
                     </button>
                 </div>
@@ -1006,7 +997,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
         {/* Leave Text */}
         <button
             onClick={confirmEndSession}
-            className="mt-6 text-[9px] tracking-[0.3em] uppercase text-stone-700 hover:text-red-400/80 transition-colors"
+            className="mt-6 text-[9px] tracking-[0.3em] uppercase text-stone-500 hover:text-red-400/90 transition-colors"
         >
             {text.controls.leave}
         </button>
