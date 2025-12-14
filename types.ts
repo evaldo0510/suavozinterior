@@ -1,3 +1,4 @@
+
 export enum SessionStatus {
   IDLE = 'IDLE',
   CONNECTING = 'CONNECTING',
@@ -15,6 +16,22 @@ export interface AudioVolumeState {
 export interface SessionHistoryItem {
   date: string;
   duration: number; // in seconds
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  isAdmin: boolean;
+  plan: UserPlan;
+  registeredAt: string;
+  lastActive: string;
+  resonanceScore: number; // Gamification score
+  pendingTask?: {
+    id: string;
+    description: string;
+    dateAssigned: string;
+  };
 }
 
 export type Language = 'en' | 'pt' | 'es' | 'fr' | 'de' | 'it' | 'ja' | 'ru' | 'hi';

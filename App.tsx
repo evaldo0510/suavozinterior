@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import SessionManager from './components/SessionManager';
-import { TRANSLATIONS } from './constants';
-import { Language, SessionHistoryItem, UserPlan } from './types';
+import { TRANSLATIONS, HUMAN_CONNECTION_TASKS } from './constants';
+import { Language, SessionHistoryItem, UserPlan, User } from './types';
 import { Logo } from './components/Logo';
 import { JournalModal } from './components/JournalModal';
+import { LandingModal } from './components/LandingModal';
+import { LoginModal } from './components/LoginModal';
+import { AdminModal } from './components/AdminModal';
 
 const LANGUAGES: { code: Language; label: string }[] = [
   { code: 'en', label: 'English' },
@@ -54,9 +57,9 @@ const StarIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const CheckIcon = ({ className }: { className?: string }) => (
+const UserIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
   </svg>
 );
 
@@ -66,9 +69,21 @@ const ShieldIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const CheckIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+  </svg>
+);
+
 const DownloadIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+  </svg>
+);
+
+const HeartIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
   </svg>
 );
 
@@ -87,7 +102,7 @@ function App() {
     return 'en';
   });
 
-  // --- User Plan State ---
+  // --- User Plan & Auth State ---
   const [userPlan, setUserPlan] = useState<UserPlan>(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
         const saved = localStorage.getItem('pch_user_plan');
@@ -96,11 +111,24 @@ function App() {
     return 'visitor';
   });
 
+  const [currentUser, setCurrentUser] = useState<User | null>(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+        const saved = localStorage.getItem('pch_current_user');
+        if (saved) return JSON.parse(saved);
+    }
+    return null;
+  });
+
   const [showHistory, setShowHistory] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
   const [showPremium, setShowPremium] = useState(false);
   const [showJournal, setShowJournal] = useState(false); 
   const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showLanding, setShowLanding] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [showHumanTask, setShowHumanTask] = useState(false);
+
   const [historyItems, setHistoryItems] = useState<SessionHistoryItem[]>([]);
   const [isProcessingUpgrade, setIsProcessingUpgrade] = useState(false);
   
@@ -110,46 +138,47 @@ function App() {
 
   const text = TRANSLATIONS[lang];
 
+  // Track Landing Visits for Analytics
+  useEffect(() => {
+      const visits = parseInt(localStorage.getItem('pch_landing_visits') || '0');
+      localStorage.setItem('pch_landing_visits', (visits + 1).toString());
+  }, []);
+
+  // Check for Human Connection Task on Logic
+  useEffect(() => {
+      if (currentUser?.pendingTask && !hasStarted && introStep === 3) {
+          // Show task modal if there is a pending task and user is on home screen
+          setTimeout(() => setShowHumanTask(true), 1500);
+      }
+  }, [currentUser, hasStarted, introStep]);
+
   // PWA Install Prompt Listener
   useEffect(() => {
     const handler = (e: any) => {
-      // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
-      // Stash the event so it can be triggered later.
       setDeferredPrompt(e);
       setIsInstallable(true);
     };
 
     window.addEventListener('beforeinstallprompt', handler);
-    
-    // Check if app is already installed
     if (window.matchMedia('(display-mode: standalone)').matches) {
        setIsInstallable(false);
     }
-
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
-    
-    // Show the install prompt
     deferredPrompt.prompt();
-    
-    // Wait for the user to respond to the prompt
     const choiceResult = await deferredPrompt.userChoice;
-    
     if (choiceResult.outcome === 'accepted') {
       console.log('User accepted the install prompt');
-    } else {
-      console.log('User dismissed the install prompt');
     }
-    
     setDeferredPrompt(null);
     setIsInstallable(false);
   };
 
-  // Persist language selection
+  // Persist language
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.setItem('pch_lang', lang);
@@ -163,11 +192,32 @@ function App() {
     }
   }, [userPlan]);
 
+  // Persist User & Update Global "Database"
+  useEffect(() => {
+      if (typeof window !== 'undefined' && window.localStorage) {
+          if (currentUser) {
+            localStorage.setItem('pch_current_user', JSON.stringify(currentUser));
+            
+            // Update "Global" user list for Admin analytics (Simulated DB)
+            const allUsers: User[] = JSON.parse(localStorage.getItem('pch_all_users_db') || '[]');
+            const index = allUsers.findIndex(u => u.email === currentUser.email);
+            if (index >= 0) {
+                allUsers[index] = currentUser;
+            } else {
+                allUsers.push(currentUser);
+            }
+            localStorage.setItem('pch_all_users_db', JSON.stringify(allUsers));
+
+          } else {
+            localStorage.removeItem('pch_current_user');
+          }
+      }
+  }, [currentUser]);
+
   // Check Privacy Consent
   useEffect(() => {
     const consent = localStorage.getItem('pch_privacy_consent');
     if (!consent) {
-       // Small delay for aesthetics
        setTimeout(() => setShowPrivacy(true), 1500);
     }
   }, []);
@@ -179,11 +229,83 @@ function App() {
 
   const handleSubscribe = () => {
     setIsProcessingUpgrade(true);
-    // Simulate payment processing delay
     setTimeout(() => {
         setUserPlan('member');
         setIsProcessingUpgrade(false);
+        if (currentUser) {
+            setCurrentUser({ ...currentUser, plan: 'member' });
+        }
     }, 1500);
+  };
+
+  const handleLogin = (user: User) => {
+      // Check existing in "DB"
+      const allUsers: User[] = JSON.parse(localStorage.getItem('pch_all_users_db') || '[]');
+      const existing = allUsers.find(u => u.email === user.email);
+      
+      let finalUser = user;
+      
+      if (existing) {
+          // Restore existing state but update login time
+          finalUser = { 
+              ...existing, 
+              lastActive: new Date().toISOString() 
+          };
+      } else {
+          // New user init
+          finalUser = {
+              ...user,
+              id: Date.now().toString(),
+              registeredAt: new Date().toISOString(),
+              lastActive: new Date().toISOString(),
+              plan: user.isAdmin ? 'guardian' : 'member', // Login grants Member by default per requirement
+              resonanceScore: 0
+          };
+      }
+
+      setCurrentUser(finalUser);
+      setUserPlan(finalUser.plan);
+  };
+
+  const handleResetApp = () => {
+      localStorage.clear();
+      window.location.reload();
+  };
+
+  const handleSessionDisconnect = () => {
+      setHasStarted(false);
+      
+      // Update last active
+      if (currentUser) {
+          // 30% chance to assign a Human Connection Task if none exists
+          let newTask = currentUser.pendingTask;
+          if (!newTask && Math.random() > 0.3) { // 70% chance actually
+              const taskDesc = HUMAN_CONNECTION_TASKS[Math.floor(Math.random() * HUMAN_CONNECTION_TASKS.length)];
+              newTask = {
+                  id: Date.now().toString(),
+                  description: taskDesc,
+                  dateAssigned: new Date().toISOString()
+              };
+          }
+
+          setCurrentUser({
+              ...currentUser,
+              lastActive: new Date().toISOString(),
+              pendingTask: newTask
+          });
+      }
+  };
+
+  const completeTask = (completed: boolean) => {
+      if (currentUser) {
+          const newScore = completed ? (currentUser.resonanceScore || 0) + 1 : (currentUser.resonanceScore || 0);
+          setCurrentUser({
+              ...currentUser,
+              pendingTask: undefined,
+              resonanceScore: newScore
+          });
+      }
+      setShowHumanTask(false);
   };
 
   // Mini Presentation Sequence
@@ -261,14 +383,23 @@ function App() {
       
       {/* Minimal Header */}
       {introStep === 3 && (
-        <header className={`absolute top-0 left-0 w-full p-6 flex justify-between items-center z-50 transition-opacity duration-1000 ${hasStarted ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
-          <div className="flex items-center space-x-2">
+        <header className={`absolute top-0 left-0 w-full p-6 flex flex-col md:flex-row justify-between items-center z-50 transition-opacity duration-1000 ${hasStarted ? 'opacity-0 hover:opacity-100' : 'opacity-100'}`}>
+          <div className="flex items-center space-x-2 mb-4 md:mb-0">
              <Logo className="w-8 h-8 text-stone-600" />
              <div className="font-serif text-sm tracking-[0.3em] text-stone-600 uppercase hover:text-stone-400 transition-colors cursor-default hidden md:block">
                {text.title}
              </div>
           </div>
-          <div className="flex items-center space-x-4">
+          
+          <div className="flex flex-wrap items-center justify-center space-x-2 md:space-x-4">
+              {/* Concept/Landing Button */}
+              <button 
+                onClick={() => setShowLanding(true)}
+                className="px-3 py-1.5 rounded-full border border-stone-800 bg-stone-900/50 text-[10px] uppercase tracking-widest text-teal-500/80 hover:bg-teal-900/20 hover:text-teal-400 transition-all mr-2"
+              >
+                  {text.conceptBtn || "The Concept"}
+              </button>
+
               {isInstallable && (
                 <button 
                   onClick={handleInstallClick}
@@ -278,6 +409,31 @@ function App() {
                   <DownloadIcon className="w-5 h-5 animate-pulse" />
                 </button>
               )}
+              
+              {/* Login / Admin Button */}
+              {currentUser ? (
+                  <button 
+                    onClick={() => currentUser.isAdmin ? setShowAdmin(true) : null}
+                    className={`flex items-center space-x-2 p-2 transition-colors ${currentUser.isAdmin ? 'text-red-400' : 'text-teal-500'}`}
+                    title={currentUser.email}
+                  >
+                     <UserIcon className="w-5 h-5" />
+                     {currentUser.resonanceScore > 0 && (
+                         <span className="text-[9px] font-mono border border-teal-900 px-1 rounded bg-teal-950/50">
+                             Lvl {currentUser.resonanceScore}
+                         </span>
+                     )}
+                  </button>
+              ) : (
+                  <button 
+                    onClick={() => setShowLogin(true)}
+                    className="flex p-2 text-stone-500 hover:text-teal-400 transition-colors"
+                    title="Login / Access"
+                  >
+                     <UserIcon className="w-5 h-5" />
+                  </button>
+              )}
+
               <button 
                 onClick={() => setShowPremium(true)}
                 className={`flex p-2 transition-colors ${userPlan !== 'visitor' ? 'text-amber-500' : 'text-stone-500 hover:text-amber-400'}`}
@@ -312,6 +468,19 @@ function App() {
 
       {/* Components Modals */}
       <JournalModal isOpen={showJournal} onClose={() => setShowJournal(false)} lang={lang} />
+      <LandingModal isOpen={showLanding} onClose={() => setShowLanding(false)} lang={lang} />
+      <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} lang={lang} onLogin={handleLogin} />
+      
+      {currentUser && (
+          <AdminModal 
+            isOpen={showAdmin} 
+            onClose={() => setShowAdmin(false)} 
+            user={currentUser} 
+            currentPlan={userPlan}
+            onUpdatePlan={setUserPlan}
+            onResetApp={handleResetApp}
+          />
+      )}
 
       {/* Guide Modal */}
       {showGuide && (
@@ -345,6 +514,43 @@ function App() {
               </div>
            </div>
         </div>
+      )}
+
+      {/* Human Connection Task Modal (Gamification) */}
+      {showHumanTask && currentUser?.pendingTask && (
+          <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/95 backdrop-blur-xl p-6 animate-fade-in">
+              <div className="bg-stone-900/80 border border-teal-900/40 rounded-xl w-full max-w-sm text-center p-8 relative shadow-[0_0_50px_rgba(20,184,166,0.1)]">
+                  <div className="mx-auto w-12 h-12 rounded-full bg-teal-900/20 flex items-center justify-center mb-6">
+                      <HeartIcon className="w-6 h-6 text-teal-500" />
+                  </div>
+                  <h3 className="font-serif text-xl text-teal-100 tracking-widest uppercase mb-2">{text.human?.title}</h3>
+                  <p className="text-[10px] uppercase tracking-widest text-teal-500/60 mb-6">{text.human?.subtitle}</p>
+                  
+                  <div className="bg-stone-950/50 p-6 rounded border border-stone-800 mb-8">
+                      <p className="text-stone-500 text-[10px] uppercase tracking-widest mb-2">{text.human?.quest}</p>
+                      <p className="text-stone-200 font-serif italic text-lg leading-relaxed">
+                          "{currentUser.pendingTask.description}"
+                      </p>
+                  </div>
+
+                  <p className="text-stone-400 text-sm mb-6">{text.human?.question}</p>
+
+                  <div className="grid grid-cols-2 gap-3">
+                      <button 
+                        onClick={() => completeTask(true)}
+                        className="py-3 bg-teal-900/20 border border-teal-500/30 text-teal-200 uppercase text-[10px] tracking-widest rounded hover:bg-teal-900/40 transition-colors"
+                      >
+                          {text.human?.yes}
+                      </button>
+                      <button 
+                        onClick={() => completeTask(false)}
+                        className="py-3 bg-stone-800/30 border border-stone-700 text-stone-500 uppercase text-[10px] tracking-widest rounded hover:text-stone-300 transition-colors"
+                      >
+                          {text.human?.no}
+                      </button>
+                  </div>
+              </div>
+          </div>
       )}
 
       {/* History Modal */}
@@ -412,6 +618,12 @@ function App() {
                     {text.premium?.desc}
                   </p>
                   
+                  {currentUser && currentUser.isAdmin && (
+                      <div className="p-2 mb-2 bg-red-950/30 border border-red-900/40 text-red-400 text-[10px] uppercase tracking-widest rounded">
+                         {text.login?.adminBadge || "ADMIN ACCESS"}
+                      </div>
+                  )}
+
                   <div className="space-y-3 pt-4 text-left px-4">
                       <div className="flex items-center space-x-3 text-stone-400 text-sm">
                           <CheckIcon className={`w-4 h-4 ${userPlan === 'visitor' ? 'text-stone-600' : 'text-amber-700'}`} />
@@ -525,33 +737,4 @@ function App() {
                     <select
                       value={lang}
                       onChange={(e) => setLang(e.target.value as Language)}
-                      className="bg-transparent text-stone-600 text-[10px] uppercase tracking-widest text-center focus:outline-none cursor-pointer hover:text-stone-400 appearance-none"
-                      style={{ textAlignLast: 'center' }}
-                    >
-                      {LANGUAGES.map(({ code, label }) => (
-                        <option key={code} value={code} className="bg-stone-950 text-stone-400">
-                          {label}
-                        </option>
-                      ))}
-                    </select>
-                </div>
-
-             </div>
-          </div>
-        ) : (
-          <div className="w-full h-full flex flex-col animate-fade-in">
-            <SessionManager 
-               onDisconnect={() => setHasStarted(false)} 
-               lang={lang} 
-               userPlan={userPlan} 
-               onUpgrade={() => setShowPremium(true)}
-            />
-          </div>
-        )}
-
-      </main>
-    </div>
-  );
-}
-
-export default App;
+                      className="bg-transparent text-stone-600 text-[10px] uppercase tracking-widest text-

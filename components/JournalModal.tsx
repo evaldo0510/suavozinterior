@@ -27,6 +27,12 @@ const TrashIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const RefreshIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+  </svg>
+);
+
 export const JournalModal: React.FC<JournalModalProps> = ({ isOpen, onClose, lang }) => {
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [currentText, setCurrentText] = useState('');
@@ -67,9 +73,21 @@ export const JournalModal: React.FC<JournalModalProps> = ({ isOpen, onClose, lan
     setCurrentText('');
     
     // Refresh prompt
-    if (text?.prompts) {
-        setCurrentPrompt(text.prompts[Math.floor(Math.random() * text.prompts.length)]);
-    }
+    cyclePrompt();
+  };
+
+  const cyclePrompt = () => {
+      if (text?.prompts && text.prompts.length > 0) {
+          let newPrompt = currentPrompt;
+          // Simple attempt to get a different prompt
+          let attempts = 0;
+          while (newPrompt === currentPrompt && attempts < 5 && text.prompts.length > 1) {
+             newPrompt = text.prompts[Math.floor(Math.random() * text.prompts.length)];
+             attempts++;
+          }
+          if (text.prompts.length === 1) newPrompt = text.prompts[0];
+          setCurrentPrompt(newPrompt);
+      }
   };
 
   const deleteEntry = (id: string) => {
@@ -110,7 +128,15 @@ export const JournalModal: React.FC<JournalModalProps> = ({ isOpen, onClose, lan
                   onChange={(e) => setCurrentText(e.target.value)}
                />
 
-               <div className="flex justify-end pt-4">
+               <div className="flex justify-between items-center pt-4">
+                  <button 
+                    onClick={cyclePrompt}
+                    className="flex items-center space-x-2 text-stone-500 text-[10px] uppercase tracking-widest hover:text-teal-400 transition-colors"
+                  >
+                     <RefreshIcon className="w-3 h-3" />
+                     <span>Shuffle</span>
+                  </button>
+
                   <button 
                     onClick={saveEntry}
                     disabled={!currentText.trim()}

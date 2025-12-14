@@ -56,6 +56,12 @@ const LockIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const StarIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+  </svg>
+);
+
 
 // --- Audio Helpers ---
 
@@ -650,29 +656,49 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
     );
   }
 
-  // LIMIT REACHED SCREEN
+  // LIMIT REACHED SCREEN - High Conversion Logic
   if (status === SessionStatus.LIMIT_REACHED) {
       return (
-        <div className="flex flex-col items-center justify-center h-full space-y-8 text-center animate-fade-in p-8 relative">
-           <div className="absolute inset-0 bg-stone-950/80 -z-10"></div>
-           <div className="space-y-2">
-               <h3 className="text-2xl font-serif text-stone-300 tracking-widest uppercase">{text.status.limitReached}</h3>
-               <p className="text-stone-500 font-light text-sm max-w-xs mx-auto">The free sanctuary is brief. To dwell longer in the silence, unlock the infinite path.</p>
-           </div>
+        <div className="flex flex-col items-center justify-center h-full space-y-8 text-center animate-fade-in p-8 relative overflow-hidden">
+           {/* Background Ambience */}
+           <div className="absolute inset-0 bg-stone-950/90 -z-10"></div>
+           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(146,64,14,0.15),_transparent_70%)] -z-10 animate-pulse"></div>
            
-           <div className="flex flex-col space-y-4 w-full max-w-xs">
-               <button 
-                onClick={onUpgrade}
-                className="w-full py-3 bg-amber-900/20 border border-amber-900/40 text-amber-200 uppercase tracking-[0.2em] text-xs hover:bg-amber-900/40 transition-colors rounded-lg"
-               >
-                 {text.controls.upgrade}
-               </button>
-               <button 
-                onClick={onDisconnect}
-                className="text-[10px] uppercase tracking-widest text-stone-600 hover:text-stone-400 transition-colors"
-               >
-                 {text.status.returnHome}
-               </button>
+           <div className="relative z-10 space-y-6 max-w-sm mx-auto">
+               <div className="mx-auto w-16 h-16 rounded-full bg-amber-900/10 border border-amber-800/40 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(245,158,11,0.1)]">
+                   <LockIcon className="w-8 h-8 text-amber-500/80" />
+               </div>
+
+               <div className="space-y-3">
+                   <h3 className="text-3xl font-serif text-amber-100/90 tracking-widest uppercase">Limit Reached</h3>
+                   <div className="h-px w-12 bg-amber-900/50 mx-auto"></div>
+                   <p className="text-stone-400 font-light text-sm leading-relaxed px-4">
+                       Your journey has just begun. The free sanctuary is brief, but the inner room of freedom is infinite.
+                   </p>
+                   <p className="text-amber-500/80 text-xs uppercase tracking-[0.2em] pt-2">
+                       Become a Guardian
+                   </p>
+               </div>
+           
+               <div className="flex flex-col space-y-4 w-full pt-4">
+                   <button 
+                    onClick={onUpgrade}
+                    className="group relative w-full py-4 bg-gradient-to-r from-amber-900/20 to-stone-900/40 border border-amber-700/40 text-amber-100 uppercase tracking-[0.2em] text-xs hover:border-amber-500/60 hover:shadow-[0_0_20px_rgba(245,158,11,0.15)] transition-all duration-500 rounded-sm overflow-hidden"
+                   >
+                     <span className="absolute inset-0 w-full h-full bg-amber-600/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
+                     <span className="relative flex items-center justify-center space-x-2">
+                        <StarIcon className="w-4 h-4 text-amber-400" />
+                        <span>{text.controls.upgrade}</span>
+                     </span>
+                   </button>
+                   
+                   <button 
+                    onClick={onDisconnect}
+                    className="text-[10px] uppercase tracking-widest text-stone-600 hover:text-stone-400 transition-colors"
+                   >
+                     {text.status.returnHome}
+                   </button>
+               </div>
            </div>
         </div>
       );
@@ -828,7 +854,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
             </div>
          </div>
          <div className={`font-mono text-[10px] tracking-widest transition-colors ${elapsedSeconds > limitConfig.maxDuration - 30 && userPlan === 'visitor' ? 'text-red-400' : 'text-stone-700'}`}>
-            {formatTime(elapsedSeconds)} {userPlan === 'visitor' ? '/ 03:00' : ''}
+            {formatTime(elapsedSeconds)} {userPlan === 'visitor' ? '/ 05:00' : ''}
          </div>
       </div>
 
