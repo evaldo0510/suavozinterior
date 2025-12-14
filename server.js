@@ -403,5 +403,5 @@ app.post('/api/query', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Voz Interior PCH API listening on port ${PORT}`);
+  console.log(`Inner Voice PCH API listening on port ${PORT}`);
 });

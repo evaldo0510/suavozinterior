@@ -656,4 +656,42 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
                  className={`flex items-center justify-center w-14 h-14 rounded-full transition-all duration-300 shadow-lg ${
                     isRecording
                       ? 'bg-teal-900/30 text-teal-400 border border-teal-500/50 shadow-[0_0_20px_rgba(45,212,191,0.2)] animate-pulse' 
-                      : 'bg
+                      : 'bg-stone-800 text-stone-400 border border-stone-700 hover:border-teal-700/50 hover:text-teal-200'
+                 }`}
+                 title={isRecording ? "Stop Recording" : "Record Session"}
+                 aria-label={isRecording ? "Stop Recording" : "Record Session"}
+               >
+                 {isRecording ? <StopRecordIcon className="w-6 h-6" /> : <RecordIcon className="w-6 h-6" />}
+               </button>
+
+               <div className="h-6 w-px bg-stone-800"></div>
+
+               {/* Volume Slider */}
+               <div className="flex items-center space-x-3 w-40">
+                 <VolumeIcon className="w-5 h-5 text-stone-500" />
+                 <input 
+                   type="range" 
+                   min="0" 
+                   max="1" 
+                   step="0.01" 
+                   value={outputVolume} 
+                   onChange={handleVolumeChange}
+                   className="w-full h-1 bg-stone-700 rounded-lg appearance-none cursor-pointer accent-teal-600 focus:outline-none focus:ring-0"
+                 />
+               </div>
+            </div>
+
+            <button
+                onClick={confirmEndSession}
+                className="group relative px-8 py-3 bg-transparent overflow-hidden rounded-full border border-stone-700 text-stone-400 hover:text-stone-200 transition-colors duration-500"
+            >
+                <span className="relative z-10 text-xs tracking-[0.2em] uppercase">{text.controls.leave}</span>
+                <div className="absolute inset-0 bg-stone-800 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left opacity-30"></div>
+            </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SessionManager;

@@ -1,6 +1,6 @@
 {
   "name": "Inner Voice PCH",
-  "description": "A therapeutic cognitive poetry agent that guides users through inner landscapes using the Gemini Live API.",
+  "description": "A therapeutic cognitive poetry app for mental clarity, presence, and emotional organization.",
   "requestFramePermissions": [
     "microphone"
   ]

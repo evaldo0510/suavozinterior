@@ -4,8 +4,8 @@ import { TRANSLATIONS } from './constants';
 import { Language } from './types';
 
 const LANGUAGES: { code: Language; label: string }[] = [
-  { code: 'pt', label: 'Português' },
   { code: 'en', label: 'English' },
+  { code: 'pt', label: 'Português' },
   { code: 'es', label: 'Español' },
   { code: 'fr', label: 'Français' },
   { code: 'de', label: 'Deutsch' },
@@ -31,7 +31,7 @@ const XMarkIcon = ({ className }: { className?: string }) => (
 function App() {
   const [hasStarted, setHasStarted] = useState(false);
   
-  // Initialize language from localStorage or default to 'pt'
+  // Initialize language from localStorage or default to 'en'
   const [lang, setLang] = useState<Language>(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
       const saved = localStorage.getItem('pch_lang');
@@ -40,7 +40,7 @@ function App() {
         return saved as Language;
       }
     }
-    return 'pt';
+    return 'en';
   });
 
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -103,7 +103,7 @@ function App() {
       
       {/* Header / Logo */}
       <header className="absolute top-0 left-0 w-full p-6 flex justify-between items-center z-50 opacity-60">
-        <div className="font-serif text-lg tracking-widest text-teal-700/60">PCH</div>
+        <div className="font-serif text-lg tracking-widest text-teal-700/60 uppercase">Inner Voice PCH</div>
         <div className="flex items-center space-x-4">
             
             {/* QR Code Button (Desktop Only) */}
