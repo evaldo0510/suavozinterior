@@ -3,6 +3,7 @@ import { GoogleGenAI, LiveServerMessage, Modality } from '@google/genai';
 import { SessionStatus, Language, VoiceType } from '../types';
 import { getSystemInstruction, MODEL_NAME, TRANSLATIONS, VOICE_IDS } from '../constants';
 import AudioVisualizer from './AudioVisualizer';
+import { Logo } from './Logo';
 
 interface SessionManagerProps {
   onDisconnect: () => void;
@@ -12,37 +13,37 @@ interface SessionManagerProps {
 // --- Icons ---
 
 const MicIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className={className}>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
   </svg>
 );
 
 const MicOffIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className={className}>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 5.25l-15 15m0-15l15 15m-4.02-3.831a6 6 0 0 0 1.02-3.169v-1.5m-6 7.5a6 6 0 0 1-3.674-.634m9.674.634v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v1.751m-6 10.998v-3m0 0h.01" />
   </svg>
 );
 
 const VolumeIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className={className}>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
   </svg>
 );
 
 const ThumbUpIcon = ({ className, filled }: { className?: string, filled?: boolean }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill={filled ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className={className}>
+  <svg xmlns="http://www.w3.org/2000/svg" fill={filled ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.281-.723 3.311.482.3 1.054.485 1.666.485 2.652 0 4.688 2.342 4.07 5.087l-.922 4.15a4.5 4.5 0 0 1-3.648 3.518 7.5 7.5 0 0 1-5.632-.613 2.25 2.25 0 0 1-.952-1.672l-.337-1.352a.75.75 0 0 0-.75-.75h-.375a.75.75 0 0 0-.75.75v3.375a.75.75 0 0 0 .75.75h1.875c.31 0 .616.056.903.159.283.101.558.215.825.34l.278.13c.806.379 1.517 1.037 1.948 1.823.18.328.322.678.418 1.042.062.235.086.478.077.72H5.25a2.25 2.25 0 0 1-2.25-2.25v-8.375a2.25 2.25 0 0 1 2.25-2.25h1.383Z" />
   </svg>
 );
 
 const ThumbDownIcon = ({ className, filled }: { className?: string, filled?: boolean }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill={filled ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className={className}>
+  <svg xmlns="http://www.w3.org/2000/svg" fill={filled ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 15h2.25a2.25 2.25 0 0 0 2.25-2.25V4.5a2.25 2.25 0 0 0-2.25-2.25h-1.383a2.25 2.25 0 0 0-2.25 2.25v8.375a2.25 2.25 0 0 0 2.25 2.25Zm0 0-3.75 3.75M4.875 15h-1.875a.75.75 0 0 0-.75.75v3.375a.75.75 0 0 0 .75.75h.375a.75.75 0 0 0 .75-.75l.337-1.352a2.25 2.25 0 0 1 .952-1.672 7.5 7.5 0 0 1 5.632-.613 4.5 4.5 0 0 1 3.648 3.518l.922 4.15a.75.75 0 0 0 1.25.132 4.07 4.07 0 0 0 .285-.503 9.041 9.041 0 0 0 1.08-2.031c.384-.723.956-1.35 1.715-1.653.76-.304 1.348-.917 1.672-1.672.279-.65.503-1.345.613-2.25a2.25 2.25 0 0 0-2.25-2.25h-6.633l.922-4.15a4.5 4.5 0 0 0-3.648-3.518 7.5 7.5 0 0 0-5.632.613 2.25 2.25 0 0 0-.952 1.672l-.337 1.352Z" />
   </svg>
 );
 
 const SettingsIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className={className}>
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
   </svg>
 );
@@ -179,9 +180,17 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
         
         // If idle for > 30s AND not currently having AI speak AND haven't already triggered for this specific idle period
         if (timeSinceActivity > IDLE_THRESHOLD_MS && !isAiSpeakingRef.current && !hasTriggeredIdleRef.current) {
-           console.log("Idle threshold reached.");
+           console.log("Idle threshold reached. Prompting AI.");
            hasTriggeredIdleRef.current = true; // Prevent re-triggering until reset
-           // Logic to gently nudge could go here if implementing proactive AI speech
+           
+           // Send a gentle prompt to the AI to engage the user
+           if (sessionPromiseRef.current) {
+             sessionPromiseRef.current.then(session => {
+                session.send({
+                    parts: [{ text: "The user has been silent for 30 seconds. Gently invite them back to the present moment with a brief, poetic reflection about silence and presence." }]
+                });
+             });
+           }
         }
       }, 1000);
 
@@ -568,14 +577,18 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
   }
 
   const isConnecting = status === SessionStatus.CONNECTING;
-  const visualizerColor = isAiSpeaking ? "rgb(34, 211, 238)" : "rgb(120, 113, 108)";
+  const visualizerColor = isAiSpeaking ? "rgb(20, 184, 166)" : "rgb(120, 113, 108)"; // Teal when speaking, Stone when quiet
 
   return (
-    <div className="relative flex flex-col items-center justify-center w-full h-full">
+    <div className="relative flex flex-col items-center justify-between w-full h-full p-6 overflow-hidden">
       
+      {/* Background Ambience */}
+      <div className="absolute inset-0 bg-stone-950/80 -z-10"></div>
+      <div className={`absolute inset-0 transition-opacity duration-[2000ms] -z-10 ${isAiSpeaking ? 'opacity-30' : 'opacity-10'} bg-[radial-gradient(circle_at_center,_rgba(20,184,166,0.15),_transparent_70%)]`}></div>
+
       {/* Exit Confirmation Modal */}
       {showExitConfirm && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-6 animate-fade-in">
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-6 animate-fade-in">
           <div className="bg-transparent text-center space-y-8">
             <h3 className="font-serif text-2xl text-stone-300">Leave Sanctuary?</h3>
             <div className="flex flex-col space-y-4">
@@ -596,12 +609,12 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
         </div>
       )}
 
-      {/* Settings Modal (Clean) */}
+      {/* Settings Modal */}
       {showSettings && (
-         <div className="absolute bottom-28 bg-stone-950/90 backdrop-blur border border-stone-800 p-6 rounded-none z-40 w-72 animate-fade-in mb-2 shadow-2xl">
+         <div className="absolute bottom-28 bg-stone-900/95 backdrop-blur-xl border border-stone-800 p-6 rounded-2xl z-40 w-72 animate-fade-in mb-2 shadow-2xl ring-1 ring-stone-800">
             <div className="space-y-6">
                 <div className="flex justify-between items-center pb-4 border-b border-stone-800">
-                    <span className="text-[10px] font-bold text-stone-500 uppercase tracking-widest">{text.settings?.title}</span>
+                    <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">{text.settings?.title}</span>
                     <button onClick={() => setShowSettings(false)} className="text-stone-600 hover:text-stone-300">
                         ✕
                     </button>
@@ -609,37 +622,37 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
                 
                 {/* Voice */}
                 <div className="space-y-3 pb-4 border-b border-stone-800/50">
-                    <label className="text-[10px] text-stone-600 block uppercase tracking-wider">{text.settings?.voice}</label>
+                    <label className="text-[10px] text-stone-500 block uppercase tracking-wider">{text.settings?.voice}</label>
                     <div className="grid grid-cols-2 gap-3">
                       <button 
                          onClick={() => handleVoiceChange('female')}
-                         className={`text-[10px] py-2 border transition-colors ${selectedVoice === 'female' ? 'bg-stone-800 border-stone-600 text-stone-300' : 'bg-transparent border-stone-800 text-stone-600 hover:text-stone-400'}`}
+                         className={`text-[10px] py-2 rounded-lg border transition-all ${selectedVoice === 'female' ? 'bg-stone-800 border-teal-900 text-teal-100 shadow-lg' : 'bg-transparent border-stone-800 text-stone-500 hover:text-stone-300'}`}
                       >
                          {text.settings?.female}
                       </button>
                       <button 
                          onClick={() => handleVoiceChange('male')}
-                         className={`text-[10px] py-2 border transition-colors ${selectedVoice === 'male' ? 'bg-stone-800 border-stone-600 text-stone-300' : 'bg-transparent border-stone-800 text-stone-600 hover:text-stone-400'}`}
+                         className={`text-[10px] py-2 rounded-lg border transition-all ${selectedVoice === 'male' ? 'bg-stone-800 border-teal-900 text-teal-100 shadow-lg' : 'bg-transparent border-stone-800 text-stone-500 hover:text-stone-300'}`}
                       >
                          {text.settings?.male}
                       </button>
                     </div>
                 </div>
 
-                {/* Notifications (Grandmother Mode) */}
+                {/* Notifications */}
                  <div className="space-y-3 pb-4 border-b border-stone-800/50">
                      <div className="flex justify-between items-center">
-                         <label className="text-[10px] text-stone-600 block uppercase tracking-wider">{text.settings?.notifications}</label>
+                         <label className="text-[10px] text-stone-500 block uppercase tracking-wider">{text.settings?.notifications}</label>
                          <button 
                            onClick={handleNotificationToggle}
-                           className={`w-8 h-4 rounded-full transition-colors relative ${notificationsEnabled ? 'bg-teal-900' : 'bg-stone-800'}`}
+                           className={`w-8 h-4 rounded-full transition-colors relative ${notificationsEnabled ? 'bg-teal-900/50' : 'bg-stone-800'}`}
                          >
-                            <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-stone-400 transition-all ${notificationsEnabled ? 'left-4 bg-teal-400' : 'left-0.5'}`}></div>
+                            <div className={`absolute top-0.5 w-3 h-3 rounded-full transition-all ${notificationsEnabled ? 'left-4 bg-teal-400' : 'left-0.5 bg-stone-600'}`}></div>
                          </button>
                      </div>
                      
                      {notificationsEnabled && (
-                         <div className="flex items-center space-x-2 text-[10px] text-stone-500">
+                         <div className="flex items-center space-x-2 text-[10px] text-stone-500 justify-end">
                             <span>{text.settings?.notifyEvery}</span>
                             <input 
                               type="number" 
@@ -647,7 +660,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
                               max="120"
                               value={notificationInterval}
                               onChange={(e) => setNotificationInterval(Math.max(10, parseInt(e.target.value)))}
-                              className="bg-stone-900 border border-stone-800 w-12 text-center py-1 rounded"
+                              className="bg-stone-950 border border-stone-800 w-12 text-center py-1 rounded text-stone-300"
                             />
                             <span>{text.settings?.minutes}</span>
                          </div>
@@ -656,14 +669,14 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
 
                 {/* Sensitivity */}
                 <div className="space-y-3">
-                    <label className="text-[10px] text-stone-600 block uppercase tracking-wider">{text.settings?.sensitivity}</label>
-                    <div className="h-0.5 w-full bg-stone-800 relative">
+                    <label className="text-[10px] text-stone-500 block uppercase tracking-wider">{text.settings?.sensitivity}</label>
+                    <div className="h-0.5 w-full bg-stone-800 relative rounded-full overflow-hidden">
                         <div 
                           className="absolute top-0 bottom-0 left-0 bg-stone-500 transition-all duration-75" 
                           style={{ width: `${Math.min(100, (inputLevel / 0.1) * 100)}%` }} 
                         />
                         <div 
-                          className="absolute -top-1 bottom-0 w-0.5 h-2.5 bg-teal-500/50 z-10" 
+                          className="absolute -top-1 bottom-0 w-0.5 h-2.5 bg-teal-500 z-10 shadow-[0_0_10px_rgba(20,184,166,0.8)]" 
                           style={{ left: `${Math.min(100, (inputSensitivity / 0.1) * 100)}%` }} 
                         />
                     </div>
@@ -675,100 +688,134 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
                       step="0.001" 
                       value={inputSensitivity} 
                       onChange={handleSensitivityChange}
-                      className="w-full h-1 bg-transparent appearance-none cursor-pointer accent-stone-500 focus:outline-none"
+                      className="w-full h-4 -mt-2 opacity-0 cursor-pointer"
                     />
                 </div>
             </div>
          </div>
       )}
 
-      {/* Session Timer (Very subtle) */}
-      <div className="absolute top-6 right-6 font-mono text-[10px] tracking-widest text-stone-700 opacity-40 hover:opacity-100 transition-opacity">
-        {text.controls.session} {formatTime(elapsedSeconds)}
-      </div>
-
-      {/* Background Visualizer Layer */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center opacity-60 pointer-events-none">
-        <AudioVisualizer 
-            volume={volume} 
-            isActive={(isUserSpeaking && !isMicMuted) || isAiSpeaking} 
-            color={visualizerColor} 
-        />
-      </div>
-
-      {/* Content Layer */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full w-full max-w-2xl px-6">
-        
-        {/* Simplified Status Area */}
-        <div className="flex-1 flex flex-col items-center justify-center text-center">
-            {isConnecting ? (
-               <div className="text-stone-600 text-xs tracking-[0.3em] uppercase animate-pulse">{text.status.connecting}</div>
-            ) : (
-               <div className="h-8"></div> // Spacer to keep layout stable
-            )}
-        </div>
-
-        {/* Bottom Control Bar - Auto fade */}
-        <div className="w-full pb-12 flex flex-col items-center space-y-8 group transition-opacity duration-500 opacity-40 hover:opacity-100">
-            
-            {/* Main Controls */}
-            <div className="flex items-center space-x-6">
-               
-               {/* Settings (Hidden unless hovered/active) */}
-               <button 
-                 onClick={() => setShowSettings(!showSettings)}
-                 className={`transition-colors ${showSettings ? 'text-stone-300' : 'text-stone-700 hover:text-stone-500'}`}
-               >
-                 <SettingsIcon className="w-4 h-4" />
-               </button>
-
-               {/* Mic Toggle */}
-               <button 
-                 onClick={toggleMic}
-                 className={`flex items-center justify-center w-12 h-12 rounded-full border transition-all duration-500 ${
-                    isMicMuted 
-                      ? 'border-red-900/50 text-red-900' 
-                      : 'border-stone-800 text-stone-500 hover:border-stone-600 hover:text-stone-300'
-                 }`}
-               >
-                 {isMicMuted ? <MicOffIcon className="w-5 h-5" /> : <MicIcon className="w-5 h-5" />}
-               </button>
-
-               {/* Volume Slider */}
-               <div className="flex items-center space-x-2 w-20">
-                 <VolumeIcon className="w-3 h-3 text-stone-700" />
-                 <input 
-                   type="range" 
-                   min="0" 
-                   max="1" 
-                   step="0.01" 
-                   value={outputVolume} 
-                   onChange={handleVolumeChange}
-                   className="w-full h-0.5 bg-stone-800 appearance-none cursor-pointer accent-stone-500"
-                 />
-               </div>
-
-               {/* Feedback (Small) */}
-               <div className="flex space-x-2 pl-4 border-l border-stone-900">
-                 <button onClick={() => handleFeedback('up')} className={`text-stone-700 hover:text-teal-700 ${feedback === 'up' ? 'text-teal-600' : ''}`}>
-                    <ThumbUpIcon className="w-3 h-3" filled={feedback === 'up'} />
-                 </button>
-                 <button onClick={() => handleFeedback('down')} className={`text-stone-700 hover:text-red-900 ${feedback === 'down' ? 'text-red-800' : ''}`}>
-                    <ThumbDownIcon className="w-3 h-3" filled={feedback === 'down'} />
-                 </button>
-               </div>
-
+      {/* --- HEADER IDENTITY --- */}
+      <div className="w-full flex justify-between items-start z-10 pt-2">
+         <div className="flex items-center space-x-3 opacity-80">
+            <div className="p-1.5 rounded-full border border-stone-800 bg-stone-900/50">
+               <Logo className="w-4 h-4 text-teal-500/80" />
             </div>
-
-            {/* Leave Button */}
-            <button
-                onClick={confirmEndSession}
-                className="text-[10px] tracking-[0.3em] uppercase text-stone-700 hover:text-stone-400 transition-colors"
-            >
-                {text.controls.leave}
-            </button>
-        </div>
+            <div className="flex flex-col">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-stone-500">Dr. Inner Voice PCH</span>
+              <span className="font-serif text-lg leading-none text-stone-300 tracking-wide">{text.title}</span>
+            </div>
+         </div>
+         <div className="font-mono text-[10px] tracking-widest text-stone-700">
+            {formatTime(elapsedSeconds)}
+         </div>
       </div>
+
+      {/* --- VISUALIZER PORTAL --- */}
+      <div className="flex-1 flex flex-col items-center justify-center w-full relative">
+         
+         {/* Glass Container for Visualizer */}
+         <div className={`relative w-[320px] h-[320px] md:w-[450px] md:h-[450px] rounded-full flex items-center justify-center transition-all duration-1000 ${isAiSpeaking ? 'scale-105 shadow-[0_0_80px_-20px_rgba(20,184,166,0.2)]' : 'scale-100 shadow-none'}`}>
+             
+             {/* Outer Ring */}
+             <div className="absolute inset-0 rounded-full border border-stone-800/40 bg-black/20 backdrop-blur-sm z-0"></div>
+             
+             {/* Inner Ring (Pulsing) */}
+             <div className={`absolute inset-4 rounded-full border border-stone-800/30 z-10 transition-all duration-500 ${isAiSpeaking ? 'border-teal-900/40' : ''}`}></div>
+
+             {/* Canvas Layer */}
+             <div className="absolute inset-0 z-20 opacity-80 mix-blend-screen p-8">
+                 <AudioVisualizer 
+                    volume={volume} 
+                    isActive={(isUserSpeaking && !isMicMuted) || isAiSpeaking} 
+                    color={visualizerColor} 
+                />
+             </div>
+             
+             {/* Status Badge */}
+             <div className="absolute bottom-16 z-30 flex flex-col items-center space-y-2">
+                 {isConnecting ? (
+                    <div className="text-stone-500 text-[10px] tracking-[0.3em] uppercase animate-pulse">{text.status.connecting}</div>
+                 ) : isAiSpeaking ? (
+                    <div className="flex items-center space-x-2 bg-teal-950/30 border border-teal-900/50 px-3 py-1 rounded-full backdrop-blur-md">
+                        <div className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse shadow-[0_0_8px_rgba(20,184,166,0.8)]"></div>
+                        <span className="text-[10px] text-teal-200 uppercase tracking-widest">{text.status.aiSpeaking}</span>
+                    </div>
+                 ) : (
+                    <div className="text-stone-600 text-[10px] uppercase tracking-widest transition-opacity duration-500">
+                        {isUserSpeaking ? text.status.listening : text.status.aligning}
+                    </div>
+                 )}
+             </div>
+
+         </div>
+      </div>
+
+      {/* --- CONTROL DECK --- */}
+      <div className="w-full flex flex-col items-center justify-center z-20 pb-4">
+        
+        {/* Floating Glass Deck */}
+        <div className="flex items-center gap-6 px-8 py-4 bg-stone-900/40 backdrop-blur-xl border border-stone-800/60 rounded-full shadow-2xl transition-all hover:border-stone-700/60 hover:bg-stone-900/60">
+            
+            {/* Settings */}
+            <button 
+                onClick={() => setShowSettings(!showSettings)}
+                className={`p-2 rounded-full transition-colors ${showSettings ? 'bg-stone-800 text-stone-200' : 'text-stone-500 hover:text-stone-300 hover:bg-stone-800/50'}`}
+                title="Settings"
+            >
+                <SettingsIcon className="w-5 h-5" />
+            </button>
+
+            {/* Mic (Main Action) */}
+            <button 
+                onClick={toggleMic}
+                className={`relative flex items-center justify-center w-14 h-14 rounded-full border transition-all duration-300 ${
+                isMicMuted 
+                    ? 'border-red-900/30 bg-red-950/10 text-red-800' 
+                    : 'border-stone-700 bg-stone-800/50 text-stone-300 hover:border-teal-700/50 hover:text-white hover:shadow-[0_0_15px_-5px_rgba(20,184,166,0.3)]'
+                }`}
+            >
+                {isMicMuted ? <MicOffIcon className="w-6 h-6" /> : <MicIcon className="w-6 h-6" />}
+            </button>
+
+            {/* Volume & Feedback Group */}
+            <div className="flex items-center gap-4 border-l border-stone-800 pl-6">
+                
+                {/* Volume */}
+                <div className="group flex items-center space-x-2">
+                    <VolumeIcon className="w-4 h-4 text-stone-600 group-hover:text-stone-400 transition-colors" />
+                    <input 
+                    type="range" 
+                    min="0" 
+                    max="1" 
+                    step="0.01" 
+                    value={outputVolume} 
+                    onChange={handleVolumeChange}
+                    className="w-16 h-1 bg-stone-800 rounded-full appearance-none cursor-pointer accent-stone-500 hover:accent-stone-400"
+                    />
+                </div>
+
+                {/* Feedback */}
+                <div className="flex space-x-1">
+                    <button onClick={() => handleFeedback('up')} className={`p-1.5 rounded hover:bg-stone-800/50 transition-colors ${feedback === 'up' ? 'text-teal-500' : 'text-stone-600 hover:text-teal-600'}`}>
+                        <ThumbUpIcon className="w-4 h-4" filled={feedback === 'up'} />
+                    </button>
+                    <button onClick={() => handleFeedback('down')} className={`p-1.5 rounded hover:bg-stone-800/50 transition-colors ${feedback === 'down' ? 'text-red-500' : 'text-stone-600 hover:text-red-600'}`}>
+                        <ThumbDownIcon className="w-4 h-4" filled={feedback === 'down'} />
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {/* Leave Text */}
+        <button
+            onClick={confirmEndSession}
+            className="mt-6 text-[9px] tracking-[0.3em] uppercase text-stone-700 hover:text-red-400/80 transition-colors"
+        >
+            {text.controls.leave}
+        </button>
+      </div>
+
     </div>
   );
 };
