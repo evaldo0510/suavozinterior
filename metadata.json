@@ -1,0 +1,7 @@
+{
+  "name": "Inner Voice PCH",
+  "description": "A therapeutic cognitive poetry agent that guides users through inner landscapes using the Gemini Live API.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
