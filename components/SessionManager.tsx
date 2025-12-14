@@ -97,6 +97,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
   // New features state
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [outputVolume, setOutputVolume] = useState(0.8);
+  const [aiTranscript, setAiTranscript] = useState('');
   
   // Initialize sensitivity from localStorage or default to 0.01
   const [inputSensitivity, setInputSensitivity] = useState(() => {
@@ -487,7 +488,9 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
             voiceConfig: { prebuiltVoiceConfig: { voiceName: VOICE_IDS[voice] } },
           },
           // Dynamically inject the language AND TIME into the system prompt
-          systemInstruction: enhancedInstruction,
+          // Ensure it's passed as a Content object to prevent "Invalid argument" errors
+          systemInstruction: { parts: [{ text: enhancedInstruction }] },
+          // Removed outputAudioTranscription to resolve "Invalid argument" error
         },
         callbacks: {
           onopen: () => {
@@ -496,6 +499,11 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
             // The system instruction effectively sets the context.
           },
           onmessage: async (message: LiveServerMessage) => {
+            // Handle Transcription (if enabled in future)
+            if (message.serverContent?.outputTranscription?.text) {
+                setAiTranscript(prev => prev + message.serverContent.outputTranscription.text);
+            }
+
             // Handle Audio Output
             const base64Audio = message.serverContent?.modelTurn?.parts?.[0]?.inlineData?.data;
             if (base64Audio) {
@@ -585,6 +593,9 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
             lastUserActivityRef.current = Date.now();
             hasTriggeredIdleRef.current = false; // Reset idle trigger
             silenceFramesRef.current = 0;
+            
+            // Clear Transcript when user speaks
+            setAiTranscript('');
         } else {
             setIsUserSpeaking(false);
             silenceFramesRef.current++;
@@ -922,8 +933,28 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
                 />
              </div>
              
-             {/* Status Badge - Floating Minimal */}
-             <div className="absolute bottom-4 md:bottom-16 z-30 flex flex-col items-center space-y-2 pointer-events-none">
+             {/* Speech Bubble / Subtitle Overlay */}
+             <div className={`absolute bottom-0 md:bottom-8 left-1/2 -translate-x-1/2 w-full max-w-lg px-4 transition-all duration-500 z-30 ${aiTranscript ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+                 <div className="bg-stone-950/70 backdrop-blur-md border border-stone-800/50 rounded-xl p-4 md:p-6 shadow-2xl relative group">
+                     {/* Text */}
+                     <p className="text-stone-300 font-serif text-sm md:text-lg leading-relaxed text-center font-light drop-shadow-md">
+                         "{aiTranscript}"
+                     </p>
+                     
+                     {/* Feedback Buttons - Floating attached to bubble */}
+                     <div className="absolute -right-3 top-1/2 -translate-y-1/2 flex flex-col space-y-2 transition-opacity duration-300">
+                        <button onClick={() => handleFeedback('up')} className={`p-2 bg-stone-900/80 rounded-full border border-stone-700/50 shadow-lg hover:bg-stone-800 transition-colors ${feedback === 'up' ? 'text-teal-400' : 'text-stone-500 hover:text-teal-400'}`}>
+                            <ThumbUpIcon className="w-4 h-4" filled={feedback === 'up'} />
+                        </button>
+                        <button onClick={() => handleFeedback('down')} className={`p-2 bg-stone-900/80 rounded-full border border-stone-700/50 shadow-lg hover:bg-stone-800 transition-colors ${feedback === 'down' ? 'text-red-400' : 'text-stone-500 hover:text-red-400'}`}>
+                            <ThumbDownIcon className="w-4 h-4" filled={feedback === 'down'} />
+                        </button>
+                     </div>
+                 </div>
+             </div>
+
+             {/* Status Badge - Floating Minimal (moved up slightly if text is showing) */}
+             <div className={`absolute bottom-full mb-4 z-30 flex flex-col items-center space-y-2 pointer-events-none transition-all duration-500 ${aiTranscript ? 'opacity-0' : 'opacity-100'}`}>
                  {isConnecting ? (
                     <div className="text-stone-500 text-[10px] tracking-[0.3em] uppercase animate-pulse">{text.status.connecting}</div>
                  ) : isAiSpeaking ? (
@@ -968,7 +999,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
                 {isMicMuted ? <MicOffIcon className="w-5 h-5 md:w-6 md:h-6" /> : <MicIcon className="w-5 h-5 md:w-6 md:h-6" />}
             </button>
 
-            {/* Volume & Feedback Group */}
+            {/* Volume */}
             <div className="flex items-center gap-3 md:gap-4 border-l border-stone-700/50 pl-3 md:pl-6">
                 
                 {/* Volume - Hidden on Mobile */}
@@ -983,16 +1014,6 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang, use
                     onChange={handleVolumeChange}
                     className="w-16 h-1 bg-stone-800 rounded-full appearance-none cursor-pointer accent-stone-500 hover:accent-stone-300"
                     />
-                </div>
-
-                {/* Feedback */}
-                <div className="flex space-x-1">
-                    <button onClick={() => handleFeedback('up')} className={`p-1.5 rounded hover:bg-stone-800/50 transition-colors ${feedback === 'up' ? 'text-teal-500' : 'text-stone-500 hover:text-teal-500'}`}>
-                        <ThumbUpIcon className="w-4 h-4" filled={feedback === 'up'} />
-                    </button>
-                    <button onClick={() => handleFeedback('down')} className={`p-1.5 rounded hover:bg-stone-800/50 transition-colors ${feedback === 'down' ? 'text-red-500' : 'text-stone-500 hover:text-red-500'}`}>
-                        <ThumbDownIcon className="w-4 h-4" filled={feedback === 'down'} />
-                    </button>
                 </div>
             </div>
         </div>
