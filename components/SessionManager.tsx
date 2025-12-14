@@ -181,7 +181,6 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
         // If idle for > 30s AND not currently having AI speak AND haven't already triggered for this specific idle period
         if (timeSinceActivity > IDLE_THRESHOLD_MS && !isAiSpeakingRef.current && !hasTriggeredIdleRef.current) {
            // We do not send a prompt here to avoid the 'session.send is not a function' error.
-           // Future implementation could rely on ClientContent messages if supported by the SDK.
            console.log("Idle threshold reached (silent).");
            hasTriggeredIdleRef.current = true; // Prevent re-triggering until reset
         }
@@ -298,6 +297,17 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
     setTimeout(() => setFeedback(null), 2000); 
   };
 
+  const resumeAudioContext = useCallback(async () => {
+    if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+        try {
+            await audioContextRef.current.resume();
+            console.log("AudioContext resumed");
+        } catch (e) {
+            console.error("Failed to resume AudioContext", e);
+        }
+    }
+  }, []);
+
   const connectToGemini = useCallback(async () => {
     try {
       if (!process.env.API_KEY) {
@@ -385,6 +395,10 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
             // Handle Audio Output
             const base64Audio = message.serverContent?.modelTurn?.parts?.[0]?.inlineData?.data;
             if (base64Audio) {
+              
+              // CRITICAL: Ensure AudioContext is running before playing
+              await resumeAudioContext();
+
               setIsAiSpeaking(true);
               isAiSpeakingRef.current = true;
               
@@ -513,7 +527,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
       setErrorMsg(e.message || "Failed.");
       setStatus(SessionStatus.ERROR);
     }
-  }, [lang, selectedVoice, text.status.error]);
+  }, [lang, selectedVoice, text.status.error, resumeAudioContext]);
 
   useEffect(() => {
     connectToGemini();
@@ -695,7 +709,7 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
                <Logo className="w-4 h-4 text-teal-500/80" />
             </div>
             <div className="flex flex-col">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-stone-500">Dr. Inner Voice PCH</span>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-stone-500">Your Inner Voice</span>
               <span className="font-serif text-lg leading-none text-stone-300 tracking-wide">{text.title}</span>
             </div>
          </div>
@@ -710,6 +724,11 @@ const SessionManager: React.FC<SessionManagerProps> = ({ onDisconnect, lang }) =
          {/* Glass Container for Visualizer */}
          <div className={`relative w-[320px] h-[320px] md:w-[450px] md:h-[450px] rounded-full flex items-center justify-center transition-all duration-1000 ${isAiSpeaking ? 'scale-105 shadow-[0_0_80px_-20px_rgba(20,184,166,0.2)]' : 'scale-100 shadow-none'}`}>
              
+             {/* Text Label Top */}
+             <div className="absolute top-12 left-0 right-0 text-center z-20 pointer-events-none">
+                <span className="text-[9px] uppercase tracking-[0.4em] text-stone-600/60 font-light">Your Inner Voice</span>
+             </div>
+
              {/* Outer Ring */}
              <div className="absolute inset-0 rounded-full border border-stone-800/40 bg-black/20 backdrop-blur-sm z-0"></div>
              
